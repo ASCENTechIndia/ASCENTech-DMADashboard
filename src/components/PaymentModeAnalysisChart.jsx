@@ -34,7 +34,7 @@ function PaymentModeAnalysisChart({ data = paymentModeAnalysisData }) {
       <div
         className="dma-payment-donut-chart"
         ref={ref}
-        style={{ height: "220px", width: "100%" }}
+        style={{ height: "200px", width: "100%" }}
       />
       <div className="dma-legend-list">
         {data.map((row) => (

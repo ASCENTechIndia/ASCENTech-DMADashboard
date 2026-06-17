@@ -17,7 +17,7 @@ function CollectionStatusDonutChart({
       series: [
         {
           type: "pie",
-          radius: ["40%", "80%"],
+          radius: ["37%", "80%"],
           avoidLabelOverlap: false,
           label: {
             show: true,
@@ -64,7 +64,7 @@ function CollectionStatusDonutChart({
     }),
     [data, total],
   );
-  return <div ref={ref} style={{ width: "100%", height: 260 }} />;
+  return <div ref={ref} style={{ width: "100%", height: "240px" }} />;
 }
 
 export default CollectionStatusDonutChart;

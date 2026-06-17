@@ -110,7 +110,6 @@ function App() {
           </div>
         </div>
 
-        {/* Footer – full width */}
         <div className="row g-3 mt-2">
           <div className="col-12 m-0">
             <DashboardFooter />

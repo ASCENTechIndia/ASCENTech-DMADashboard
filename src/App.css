@@ -111,7 +111,6 @@ body {
 
 .dma-card-body--split {
   display: flex;
-  gap: 20px;
 }
 
 .dma-card-body--split > * {

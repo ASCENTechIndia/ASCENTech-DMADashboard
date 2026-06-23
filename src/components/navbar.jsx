@@ -12,7 +12,7 @@ export default function Navbar() {
           style={{ background: "white", width: "10%" }}
         >
           <img
-            src={logo}
+            // src={logo}
             alt="Logo"
             className="h-16 w-auto object-contain"
           />

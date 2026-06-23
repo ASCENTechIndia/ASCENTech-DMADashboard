@@ -120,7 +120,7 @@
   flex-wrap: wrap;
 }
 
-.dma-card-body--split > * {
+.dma-card-body--split>* {
   flex: 1;
   min-width: 280px;
 }
@@ -145,15 +145,9 @@
   min-width: 0;
 }
 
-.dma-header-logo-mark {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: var(--dma-navy);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+.dma-header-logo-img {
+  margin-left: 50px;
+  padding-right: 50px;
 }
 
 .dma-header-org-name {
@@ -423,6 +417,7 @@
 
 /* ---- responsive ------------------------------------------------------------ */
 @media (max-width: 1100px) {
+
   .dma-row-1-2,
   .dma-row-14-1,
   .dma-row-3 {
@@ -440,13 +435,16 @@
   .dma-summary-grid {
     grid-template-columns: 1fr;
   }
+
   .dma-header {
     flex-direction: column;
     text-align: center;
   }
+
   .dma-header-title {
     font-size: 22px;
   }
+
   .dma-bar-row {
     grid-template-columns: 90px 1fr 56px;
   }

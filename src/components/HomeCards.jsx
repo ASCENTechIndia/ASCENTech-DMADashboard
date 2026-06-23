@@ -5,7 +5,7 @@ export default function HomeCards({ cards = [] }) {
     <div className="row g-3">
       {cards.map((card, index) => (
         <div
-          key={card.code || index}
+          key={`${card.code}-${index}`}
           className="col-xl-3 col-lg-4 col-md-6 col-sm-12"
         >
           <HomedashboardCard title={card.title}>

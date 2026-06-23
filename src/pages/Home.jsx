@@ -9,34 +9,60 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function Home() {
   const [cards, setCards] = useState([]);
+    const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchDashboard();
   }, []);
 
-  const fetchDashboard = async () => {
-    try {
-      const res = await axios.get(
-        `${API_BASE_URL}/dashboard/DashboardDataNew`
-      );
-      console.log("API_BASE_URL", API_BASE_URL);
-console.log("URL", `${API_BASE_URL}/dashboard/DashboardDataNew`);
+ const fetchDashboard = async () => {
+  try {
+    // const start = performance.now();
+    setLoading(true);
+    const res = await axios.get(
+      `${API_BASE_URL}/dashboard/DashboardDataNew`
+    );
 
-      setCards(res.data.data || []);
-    } catch (err) {
-      console.error("Dashboard Error:", err);
-    }
-  };
+  //  const end = performance.now();
+
+// console.log(`API Time: ${((end - start) / 1000).toFixed(2)} sec`);
+
+    setCards(res.data.data || []);
+  } catch (err) {
+    console.error("Dashboard Error:", err);
+  } finally{
+    setLoading(false);
+  }
+};
 
   return (
-    <>
-      <div className="dma-dashboard">
+    <div className="dma-dashboard">
       <Header />
+
       <div className="container-fluid px-4 py-4">
-        <HomeCards cards={cards} />
+        {loading ? (
+          <div
+            style={{
+              height: "60vh",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div
+              className="spinner-border text-primary"
+              role="status"
+            >
+              <span className="visually-hidden">
+                Loading...
+              </span>
+            </div>
+          </div>
+        ) : (
+          <HomeCards cards={cards} />
+        )}
       </div>
-      </div>
-    </>
+    </div>
   );
 }
 

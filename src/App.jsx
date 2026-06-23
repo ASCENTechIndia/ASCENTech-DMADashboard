@@ -16,6 +16,7 @@ import CollectionRankingChart from "./components/CollectionRankingChart";
 import DashboardFooter from "./components/DashboardFooter";
 
 import "./styles/dashboard.css";
+import RTSDashboard from "./pages/RTSDashboard";
 
 function DashboardPage() {
   return (
@@ -131,6 +132,8 @@ function App() {
 
         {/* Existing Home page */}
         <Route path="/home" element={<Home />} />
+
+        <Route path="/rtsdashboard" element={<RTSDashboard />} />
       </Routes>
     </Router>
   );

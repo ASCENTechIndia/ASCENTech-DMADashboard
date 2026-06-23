@@ -1,6 +1,6 @@
-import { useState } from "react";
-import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+import Home from "./pages/Home";
 import Header from "./components/Header";
 import SummaryCards from "./components/SummaryCards";
 import DashboardCard from "./components/DashboardCard";
@@ -15,9 +15,9 @@ import PaymentModeAnalysisChart from "./components/PaymentModeAnalysisChart";
 import CollectionRankingChart from "./components/CollectionRankingChart";
 import DashboardFooter from "./components/DashboardFooter";
 
-function App() {
-  const [count, setCount] = useState(0);
+import "./styles/dashboard.css";
 
+function DashboardPage() {
   return (
     <div className="dma-dashboard">
       <div className="container-fluid px-0">
@@ -27,7 +27,7 @@ function App() {
           </div>
         </div>
 
-        <div className="row g-3" >
+        <div className="row g-3">
           <div className="col-12">
             <SummaryCards />
           </div>
@@ -43,6 +43,7 @@ function App() {
               <TodaysCollectionTable />
             </DashboardCard>
           </div>
+
           <div className="col-lg-8 col-md-8 col-sm-12 m-0 mt-lg-0 mt-2">
             <DashboardCard
               title="Property Summary"
@@ -66,6 +67,7 @@ function App() {
               <CollectionPercentTable />
             </DashboardCard>
           </div>
+
           <div className="col-lg-6 col-md-12 m-0 mt-lg-0 mt-2">
             <DashboardCard
               title="Collection Status Mode Wise"
@@ -79,7 +81,6 @@ function App() {
           </div>
         </div>
 
-        {/* Row: three equal columns for the last three charts */}
         <div className="row g-3 mt-2">
           <div className="col-lg-4 col-md-6 col-sm-12 m-0">
             <DashboardCard
@@ -90,6 +91,7 @@ function App() {
               <TopPerformingCorporationsChart />
             </DashboardCard>
           </div>
+
           <div className="col-lg-4 col-md-6 col-sm-12 m-0 mt-lg-0 mt-2">
             <DashboardCard
               title="Payment Mode Analysis (Collection in Cr)"
@@ -99,6 +101,7 @@ function App() {
               <PaymentModeAnalysisChart />
             </DashboardCard>
           </div>
+
           <div className="col-lg-4 col-md-6 col-sm-12 m-0 mt-lg-0 mt-2">
             <DashboardCard
               title="Collection Ranking (By Collection in Cr)"
@@ -110,7 +113,6 @@ function App() {
           </div>
         </div>
 
-        {/* Footer – full width */}
         <div className="row g-3 mt-2">
           <div className="col-12 m-0">
             <DashboardFooter />
@@ -118,6 +120,19 @@ function App() {
         </div>
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<DashboardPage />} />
+
+        {/* Existing Home page */}
+        <Route path="/home" element={<Home />} />
+      </Routes>
+    </Router>
   );
 }
 

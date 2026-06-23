@@ -18,7 +18,7 @@ function RTSDashboard() {
             <Table />
         </div>
 
-        <DashboardFooter />
+        {/* <DashboardFooter /> */}
       </div>
     </div>
   )

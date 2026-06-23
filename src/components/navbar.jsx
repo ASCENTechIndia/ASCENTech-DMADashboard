@@ -12,7 +12,7 @@ export default function Navbar() {
           style={{ background: "white", width: "10%" }}
         >
           <img
-            src={logo}
+            // src={logo}
             alt="Logo"
             className="h-16 w-auto object-contain"
           />
@@ -30,7 +30,7 @@ export default function Navbar() {
               lineHeight: 1.2,
             }}
           >
-            Dashboard
+            DMA Dashboard
           </h1>
         </div>
 
@@ -42,15 +42,7 @@ export default function Navbar() {
             width: "10%",
           }}
         >
-          <span
-            style={{
-              color: "#054b65",
-              fontWeight: "bold",
-              fontSize: "16px",
-            }}
-          >
-            DMA
-          </span>
+        
         </div>
       </div>
     </nav>

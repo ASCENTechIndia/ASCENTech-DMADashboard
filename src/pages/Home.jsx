@@ -1,103 +1,42 @@
-import "../styles/dashboard.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-import Navbar from "../components/navbar";
-
+import Navbar from "../components/Navbar";
+import HomeCards from "../components/HomeCards";
 import Header from "../components/Header";
-import SummaryCards from "../components/SummaryCards";
-import DashboardCard from "../components/DashboardCard";
-import TodaysCollectionTable from "../components/TodaysCollectionTable";
-import PropertySummaryTable from "../components/PropertySummaryTable";
-import PropertyDistributionChart from "../components/PropertyDistributionChart";
-import CollectionPercentTable from "../components/CollectionPercentTable";
-import CollectionStatusDonutChart from "../components/CollectionStatusDonutChart";
-import CollectionStatusModeTable from "../components/CollectionStatusModeTable";
-import TopPerformingCorporationsChart from "../components/TopPerformingCorporationsChart";
-import PaymentModeAnalysisChart from "../components/PaymentModeAnalysisChart";
-import CollectionRankingChart from "../components/CollectionRankingChart";
-import DashboardFooter from "../components/DashboardFooter";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function Home() {
+  const [cards, setCards] = useState([]);
+
+  useEffect(() => {
+    fetchDashboard();
+  }, []);
+
+  const fetchDashboard = async () => {
+    try {
+      const res = await axios.get(
+        `${API_BASE_URL}/dashboard/DashboardDataNew`
+      );
+      console.log("API_BASE_URL", API_BASE_URL);
+console.log("URL", `${API_BASE_URL}/dashboard/DashboardDataNew`);
+
+      setCards(res.data.data || []);
+    } catch (err) {
+      console.error("Dashboard Error:", err);
+    }
+  };
+
   return (
     <>
-      <Navbar />
-
       <div className="dma-dashboard">
-        <div className="dma-grid">
-
-          <Header />
-
-          <SummaryCards />
-
-          <div className="dma-row dma-row-1-2">
-            <DashboardCard
-              title="Today's Collection (Amount in Lakhs)"
-              icon="calendar"
-              color="blue"
-            >
-              <TodaysCollectionTable />
-            </DashboardCard>
-
-            <DashboardCard
-              title="Property Summary"
-              icon="building"
-              color="blue"
-              split
-            >
-              <PropertySummaryTable />
-              <PropertyDistributionChart />
-            </DashboardCard>
-          </div>
-
-          <div className="dma-row dma-row-14-1">
-            <DashboardCard
-              title="Collection % (Amount in Cr)"
-              icon="pie"
-              color="blue"
-            >
-              <CollectionPercentTable />
-            </DashboardCard>
-
-            <DashboardCard
-              title="Collection Status Mode Wise"
-              icon="status"
-              color="blue"
-              split
-            >
-              <CollectionStatusDonutChart />
-              <CollectionStatusModeTable />
-            </DashboardCard>
-          </div>
-
-          <div className="dma-row dma-row-3">
-            <DashboardCard
-              title="Top Performing Corporations (By Collection %)"
-              icon="bars"
-              color="green"
-            >
-              <TopPerformingCorporationsChart />
-            </DashboardCard>
-
-            <DashboardCard
-              title="Payment Mode Analysis (Collection in Cr)"
-              icon="donut"
-              color="blue"
-            >
-              <PaymentModeAnalysisChart />
-            </DashboardCard>
-
-            <DashboardCard
-              title="Collection Ranking (By Collection in Cr)"
-              icon="trophy"
-              color="purple"
-            >
-              <CollectionRankingChart />
-            </DashboardCard>
-          </div>
-
-          <DashboardFooter />
-
-        </div>
+      <Header />
+      <div className="container-fluid px-4 py-4">
+        <HomeCards cards={cards} />
+      </div>
       </div>
     </>
   );
 }
+

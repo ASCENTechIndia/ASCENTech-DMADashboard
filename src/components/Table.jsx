@@ -105,6 +105,18 @@ const Table = () => {
   const [selectedUlbId, setSelectedUlbId] = useState(null);
   const [departmentData, setDepartmentData] = useState({});
   const [serviceData, setServiceData] = useState({});
+  const [statusData, setStatusData] = useState([]);
+  const [selectedStatusLabel, setSelectedStatusLabel] = useState('');
+
+  const keyToStatus = {
+    applicationReceived: 'TOT',
+    approved: 'AP',
+    authorisationReject: 'CR',
+    authorisationPending: 'CP',
+    paymentPending: 'PP',
+    paymentReceived: 'NW',
+    certificateIssued: 'DL',
+  };
 
   // ─── Toast state ──────────────────────────────────────────────────────
   const [toastMessage, setToastMessage] = useState(null);
@@ -116,6 +128,43 @@ const Table = () => {
     setToastMessage(`${corporation} · ${label}: ${value.toLocaleString()}`);
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
+  };
+
+  const handleStatusClick = async (columnKey, ulbId) => {
+    const status = keyToStatus[columnKey];
+    if (!status) return;
+
+    setSelectedStatusLabel(colLabels[columnKey]);
+    setView('status');
+
+    try {
+      setLoading(true);
+      const url = ulbId 
+        ? `${API_BASE_URL}/dashboard/RTSStatusWise?status=${status}&ulbId=${ulbId}`
+        : `${API_BASE_URL}/dashboard/RTSStatusWise?status=${status}`;
+      
+      const response = await axios.get(url);
+      console.log("status", response);
+      if (!response.data.success) {
+        throw new Error(`${response.data.message || "Failed to load status data"}`);
+      }
+      
+      const items = Array.isArray(response.data) ? response.data.data : (response.data.data || []);
+      
+      const formattedItems = items.map(item => ({
+        department: item.VAR_DEPT_ENGNAME || 'Unknown',
+        deptId: item.NUM_APPLICATION_DEPTID,
+        count: Number(item.STATUS || 0),
+        applicationStatus: item.APPLICATION_STATUS || status
+      }));
+
+      setStatusData(formattedItems);
+    } catch (err) {
+      console.error("Error fetching status data:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCorporationClick = async (corpName, ulbId) => {
@@ -206,6 +255,10 @@ const Table = () => {
     setSelectedDepartment(null);
   };
 
+  const computeStatusTotal = (items) => {
+    return items.reduce((acc, item) => acc + item.count, 0);
+  };
+
   const formatNumber = (num) => num.toLocaleString();
 
   // ─── Helpers to compute totals ─────────────────────────────────────────
@@ -272,6 +325,19 @@ const Table = () => {
     backButton = (
       <button className="btn btn-sm btn-outline-primary ms-auto" onClick={handleBackToDepartments}>
         <i className="bi bi-arrow-left me-1"></i> Back to Departments
+      </button>
+    );
+  } else if (view === 'status') {
+    title = `${selectedCorporation} – ${selectedStatusLabel} Breakdown`;
+    backButton = (
+      <button className="btn btn-sm btn-outline-primary ms-auto" onClick={() => {
+        if (selectedUlbId) {
+          setView('services');
+        } else {
+          setView('summary');
+        }
+      }}>
+        <i className="bi bi-arrow-left me-1"></i> Back
       </button>
     );
   }
@@ -472,15 +538,65 @@ const Table = () => {
                       <td><strong>Total</strong></td>
                       {(() => {
                         const svcTotals = computeServiceTotals(serviceData[`${selectedCorporation}_${selectedDepartment}`]);
-                        return colKeys.map(key => (
-                          <td key={key} className="text-center"><strong>{formatNumber(svcTotals[key])}</strong></td>
-                        ));
+                        return colKeys.map(key => {
+                          const value = svcTotals[key];
+                          const isZero = value === 0;
+                          return (
+                            <td key={key} className="text-center">
+                              {isZero ? (
+                                <span className="text-muted">{formatNumber(value)}</span>
+                              ) : (
+                                <button
+                                  className="btn btn-link btn-sm p-0 text-white text-decoration-underline"
+                                  onClick={() => handleStatusClick(key, selectedUlbId)}
+                                  style={{ cursor: 'pointer', fontWeight: 700 }}
+                                >
+                                  {formatNumber(value)}
+                                  <i className="bi bi-chevron-right ms-1 small"></i>
+                                </button>
+                              )}
+                            </td>
+                          );
+                        });
                       })()}
                     </tr>
                   </tfoot>
                 </table>
               ) : (
                 <p className="text-muted">No service data available for {selectedDepartment}.</p>
+              )
+            )}
+
+            {view === 'status' && (
+              // ─── STATUS TABLE ──────────────────────────────────────────
+              statusData.length > 0 ? (
+                <table className="dma-table table table-bordered">
+                  <thead>
+                    <tr>
+                      <th style={{ width: '60px' }}>Sr. No.</th>
+                      <th>Department</th>
+                      <th className="text-center">{selectedStatusLabel}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {statusData.map((item, idx) => (
+                      <tr key={idx}>
+                        <td className="text-center">{idx + 1}</td>
+                        <td>{item.department}</td>
+                        <td className="text-center">{formatNumber(item.count)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td className="text-center"></td>
+                      <td><strong>Total</strong></td>
+                      <td className="text-center"><strong>{formatNumber(computeStatusTotal(statusData))}</strong></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              ) : (
+                <p className="text-muted">No data available.</p>
               )
             )}
           </div>

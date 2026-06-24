@@ -1,5 +1,8 @@
-import { useEChart } from '../hooks/useEChart'
-import { propertySummaryData } from '../data/dashboardData'
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useEChart } from '../hooks/useEChart';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const COLORS = {
   residential: '#2f6fed',
@@ -7,14 +10,51 @@ const COLORS = {
   mixed: '#1fa854',
   border: 'rgba(148, 163, 184, 0.25)',
   muted: '#64748b',
-}
+};
 
 /**
  * PropertyDistributionChart
  * Stacked bar chart: Residential / Commercial / Mixed counts per corporation.
  * Pairs with <PropertySummaryTable /> inside the "Property Summary" card.
  */
-function PropertyDistributionChart({ data = propertySummaryData }) {
+function PropertyDistributionChart() {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState(null);
+
+  useEffect(() => {
+    const fetchPropertySummary = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${API_BASE_URL}/property/getPropertySummary`);
+        if (response.data.success) {
+          const rows = response.data.data || [];
+          if (rows.length === 0) {
+            setMessage(response.data.message || 'No property data available.');
+          } else {
+            setData(
+              rows.map((item) => ({
+                corporation: item.CORPORATION || 'Unknown',
+                residential: Number(item.RESIDENTIAL || 0),
+                commercial: Number(item.COMMERCIAL || 0),
+                mixed: Number(item.MIXED || 0),
+              }))
+            );
+          }
+        } else {
+          setMessage(response.data.message || 'Failed to load property data.');
+        }
+      } catch (err) {
+        console.error('Error fetching property summary for chart:', err);
+        setMessage(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPropertySummary();
+  }, []);
+
   const ref = useEChart(
     () => ({
       tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
@@ -43,9 +83,28 @@ function PropertyDistributionChart({ data = propertySummaryData }) {
       ],
     }),
     [data]
-  )
+  );
 
-  return <div className="echart-container" ref={ref} />
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (message) {
+    return (
+      <div className="alert alert-info m-2" role="alert">
+        <i className="bi bi-info-circle me-2"></i>
+        {message}
+      </div>
+    );
+  }
+
+  return <div className="echart-container" ref={ref} />;
 }
 
-export default PropertyDistributionChart
+export default PropertyDistributionChart;

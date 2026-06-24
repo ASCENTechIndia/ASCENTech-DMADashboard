@@ -34,7 +34,7 @@ function PropertySummaryTable() {
         }
       } catch (err) {
         console.error("Error fetching property summary:", err);
-        setMessage("Unable to connect to the server. Please try again later.");
+        setMessage(err.message);
       } finally {
         setLoading(false);
       }

@@ -1,13 +1,78 @@
-import {
-  propertySummaryData,
-  propertySummaryTotal,
-} from "../data/dashboardData";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-function PropertySummaryTable({
-  data = propertySummaryData,
-  total = propertySummaryTotal,
-}) {
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+function PropertySummaryTable() {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState(null);
+
+  useEffect(() => {
+    const fetchPropertySummary = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${API_BASE_URL}/property/getPropertySummary`);
+        console.log(response.data);
+        if (response.data.success) {
+          const rows = response.data.data || [];
+          if (rows.length === 0) {
+            setMessage(response.data.message || "No property summary data available.");
+          } else {
+            setData(
+              rows.map((item) => ({
+                corporation: item.CORPORATION || "Unknown",
+                residential: Number(item.RESIDENTIAL || 0),
+                commercial: Number(item.COMMERCIAL || 0),
+                mixed: Number(item.MIXED || 0),
+                total: Number(item.TOTAL || 0),
+              }))
+            );
+          }
+        } else {
+          setMessage(response.data.message || "Failed to load property summary.");
+        }
+      } catch (err) {
+        console.error("Error fetching property summary:", err);
+        setMessage("Unable to connect to the server. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPropertySummary();
+  }, []);
+
+  const total = data.reduce(
+    (acc, row) => ({
+      residential: acc.residential + row.residential,
+      commercial: acc.commercial + row.commercial,
+      mixed: acc.mixed + row.mixed,
+      total: acc.total + row.total,
+    }),
+    { residential: 0, commercial: 0, mixed: 0, total: 0 }
+  );
+
   const hasMoreThanFive = data.length > 5;
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "150px" }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (message) {
+    return (
+      <div className="alert alert-info m-2" role="alert">
+        <i className="bi bi-info-circle me-2"></i>
+        {message}
+      </div>
+    );
+  }
 
   return (
     <div
@@ -28,39 +93,23 @@ function PropertySummaryTable({
           </tr>
         </thead>
         <tbody>
-          {data.map((row) => (
-            <tr key={row.corporation}>
+          {data.map((row, idx) => (
+            <tr key={idx}>
               <td>{row.corporation}</td>
-              <td className="dma-text-center">
-                {row.residential.toLocaleString("en-IN")}
-              </td>
-              <td className="dma-text-center">
-                {row.commercial.toLocaleString("en-IN")}
-              </td>
-              <td className="dma-text-center">
-                {row.mixed.toLocaleString("en-IN")}
-              </td>
-              <td className="dma-text-center">
-                {row.total.toLocaleString("en-IN")}
-              </td>
+              <td className="dma-text-center">{row.residential.toLocaleString("en-IN")}</td>
+              <td className="dma-text-center">{row.commercial.toLocaleString("en-IN")}</td>
+              <td className="dma-text-center">{row.mixed.toLocaleString("en-IN")}</td>
+              <td className="dma-text-center">{row.total.toLocaleString("en-IN")}</td>
             </tr>
           ))}
         </tbody>
         <tfoot>
           <tr>
             <td>Total</td>
-            <td className="dma-text-center">
-              {total.residential.toLocaleString("en-IN")}
-            </td>
-            <td className="dma-text-center">
-              {total.commercial.toLocaleString("en-IN")}
-            </td>
-            <td className="dma-text-center">
-              {total.mixed.toLocaleString("en-IN")}
-            </td>
-            <td className="dma-text-center">
-              {total.total.toLocaleString("en-IN")}
-            </td>
+            <td className="dma-text-center">{total.residential.toLocaleString("en-IN")}</td>
+            <td className="dma-text-center">{total.commercial.toLocaleString("en-IN")}</td>
+            <td className="dma-text-center">{total.mixed.toLocaleString("en-IN")}</td>
+            <td className="dma-text-center">{total.total.toLocaleString("en-IN")}</td>
           </tr>
         </tfoot>
       </table>

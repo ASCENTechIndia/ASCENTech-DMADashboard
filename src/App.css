@@ -36,6 +36,14 @@
 
 body {
   width: 100%;
+  font-family:
+    "Poppins",
+    "Inter",
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    sans-serif;
 }
 
 .dma-dashboard {
@@ -114,7 +122,7 @@ body {
   gap: 20px;
 }
 
-.dma-card-body--split > * {
+.dma-card-body--split>* {
   flex: 1;
 }
 
@@ -308,6 +316,7 @@ body {
   width: 48px;
   text-align: right;
 }
+
 .echart-container {
   width: 100%;
 }
@@ -315,6 +324,7 @@ body {
 .echart-container--sm {
   height: 240px;
 }
+
 .dma-legend-list {
   display: flex;
   flex-direction: column;
@@ -346,6 +356,7 @@ body {
   color: var(--dma-text-muted);
   font-size: 12.5px;
 }
+
 .dma-bar-list {
   display: flex;
   flex-direction: column;
@@ -411,6 +422,7 @@ body {
 }
 
 @media (max-width: 1100px) {
+
   .dma-row-1-2,
   .dma-row-14-1,
   .dma-row-3 {
@@ -428,18 +440,22 @@ body {
   .dma-summary-grid {
     grid-template-columns: 1fr;
   }
+
   .dma-header {
     flex-direction: row;
     text-align: center;
   }
+
   .dma-header-logo-mark {
     height: 40px;
     width: 40px;
   }
+
   .dma-header-title {
     font-size: 10px;
     display: none;
   }
+
   .dma-bar-row {
     grid-template-columns: 90px 1fr 56px;
   }

@@ -128,10 +128,10 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<DashboardPage />} />
+        <Route path="/propertydashboard" element={<DashboardPage />} />
 
         {/* Existing Home page */}
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
 
         <Route path="/rtsdashboard" element={<RTSDashboard />} />
       </Routes>

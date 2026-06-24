@@ -34,7 +34,7 @@ function PropertySummaryTable() {
         }
       } catch (err) {
         console.error("Error fetching property summary:", err);
-        setMessage(err.message);
+        setMessage(err.response.data.message);
       } finally {
         setLoading(false);
       }

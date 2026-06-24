@@ -46,7 +46,7 @@ function PropertyDistributionChart() {
         }
       } catch (err) {
         console.error('Error fetching property summary for chart:', err);
-        setMessage(err.message);
+        setMessage(err.response.data.message);
       } finally {
         setLoading(false);
       }

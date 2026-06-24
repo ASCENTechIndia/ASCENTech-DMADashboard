@@ -31,7 +31,7 @@ function CollectionRankingChart() {
         }
       } catch (err) {
         console.error("Error fetching collection ranking:", err);
-        setMessage(err.message);
+        setMessage(err.response.data.message);
       } finally {
         setLoading(false);
       }

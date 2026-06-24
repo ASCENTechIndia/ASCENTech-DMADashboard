@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import axios from "axios";
 import { useEChart } from "../hooks/useEChart";
 
@@ -13,15 +13,16 @@ const COLOR_MAP = {
 function CollectionStatusDonutChart() {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
-   const [error, setError] = useState("");
-
+   const [message, setMessage] = useState("");
+  const[loading, setLoading] = useState(true);
   useEffect(() => {
     fetchModewiseCollection();
   }, []);
 
   const fetchModewiseCollection = async () => {
     try {
-      setError("");
+      setMessage(""); 
+      setLoading(true);
       const res = await axios.get(
         `${API_BASE_URL}/property/getModewiseCollection`
       );
@@ -55,15 +56,17 @@ function CollectionStatusDonutChart() {
       setTotal(totalCollection);
     } catch (err) {
       console.error("Modewise Collection Error:", err);
-        setError(
+        setMessage(
     err?.response?.data?.message ||
     err?.message ||
     "Failed to load data"
   );
+    } finally{
+      setLoading(false);
     }
   };
 
-  const ref = useEChart(
+    const ref = useEChart(
     () => ({
       tooltip: {
         trigger: "item",
@@ -124,22 +127,26 @@ function CollectionStatusDonutChart() {
     }),
     [data, total]
   );
-if (error) {
-  return (
-    <div
-      style={{
-        width: "100%",
-        height: 260,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: "#dc2626",
-      }}
-    >
-      {error}
-    </div>
-  );
-}
+  
+    if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "150px" }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+
+  if (message) {
+    return (
+      <div className="alert alert-info m-2" role="alert">
+        <i className="bi bi-info-circle me-2"></i>
+        {message}
+      </div>
+    );
+  }
 
   return (
     <div
@@ -152,4 +159,4 @@ if (error) {
   );
 }
 
-export default CollectionStatusDonutChart;
+export default memo(CollectionStatusDonutChart);

@@ -1,74 +1,140 @@
 import '../styles/dashboard.css'
-
+import { lazy, Suspense } from "react";
 import Header from '../components/Header'
 import SummaryCards from '../components/SummaryCards'
 import DashboardCard from '../components/DashboardCard'
 import TodaysCollectionTable from '../components/TodaysCollectionTable'
 import PropertySummaryTable from '../components/PropertySummaryTable'
-import PropertyDistributionChart from '../components/PropertyDistributionChart'
 import CollectionPercentTable from '../components/CollectionPercentTable'
-import CollectionStatusDonutChart from '../components/CollectionStatusDonutChart'
 import CollectionStatusModeTable from '../components/CollectionStatusModeTable'
-import TopPerformingCorporationsChart from '../components/TopPerformingCorporationsChart'
-import PaymentModeAnalysisChart from '../components/PaymentModeAnalysisChart'
-import CollectionRankingChart from '../components/CollectionRankingChart'
+const PropertyDistributionChart = lazy(() =>
+  import("../components/PropertyDistributionChart")
+);
+const CollectionStatusDonutChart = lazy(() =>
+  import("../components/CollectionStatusDonutChart")
+);
+const TopPerformingCorporationsChart = lazy(() =>
+  import("../components/TopPerformingCorporationsChart")
+);
+const PaymentModeAnalysisChart = lazy(() =>
+  import("../components/PaymentModeAnalysisChart")
+);
+const CollectionRankingChart = lazy(() =>
+  import("../components/CollectionRankingChart")
+);
 import DashboardFooter from '../components/DashboardFooter'
 
-/**
- * DMADashboard
- * Top-level page that lays out every card in the same arrangement as the
- * approved design. Each chart/table is its own component (see src/components)
- * so wiring up the real API later just means editing src/data/dashboardData.js
- * and/or replacing the dummy props passed into each component below.
- */
 function DMADashboard() {
   return (
     <div className="dma-dashboard">
-      <div className="dma-grid">
-        <Header />
+      <div className="container-fluid px-0">
 
-        <SummaryCards />
-
-        <div className="dma-row dma-row-1-2">
-          <DashboardCard title="Today's Collection (Amount in Lakhs)" icon="calendar" color="blue">
-            <TodaysCollectionTable />
-          </DashboardCard>
-
-          <DashboardCard title="Property Summary" icon="building" color="blue" split>
-            <PropertySummaryTable />
-            <PropertyDistributionChart />
-          </DashboardCard>
+        <div className="row g-3">
+          <div className="col-12">
+            <Header />
+          </div>
         </div>
 
-        <div className="dma-row dma-row-14-1">
-          <DashboardCard title="Collection % (Amount in Cr)" icon="pie" color="blue">
-            <CollectionPercentTable />
-          </DashboardCard>
-
-          <DashboardCard title="Collection Status Mode Wise" icon="status" color="blue" split>
-            <CollectionStatusDonutChart />
-            <CollectionStatusModeTable />
-          </DashboardCard>
+        <div className="row g-3">
+          <div className="col-12">
+            <SummaryCards />
+          </div>
         </div>
 
-        <div className="dma-row dma-row-3">
-          <DashboardCard title="Top Performing Corporations (By Collection %)" icon="bars" color="green">
-            <TopPerformingCorporationsChart />
-          </DashboardCard>
+       <div className="row g-3 mt-2 align-items-stretch">
+  <div className="col-lg-4 col-md-4 col-sm-12 d-flex">
+    <DashboardCard
+      className="h-100 w-100"
+      title="Today's Collection (Amount in Lakhs)"
+      icon="calendar"
+      color="blue"
+    >
+      <TodaysCollectionTable />
+    </DashboardCard>
+  </div>
 
-          <DashboardCard title="Payment Mode Analysis (Collection in Cr)" icon="donut" color="blue">
-            <PaymentModeAnalysisChart />
-          </DashboardCard>
+  <div className="col-lg-8 col-md-8 col-sm-12 d-flex">
+    <DashboardCard
+      className="h-100 w-100"
+      title="Property Summary"
+      icon="building"
+      color="blue"
+      split
+    >
+      <PropertySummaryTable />
+    <Suspense fallback={<div>Loading Chart...</div>}>  <PropertyDistributionChart /></Suspense>
+    </DashboardCard>
+  </div>
+</div>
+      <div className="row g-3 mt-2 align-items-stretch">
+  <div className="col-lg-6 col-md-12 d-flex">
+    <DashboardCard
+      className="h-100 w-100"
+      title="Collection % (Amount in Cr)"
+      icon="pie"
+      color="blue"
+    >
+      <CollectionPercentTable />
+    </DashboardCard>
+  </div>
 
-          <DashboardCard title="Collection Ranking (By Collection in Cr)" icon="trophy" color="purple">
-            <CollectionRankingChart />
-          </DashboardCard>
+  <div className="col-lg-6 col-md-12 d-flex">
+    <DashboardCard
+      className="h-100 w-100"
+      title="Collection Status Mode Wise"
+      icon="status"
+      color="blue"
+      split
+    >
+    <Suspense fallback={<div>Loading Chart...</div>}>  <CollectionStatusDonutChart /></Suspense>
+      <CollectionStatusModeTable />
+    </DashboardCard>
+  </div>
+</div>
+      <div className="row g-3 mt-2 align-items-stretch">
+  <div className="col-lg-4 col-md-6 col-sm-12 d-flex">
+    <DashboardCard
+      className="h-100 w-100"
+      title="Top Performing Corporations (By Collection %)"
+      icon="bars"
+      color="green"
+    >
+    <Suspense fallback={<div>Loading Chart...</div>}> <TopPerformingCorporationsChart /></Suspense>
+    </DashboardCard>
+  </div>
+
+  <div className="col-lg-4 col-md-6 col-sm-12 d-flex">
+    <DashboardCard
+      className="h-100 w-100"
+      title="Payment Mode Analysis (Collection in Cr)"
+      icon="donut"
+      color="blue"
+    >
+    <Suspense fallback={<div>Loading Chart...</div>}>   <PaymentModeAnalysisChart /></Suspense>
+    </DashboardCard>
+  </div>
+
+  <div className="col-lg-4 col-md-6 col-sm-12 d-flex">
+    <DashboardCard
+      className="h-100 w-100"
+      title="Collection Ranking (By Collection in Cr)"
+      icon="trophy"
+      color="purple"
+    >
+    <Suspense fallback={<div>Loading Chart...</div>}>  <CollectionRankingChart /></Suspense>
+    </DashboardCard>
+  </div>
+</div>
+
+        <div className="row g-3 mt-2">
+          <div className="col-12">
+            <DashboardFooter />
+          </div>
         </div>
 
-        <DashboardFooter />
       </div>
     </div>
-  )
+  );
 }
 
-export default DMADashboard
+export default DMADashboard;

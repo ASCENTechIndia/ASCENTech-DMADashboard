@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import React, { memo } from "react";
 import { summaryData } from "../data/dashboardData";
 import { FaFileAlt, FaRupeeSign, FaWallet, FaChartPie } from "react-icons/fa";
 import axios from "axios";
@@ -43,15 +44,17 @@ function SummaryCards() {
       try {
         const response = await axios.get(`${API_BASE_URL}/property/getTilesData`);
         console.log(response.data);
-        if (response.data.success && response.data.data) {
-          const apiData = response.data.data;
-          setData({
-            totalDemand: Number(apiData.TOTAL_DEMAND || 0) / 10000000,
-            totalCollection: Number(apiData.TOTAL_COLLECTION || 0) / 10000000,
-            totalOutstanding: Number(apiData.TOTAL_OUTSTANDING || 0) / 10000000,
-            collectionPercent: Number(apiData.COLLECTION_PERCENTAGE || 0)
-          });
-        }
+       if (response.data.success && response.data.data?.length > 0) {
+        const apiData = response.data.data[0];
+        console.log("API Response", response.data);
+console.log("First Row", response.data.data[0]);  
+        setData({
+          totalDemand: Number(apiData.TOTAL_DEMAND || 0) / 10000000,
+          totalCollection: Number(apiData.TOTAL_COLLECTION || 0) / 10000000,
+          totalOutstanding: Number(apiData.TOTAL_OUTSTANDING || 0) / 10000000,
+          collectionPercent: Number(apiData.COLLECTION_PERCENTAGE || 0),
+        });
+      }
       } catch (error) {
         console.error("Error fetching tiles data:", error);
       }
@@ -100,4 +103,4 @@ function SummaryCards() {
   );
 }
 
-export default SummaryCards;
+export default memo(SummaryCards);

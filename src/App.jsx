@@ -17,6 +17,7 @@ import DashboardFooter from "./components/DashboardFooter";
 
 import "./styles/dashboard.css";
 import RTSDashboard from "./pages/RTSDashboard";
+import DMADashboard from "./pages/DMADashboard";
 
 function DashboardPage() {
   return (
@@ -128,7 +129,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/propertydashboard" element={<DashboardPage />} />
+        <Route path="/propertydashboard" element={<DMADashboard />} />
 
         {/* Existing Home page */}
         <Route path="/" element={<Home />} />

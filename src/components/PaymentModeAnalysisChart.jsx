@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import axios from "axios";
 import { useEChart } from "../hooks/useEChart";
 
@@ -13,7 +13,7 @@ const COLOR_MAP = {
 function PaymentModeAnalysisChart() {
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     fetchModewiseCollection();
   }, []);
@@ -21,6 +21,7 @@ function PaymentModeAnalysisChart() {
   const fetchModewiseCollection = async () => {
     try {
       setError("")
+      setLoading(true);
       const res = await axios.get(
         `${API_BASE_URL}/property/getModewiseCollection`
       );
@@ -59,6 +60,8 @@ function PaymentModeAnalysisChart() {
   );
 
   setData([]);
+    } finally{
+      setLoading(false);
     }
   };
 
@@ -90,6 +93,17 @@ function PaymentModeAnalysisChart() {
     }),
     [data]
   );
+  
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "150px" }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+  
 if (error) {
   return (
     <div
@@ -144,4 +158,4 @@ if (error) {
   );
 }
 
-export default PaymentModeAnalysisChart;
+export default memo(PaymentModeAnalysisChart);

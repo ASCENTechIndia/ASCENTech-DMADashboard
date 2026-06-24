@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -7,7 +7,8 @@ function CollectionPercentTable({
   maxRowsBeforeScroll = 5,
 }) {
   const [data, setData] = useState([]);
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState({
     demand: 0,
     collection: 0,
@@ -21,8 +22,8 @@ function CollectionPercentTable({
 
 const fetchCollectionPercent = async () => {
   try {
-    setError("");
-
+    setMessage("");
+    setLoading(true);
     const res = await axios.get(
       `${API_BASE_URL}/property/getCollectioninPerct`
     );
@@ -54,13 +55,26 @@ const fetchCollectionPercent = async () => {
       });
     }
   } catch (err) {
-    setError(
+    setMessage(
       err?.response?.data?.message ||
       err?.message ||
       "Failed to load data"
     );
+  } finally{
+    setLoading(false);
   }
 };
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "150px" }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+  
   const hasMoreThanMax =
     data.length > maxRowsBeforeScroll;
 
@@ -93,11 +107,11 @@ const fetchCollectionPercent = async () => {
           </tr>
         </thead>
 
-      <tbody>
-  {error ? (
+    <tbody>
+  {message ? (
     <tr>
       <td colSpan="5" className="text-center text-danger">
-        {error}
+        {message}
       </td>
     </tr>
   ) : (
@@ -106,15 +120,15 @@ const fetchCollectionPercent = async () => {
         <td>{row.corporation}</td>
 
         <td className="dma-text-center">
-          {row.demand.toFixed(2)}
+          {(row.demand / 10000000).toFixed(2)}
         </td>
 
         <td className="dma-text-center">
-          {row.collection.toFixed(2)}
+          {(row.collection / 10000000).toFixed(2)}
         </td>
 
         <td className="dma-text-center">
-          {row.outstanding.toFixed(2)}
+          {(row.outstanding / 10000000).toFixed(2)}
         </td>
 
         <td>
@@ -123,10 +137,7 @@ const fetchCollectionPercent = async () => {
               <div
                 className="dma-progress-fill"
                 style={{
-                  width: `${Math.min(
-                    row.percent,
-                    100
-                  )}%`,
+                  width: `${Math.min(row.percent, 100)}%`,
                 }}
               />
             </div>
@@ -140,35 +151,32 @@ const fetchCollectionPercent = async () => {
     ))
   )}
 </tbody>
- {error ? (
+ {!message && (
+  <tfoot>
     <tr>
+      <td>Total</td>
+
+      <td className="dma-text-center">
+        {(total.demand / 10000000).toFixed(2)}
+      </td>
+
+      <td className="dma-text-center">
+        {(total.collection / 10000000).toFixed(2)}
+      </td>
+
+      <td className="dma-text-center">
+        {(total.outstanding / 10000000).toFixed(2)}
+      </td>
+
+      <td className="dma-text-center">
+        {total.percent.toFixed(2)}%
+      </td>
     </tr>
-  ) : (
-        <tfoot>
-          <tr>
-            <td>Total</td>
-
-            <td className="dma-text-center">
-              {total.demand.toFixed(2)}
-            </td>
-
-            <td className="dma-text-center">
-              {total.collection.toFixed(2)}
-            </td>
-
-            <td className="dma-text-center">
-              {total.outstanding.toFixed(2)}
-            </td>
-
-            <td className="dma-text-center">
-              {total.percent.toFixed(2)}%
-            </td>
-          </tr>
-        </tfoot>
-         )}
+  </tfoot>
+)}
       </table>
     </div>
   );
 }
 
-export default CollectionPercentTable;
+export default memo(CollectionPercentTable);

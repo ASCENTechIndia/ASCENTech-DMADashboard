@@ -44,6 +44,7 @@ const Table = () => {
         const formattedItems = items.map(item => {
           const formattedItem = {
             corporation: item.VAR_CORPORATION_SHORTNAME || 'Unknown',
+            ulbId: item.NUM_CORPORATION_ID,
             applicationReceived: Number(item.TOTAL || 0),
             approved: Number(item.APPROVED || 0),
             authorisationReject: Number(item.AUTHORISATION_REJECT || 0),
@@ -97,72 +98,25 @@ const Table = () => {
     certificateIssued: 'Certificate Issued',
   };
 
-  // ─── Department data for each corporation ──────────────────────────────
-  const departmentData = {
-    Ahilyanagar: [
-      { department: 'Fire Department / অগ্নিশাখা বিলাম', applicationReceived: 61, approved: 17, authorisationReject: 16, authorisationPending: 0, paymentPending: 4, paymentReceived: 6, certificateIssued: 18 },
-      { department: 'Property Tax Department (বৈধত্ব বিলাম)', applicationReceived: 647, approved: 405, authorisationReject: 96, authorisationPending: 0, paymentPending: 16, paymentReceived: 0, certificateIssued: 130 },
-      { department: 'Construction Department / পদ / খাদ্যশালা বিলাম (Pwd)', applicationReceived: 12, approved: 2, authorisationReject: 6, authorisationPending: 0, paymentPending: 0, paymentReceived: 0, certificateIssued: 4 },
-      { department: 'Trade License', applicationReceived: 91, approved: 34, authorisationReject: 52, authorisationPending: 1, paymentPending: 3, paymentReceived: 0, certificateIssued: 1 },
-      { department: 'Solid Waste Management Department (পদকাশনী মজুমদার বিলাম)', applicationReceived: 407, approved: 2, authorisationReject: 13, authorisationPending: 9, paymentPending: 0, paymentReceived: 11, certificateIssued: 372 },
-      { department: 'Bombay Nursing Act', applicationReceived: 44, approved: 33, authorisationReject: 2, authorisationPending: 0, paymentPending: 0, paymentReceived: 0, certificateIssued: 9 },
-      { department: 'Water Supply Department / পদশী বিলাম', applicationReceived: 433, approved: 124, authorisationReject: 67, authorisationPending: 0, paymentPending: 6, paymentReceived: 0, certificateIssued: 236 },
-      { department: 'NOC Department', applicationReceived: 133, approved: 40, authorisationReject: 57, authorisationPending: 1, paymentPending: 2, paymentReceived: 7, certificateIssued: 26 },
-      { department: 'Birth And Death Department / জন্ম-নমূণ বিলাম', applicationReceived: 13706, approved: 1614, authorisationReject: 316, authorisationPending: 317, paymentPending: 355, paymentReceived: 22, certificateIssued: 11082 },
-      { department: 'Marriage Registration Dept.', applicationReceived: 40, approved: 4, authorisationReject: 33, authorisationPending: 0, paymentPending: 2, paymentReceived: 0, certificateIssued: 1 },
-      { department: 'Town Planning Department / পদশনী বিলাম', applicationReceived: 47, approved: 17, authorisationReject: 12, authorisationPending: 1, paymentPending: 0, paymentReceived: 0, certificateIssued: 17 },
-    ],
-    // Placeholder for other corporations – replace with real data
-    Ichalkaranji: [{ department: 'Sample Dept', applicationReceived: 100, approved: 50, authorisationReject: 10, authorisationPending: 5, paymentPending: 20, paymentReceived: 15, certificateIssued: 0 }],
-    'Urun Ilampur': [{ department: 'Sample Dept', applicationReceived: 100, approved: 50, authorisationReject: 10, authorisationPending: 5, paymentPending: 20, paymentReceived: 15, certificateIssued: 0 }],
-    Kolhapur: [{ department: 'Sample Dept', applicationReceived: 100, approved: 50, authorisationReject: 10, authorisationPending: 5, paymentPending: 20, paymentReceived: 15, certificateIssued: 0 }],
-    Jalgaon: [{ department: 'Sample Dept', applicationReceived: 100, approved: 50, authorisationReject: 10, authorisationPending: 5, paymentPending: 20, paymentReceived: 15, certificateIssued: 0 }],
-    Dhule: [{ department: 'Sample Dept', applicationReceived: 100, approved: 50, authorisationReject: 10, authorisationPending: 5, paymentPending: 20, paymentReceived: 15, certificateIssued: 0 }],
-    Parbhani: [{ department: 'Sample Dept', applicationReceived: 100, approved: 50, authorisationReject: 10, authorisationPending: 5, paymentPending: 20, paymentReceived: 15, certificateIssued: 0 }],
-    'Bhivandi Nizampur': [{ department: 'Sample Dept', applicationReceived: 100, approved: 50, authorisationReject: 10, authorisationPending: 5, paymentPending: 20, paymentReceived: 15, certificateIssued: 0 }],
-    Malegaon: [{ department: 'Sample Dept', applicationReceived: 100, approved: 50, authorisationReject: 10, authorisationPending: 5, paymentPending: 20, paymentReceived: 15, certificateIssued: 0 }],
-    Latur: [{ department: 'Sample Dept', applicationReceived: 100, approved: 50, authorisationReject: 10, authorisationPending: 5, paymentPending: 20, paymentReceived: 15, certificateIssued: 0 }],
-    Sangli: [{ department: 'Sample Dept', applicationReceived: 100, approved: 50, authorisationReject: 10, authorisationPending: 5, paymentPending: 20, paymentReceived: 15, certificateIssued: 0 }],
-  };
-
-  // ─── Service data for each department ──────────────────────────────────
-  // Structure: serviceData[corpName][deptName] = array of services
-  const serviceData = {
-    Ahilyanagar: {
-      'Fire Department / অগ্নিশাখা বিলাম': [
-        { service: 'अधिक्षमन अंतिम नगरकर्ता दाखला देणे - To issue final Fire NOC', applicationReceived: 15, approved: 4, authorisationReject: 5, authorisationPending: 0, paymentPending: 0, paymentReceived: 0, certificateIssued: 6 },
-        { service: 'अधिक्षमन नगरकर्ता दाखला देणे - To issue Fire NOC', applicationReceived: 45, approved: 13, authorisationReject: 10, authorisationPending: 0, paymentPending: 4, paymentReceived: 6, certificateIssued: 12 },
-        { service: 'Fire NOC – Temporary Structures', applicationReceived: 1, approved: 0, authorisationReject: 1, authorisationPending: 0, paymentPending: 0, paymentReceived: 0, certificateIssued: 0 },
-      ],
-      // Add other departments' services as needed – placeholder
-      'Property Tax Department (বৈধত্ব বিলাম)': [{ service: 'Sample Service', applicationReceived: 10, approved: 5, authorisationReject: 1, authorisationPending: 0, paymentPending: 2, paymentReceived: 1, certificateIssued: 1 }],
-      'Construction Department / পদ / খাদ্যশালা বিলাম (Pwd)': [{ service: 'Sample Service', applicationReceived: 10, approved: 5, authorisationReject: 1, authorisationPending: 0, paymentPending: 2, paymentReceived: 1, certificateIssued: 1 }],
-      'Trade License': [{ service: 'Sample Service', applicationReceived: 10, approved: 5, authorisationReject: 1, authorisationPending: 0, paymentPending: 2, paymentReceived: 1, certificateIssued: 1 }],
-      'Solid Waste Management Department (পদকাশনী মজুমদার বিলাম)': [{ service: 'Sample Service', applicationReceived: 10, approved: 5, authorisationReject: 1, authorisationPending: 0, paymentPending: 2, paymentReceived: 1, certificateIssued: 1 }],
-      'Bombay Nursing Act': [{ service: 'Sample Service', applicationReceived: 10, approved: 5, authorisationReject: 1, authorisationPending: 0, paymentPending: 2, paymentReceived: 1, certificateIssued: 1 }],
-      'Water Supply Department / পদশী বিলাম': [{ service: 'Sample Service', applicationReceived: 10, approved: 5, authorisationReject: 1, authorisationPending: 0, paymentPending: 2, paymentReceived: 1, certificateIssued: 1 }],
-      'NOC Department': [{ service: 'Sample Service', applicationReceived: 10, approved: 5, authorisationReject: 1, authorisationPending: 0, paymentPending: 2, paymentReceived: 1, certificateIssued: 1 }],
-      'Birth And Death Department / জন্ম-নমূণ বিলাম': [{ service: 'Sample Service', applicationReceived: 10, approved: 5, authorisationReject: 1, authorisationPending: 0, paymentPending: 2, paymentReceived: 1, certificateIssued: 1 }],
-      'Marriage Registration Dept.': [{ service: 'Sample Service', applicationReceived: 10, approved: 5, authorisationReject: 1, authorisationPending: 0, paymentPending: 2, paymentReceived: 1, certificateIssued: 1 }],
-      'Town Planning Department / পদশনী বিলাম': [{ service: 'Sample Service', applicationReceived: 10, approved: 5, authorisationReject: 1, authorisationPending: 0, paymentPending: 2, paymentReceived: 1, certificateIssued: 1 }],
-    },
-    // Placeholder for other corporations – you can add real data later
-    Ichalkaranji: {},
-    'Urun Ilampur': {},
-    Kolhapur: {},
-    Jalgaon: {},
-    Dhule: {},
-    Parbhani: {},
-    'Bhivandi Nizampur': {},
-    Malegaon: {},
-    Latur: {},
-    Sangli: {},
-  };
-
   // ─── State ──────────────────────────────────────────────────────────────
   const [view, setView] = useState('summary'); // 'summary', 'departments', 'services'
   const [selectedCorporation, setSelectedCorporation] = useState(null);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
+  const [selectedUlbId, setSelectedUlbId] = useState(null);
+  const [departmentData, setDepartmentData] = useState({});
+  const [serviceData, setServiceData] = useState({});
+  const [statusData, setStatusData] = useState([]);
+  const [selectedStatusLabel, setSelectedStatusLabel] = useState('');
+
+  const keyToStatus = {
+    applicationReceived: 'TOT',
+    approved: 'AP',
+    authorisationReject: 'CR',
+    authorisationPending: 'CP',
+    paymentPending: 'PP',
+    paymentReceived: 'NW',
+    certificateIssued: 'DL',
+  };
 
   // ─── Toast state ──────────────────────────────────────────────────────
   const [toastMessage, setToastMessage] = useState(null);
@@ -176,14 +130,118 @@ const Table = () => {
     setTimeout(() => setShowToast(false), 3000);
   };
 
-  const handleCorporationClick = (corpName) => {
-    setSelectedCorporation(corpName);
-    setView('departments');
+  const handleStatusClick = async (columnKey, ulbId) => {
+    const status = keyToStatus[columnKey];
+    if (!status) return;
+
+    setSelectedStatusLabel(colLabels[columnKey]);
+    setView('status');
+
+    try {
+      setLoading(true);
+      const url = ulbId 
+        ? `${API_BASE_URL}/dashboard/RTSStatusWise?status=${status}&ulbId=${ulbId}`
+        : `${API_BASE_URL}/dashboard/RTSStatusWise?status=${status}`;
+      
+      const response = await axios.get(url);
+      console.log("status", response);
+      if (!response.data.success) {
+        throw new Error(`${response.data.message || "Failed to load status data"}`);
+      }
+      
+      const items = Array.isArray(response.data) ? response.data.data : (response.data.data || []);
+      
+      const formattedItems = items.map(item => ({
+        department: item.VAR_DEPT_ENGNAME || 'Unknown',
+        deptId: item.NUM_APPLICATION_DEPTID,
+        count: Number(item.STATUS || 0),
+        applicationStatus: item.APPLICATION_STATUS || status
+      }));
+
+      setStatusData(formattedItems);
+    } catch (err) {
+      console.error("Error fetching status data:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDepartmentClick = (deptName) => {
+  const handleCorporationClick = async (corpName, ulbId) => {
+    setSelectedCorporation(corpName);
+    setSelectedUlbId(ulbId);
+    setView('departments');
+
+    if (!departmentData[corpName]) {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${API_BASE_URL}/dashboard/RTSULBDeptWise?ulbId=${ulbId}`);
+        if (!response.data.success) {
+          throw new Error(`${response.message || "Failed to load departments"}`);
+        }
+        
+        const items = Array.isArray(response.data) ? response.data.data : (response.data.data || []);
+        
+        const formattedItems = items.map(item => ({
+          department: item.VAR_DEPT_ENGNAME ||  'Unknown',
+          applicationReceived: Number(item.TOTAL || 0),
+          approved: Number(item.APPROVED || 0),
+          authorisationReject: Number(item.AUTHORISATION_REJECT || 0),
+          authorisationPending: Number(item.AUTHORISATION_PENDING || 0),
+          paymentPending: Number(item.PAYMENT_PENDING || 0),
+          paymentReceived: Number(item.NEW || 0),
+          certificateIssued: Number(item.DELIVERD || 0),
+          deptId: item.NUM_APPLICATION_DEPTID
+        }));
+
+        setDepartmentData(prev => ({ ...prev, [corpName]: formattedItems }));
+      } catch (err) {
+        console.error("Error fetching department data:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleDepartmentClick = async (deptName, deptId) => {
     setSelectedDepartment(deptName);
     setView('services');
+
+    if (selectedUlbId && deptId) {
+      // Create a key for caching
+      const cacheKey = `${selectedCorporation}_${deptName}`;
+      
+      if (!serviceData[cacheKey]) {
+        try {
+          setLoading(true);
+          const response = await axios.get(`${API_BASE_URL}/dashboard/RTSULBServiceWise?ulbId=${selectedUlbId}&deptId=${deptId}`);
+          if (!response.data.success) {
+            throw new Error(`${response.message || "Failed to load services"}`);
+          }
+          
+          const items = Array.isArray(response.data) ? response.data.data : (response.data.data || []);
+          
+          const formattedItems = items.map(item => ({
+            service: item.VAR_SERVICE_ENG_NAME || 'Unknown',
+            applicationReceived: Number(item.TOTAL || 0),
+            approved: Number(item.APPROVED || 0),
+            authorisationReject: Number(item.AUTHORISATION_REJECT || 0),
+            authorisationPending: Number(item.AUTHORISATION_PENDING || 0),
+            paymentPending: Number(item.PAYMENT_PENDING || 0),
+            paymentReceived: Number(item.NEW || 0),
+            certificateIssued: Number(item.DELIVERD || 0),
+          }));
+
+          setServiceData(prev => ({ ...prev, [cacheKey]: formattedItems }));
+        } catch (err) {
+          console.error("Error fetching service data:", err);
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      }
+    }
   };
 
   const handleBackToSummary = () => {
@@ -195,6 +253,10 @@ const Table = () => {
   const handleBackToDepartments = () => {
     setView('departments');
     setSelectedDepartment(null);
+  };
+
+  const computeStatusTotal = (items) => {
+    return items.reduce((acc, item) => acc + item.count, 0);
   };
 
   const formatNumber = (num) => num.toLocaleString();
@@ -265,6 +327,19 @@ const Table = () => {
         <i className="bi bi-arrow-left me-1"></i> Back to Departments
       </button>
     );
+  } else if (view === 'status') {
+    title = `${selectedCorporation} – ${selectedStatusLabel} Breakdown`;
+    backButton = (
+      <button className="btn btn-sm btn-outline-primary ms-auto" onClick={() => {
+        if (selectedUlbId) {
+          setView('services');
+        } else {
+          setView('summary');
+        }
+      }}>
+        <i className="bi bi-arrow-left me-1"></i> Back
+      </button>
+    );
   }
 
   return (
@@ -311,7 +386,7 @@ const Table = () => {
                           <button
                             className="btn btn-link p-0 fw-bold text-decoration-underline"
                             style={{ color: 'var(--dma-blue)' }}
-                            onClick={() => handleCorporationClick(row.corporation)}
+                            onClick={() => handleCorporationClick(row.corporation, row.ulbId)}
                           >
                             {row.corporation}
                             <i className="bi bi-box-arrow-up-right ms-1 small"></i>
@@ -395,7 +470,7 @@ const Table = () => {
                           <button
                             className="btn btn-link p-0 fw-bold text-decoration-underline"
                             style={{ color: 'var(--dma-blue)' }}
-                            onClick={() => handleDepartmentClick(dept.department)}
+                            onClick={() => handleDepartmentClick(dept.department, dept.deptId)}
                           >
                             {dept.department}
                             <i className="bi bi-box-arrow-up-right ms-1 small"></i>
@@ -411,7 +486,7 @@ const Table = () => {
                   </tbody>
                   <tfoot>
                     <tr>
-                      <td className="text-center">—</td>
+                      <td className="text-center"></td>
                       <td><strong>Total</strong></td>
                       {(() => {
                         const deptTotals = computeDeptTotals(departmentData[selectedCorporation]);
@@ -429,7 +504,7 @@ const Table = () => {
 
             {view === 'services' && (
               // ─── SERVICE TABLE ─────────────────────────────────────────
-              selectedCorporation && selectedDepartment && serviceData[selectedCorporation]?.[selectedDepartment] ? (
+              selectedCorporation && selectedDepartment && serviceData[`${selectedCorporation}_${selectedDepartment}`] ? (
                 <table className="dma-table table table-bordered">
                   <thead>
                     <tr>
@@ -445,7 +520,7 @@ const Table = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {serviceData[selectedCorporation][selectedDepartment].map((svc, idx) => (
+                    {serviceData[`${selectedCorporation}_${selectedDepartment}`].map((svc, idx) => (
                       <tr key={idx}>
                         <td className="text-center">{idx + 1}</td>
                         <td>{svc.service}</td>
@@ -459,19 +534,69 @@ const Table = () => {
                   </tbody>
                   <tfoot>
                     <tr>
-                      <td className="text-center">—</td>
+                      <td className="text-center"></td>
                       <td><strong>Total</strong></td>
                       {(() => {
-                        const svcTotals = computeServiceTotals(serviceData[selectedCorporation][selectedDepartment]);
-                        return colKeys.map(key => (
-                          <td key={key} className="text-center"><strong>{formatNumber(svcTotals[key])}</strong></td>
-                        ));
+                        const svcTotals = computeServiceTotals(serviceData[`${selectedCorporation}_${selectedDepartment}`]);
+                        return colKeys.map(key => {
+                          const value = svcTotals[key];
+                          const isZero = value === 0;
+                          return (
+                            <td key={key} className="text-center">
+                              {isZero ? (
+                                <span className="text-muted">{formatNumber(value)}</span>
+                              ) : (
+                                <button
+                                  className="btn btn-link btn-sm p-0 text-white text-decoration-underline"
+                                  onClick={() => handleStatusClick(key, selectedUlbId)}
+                                  style={{ cursor: 'pointer', fontWeight: 700 }}
+                                >
+                                  {formatNumber(value)}
+                                  <i className="bi bi-chevron-right ms-1 small"></i>
+                                </button>
+                              )}
+                            </td>
+                          );
+                        });
                       })()}
                     </tr>
                   </tfoot>
                 </table>
               ) : (
                 <p className="text-muted">No service data available for {selectedDepartment}.</p>
+              )
+            )}
+
+            {view === 'status' && (
+              // ─── STATUS TABLE ──────────────────────────────────────────
+              statusData.length > 0 ? (
+                <table className="dma-table table table-bordered">
+                  <thead>
+                    <tr>
+                      <th style={{ width: '60px' }}>Sr. No.</th>
+                      <th>Department</th>
+                      <th className="text-center">{selectedStatusLabel}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {statusData.map((item, idx) => (
+                      <tr key={idx}>
+                        <td className="text-center">{idx + 1}</td>
+                        <td>{item.department}</td>
+                        <td className="text-center">{formatNumber(item.count)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td className="text-center"></td>
+                      <td><strong>Total</strong></td>
+                      <td className="text-center"><strong>{formatNumber(computeStatusTotal(statusData))}</strong></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              ) : (
+                <p className="text-muted">No data available.</p>
               )
             )}
           </div>

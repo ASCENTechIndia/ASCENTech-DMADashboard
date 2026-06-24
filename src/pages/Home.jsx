@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
-import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 import HomeCards from "../components/HomeCards";
 import Header from "../components/Header";
 
@@ -10,6 +9,13 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function Home() {
   const [cards, setCards] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
+    const handleCardClick = (title) => {
+    if (title === "RTS") {
+      navigate("/rtsdashboard");
+    }
+  };
 
   useEffect(() => {
     fetchDashboard();
@@ -59,7 +65,10 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          <HomeCards cards={cards} />
+         <HomeCards
+  cards={cards}
+  onCardClick={handleCardClick}
+/>
         )}
       </div>
     </div>

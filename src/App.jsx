@@ -17,6 +17,7 @@ import DashboardFooter from "./components/DashboardFooter";
 
 import "./styles/dashboard.css";
 import RTSDashboard from "./pages/RTSDashboard";
+import RTSDashboard_NEW from "./pages/RTSDashboared_NEW";
 
 function DashboardPage() {
   return (
@@ -134,6 +135,9 @@ function App() {
         <Route path="/" element={<Home />} />
 
         <Route path="/rtsdashboard" element={<RTSDashboard />} />
+
+        {/* NEW RTS Dashboard */}
+        <Route path="/rtsdashboard-new" element={<RTSDashboard_NEW />} />
       </Routes>
     </Router>
   );

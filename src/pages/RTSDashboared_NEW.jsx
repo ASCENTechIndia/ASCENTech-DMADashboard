@@ -1,4 +1,5 @@
 // RTSDashboared_NEW.jsx
+import React, { useState, useEffect } from "react";
 import "../styles/dashboard.css";
 import "../styles/rts-new.css";
 
@@ -9,6 +10,27 @@ import Table_NEW from "../components/Table_NEW";
 import DashboardFooter_NEW from "../components/DashboardFooter_NEW";
 
 function RTSDashboard_NEW() {
+  const [lastUpdated, setLastUpdated] = useState("");
+
+  useEffect(() => {
+    const now = new Date();
+    const day = now.getDate();
+    const months = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    const month = months[now.getMonth()];
+    const year = now.getFullYear();
+    let hours = now.getHours();
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0 hour should be 12
+    const formattedHours = String(hours).padStart(2, "0");
+
+    setLastUpdated(`${day} ${month} ${year} ${formattedHours}:${minutes} ${ampm}`);
+  }, []);
+
   return (
     <div className="dma-dashboard">
       {/* 1 ── Top Header bar */}
@@ -31,7 +53,7 @@ function RTSDashboard_NEW() {
               <rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="2" />
               <path d="M3 9h18M8 3v4M16 3v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             </svg>
-            Last Updated: 20 May 2025 04:30 PM
+            Last Updated: {lastUpdated || "..."}
           </span>
         </div>
       </div>

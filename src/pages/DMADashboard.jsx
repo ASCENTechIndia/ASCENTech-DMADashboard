@@ -42,7 +42,7 @@ function DMADashboard() {
         </div>
 
        <div className="row g-3 mt-2 align-items-stretch">
-  <div className="col-lg-4 col-md-4 col-sm-12 d-flex">
+  {/* <div className="col-lg-4 col-md-4 col-sm-12 d-flex">
     <DashboardCard
       className="h-100 w-100"
       title="Today's Collection (Amount in Lakhs)"
@@ -51,9 +51,9 @@ function DMADashboard() {
     >
       <TodaysCollectionTable />
     </DashboardCard>
-  </div>
+  </div> */}
 
-  <div className="col-lg-8 col-md-8 col-sm-12 d-flex">
+  <div className="col-lg-12 col-md-12 col-sm-12 d-flex">
     <DashboardCard
       className="h-100 w-100"
       title="Property Summary"

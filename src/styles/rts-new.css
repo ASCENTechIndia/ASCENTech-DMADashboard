@@ -31,27 +31,22 @@
   flex-shrink: 0;
 }
 
-.rts-hamburger {
+.rts-back-btn {
   background: none;
   border: none;
   cursor: pointer;
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 4px;
+  align-items: center;
+  justify-content: center;
+  color: var(--rts-navy);
+  padding: 6px;
+  border-radius: 8px;
+  transition: background-color 0.15s, color 0.15s;
 }
 
-.rts-hamburger span {
-  display: block;
-  width: 22px;
-  height: 2.5px;
-  background: var(--rts-navy);
-  border-radius: 2px;
-  transition: background 0.2s;
-}
-
-.rts-hamburger:hover span {
-  background: var(--dma-blue);
+.rts-back-btn:hover {
+  background-color: #f1f5f9;
+  color: var(--dma-blue);
 }
 
 .rts-header-logo-wrap {
@@ -330,10 +325,11 @@
   font-size: 13px;
   text-decoration: none;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 5px;
   transition: color 0.15s;
-  white-space: nowrap;
+  text-align: left;
+  white-space: normal;
 }
 
 .rts-corp-link:hover {
@@ -344,18 +340,19 @@
 .rts-corp-icon {
   flex-shrink: 0;
   opacity: 0.85;
-  vertical-align: middle;
+  margin-top: 2px;
 }
 
 /* Service label (non-clickable, same layout) */
 .rts-service-label {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 6px;
   font-size: 13px;
   color: var(--dma-text);
   font-weight: 500;
-  white-space: nowrap;
+  text-align: left;
+  white-space: normal;
 }
 
 .text-center {
@@ -563,8 +560,40 @@
 /* ── Print styles ───────────────────────────────────────────────────── */
 @media print {
   .rts-export-btn,
-  .rts-hamburger,
+  .rts-back-btn,
   .rts-pagination-bar {
     display: none !important;
   }
+}
+
+/* Clickable table link buttons */
+.rts-cell-link {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.rts-cell-link:hover {
+  opacity: 0.82;
+}
+
+.rts-total-link {
+  background: none;
+  border: none;
+  color: #ffffff !important;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.rts-total-link:hover {
+  color: #e2e8f0 !important;
 }

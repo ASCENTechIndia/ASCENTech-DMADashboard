@@ -33,13 +33,6 @@ function RTSDashboard_NEW() {
             </svg>
             Last Updated: 20 May 2025 04:30 PM
           </span>
-          <button className="rts-export-btn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M12 3v12M7 10l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-            Export
-          </button>
         </div>
       </div>
 

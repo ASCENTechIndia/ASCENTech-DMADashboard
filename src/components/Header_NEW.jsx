@@ -1,19 +1,26 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Header_NEW({ title = "DMA Dashboard" }) {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <header className="rts-header">
       <div className="rts-header-left">
         <button
-          className="rts-hamburger"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
+          className="rts-back-btn"
+          onClick={() => {
+            const event = new CustomEvent("rts-back-click", { cancelable: true });
+            window.dispatchEvent(event);
+            if (!event.defaultPrevented) {
+              navigate("/home-new");
+            }
+          }}
+          aria-label="Go back to Home"
         >
-          <span />
-          <span />
-          <span />
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
+          </svg>
         </button>
         <div className="rts-header-logo-wrap">
           <img

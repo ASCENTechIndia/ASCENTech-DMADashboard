@@ -90,87 +90,7 @@ const computeTotals = (rows) => {
   }, {});
 };
 
-/* ── Pagination component ───────────────────────────────────────────── */
-function Pagination({ total, page, rowsPerPage, onPage, onRowsPerPage }) {
-  const totalPages = Math.max(1, Math.ceil(total / rowsPerPage));
-  const pages = [];
 
-  // build page buttons (max 5 visible)
-  let start = Math.max(1, page - 2);
-  let end = Math.min(totalPages, start + 4);
-  if (end - start < 4) start = Math.max(1, end - 4);
-  for (let i = start; i <= end; i++) pages.push(i);
-
-  return (
-    <div className="rts-pagination-bar">
-      <span className="rts-pagination-info">
-        Showing {total === 0 ? 0 : (page - 1) * rowsPerPage + 1} to{" "}
-        {Math.min(page * rowsPerPage, total)} of {total} entries
-      </span>
-
-      <div className="rts-pagination-controls">
-        <button
-          className="rts-page-btn"
-          onClick={() => onPage(1)}
-          disabled={page === 1}
-          title="First"
-        >
-          «
-        </button>
-        <button
-          className="rts-page-btn"
-          onClick={() => onPage(page - 1)}
-          disabled={page === 1}
-          title="Previous"
-        >
-          ‹
-        </button>
-
-        {pages.map((p) => (
-          <button
-            key={p}
-            className={`rts-page-btn${p === page ? " rts-page-btn--active" : ""}`}
-            onClick={() => onPage(p)}
-          >
-            {p}
-          </button>
-        ))}
-
-        <button
-          className="rts-page-btn"
-          onClick={() => onPage(page + 1)}
-          disabled={page === totalPages}
-          title="Next"
-        >
-          ›
-        </button>
-        <button
-          className="rts-page-btn"
-          onClick={() => onPage(totalPages)}
-          disabled={page === totalPages}
-          title="Last"
-        >
-          »
-        </button>
-      </div>
-
-      <div className="rts-pagination-rows">
-        <span>Rows per page:</span>
-        <select
-          value={rowsPerPage}
-          onChange={(e) => onRowsPerPage(Number(e.target.value))}
-          className="rts-rows-select"
-        >
-          {[10, 25, 50].map((n) => (
-            <option key={n} value={n}>
-              {n}
-            </option>
-          ))}
-        </select>
-      </div>
-    </div>
-  );
-}
 
 /* ── Loading spinner ────────────────────────────────────────────────── */
 function Loader() {
@@ -202,10 +122,6 @@ const Table_NEW = () => {
   const [statusData, setStatusData] = useState([]);
   const [loadingDrill, setLoadingDrill] = useState(false);
 
-  /* ─── Pagination ────────────────────────────────────────────────── */
-  const [page, setPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-
   /* ─── Fetch summary on mount ────────────────────────────────────── */
   useEffect(() => {
     const fetchSummary = async () => {
@@ -236,10 +152,36 @@ const Table_NEW = () => {
     fetchSummary();
   }, []);
 
-  /* ─── Reset page when view changes ─────────────────────────────── */
+  /* ─── Handle header back click step by step ─────────────────────── */
   useEffect(() => {
-    setPage(1);
-  }, [view, selectedCorp, selectedDept]);
+    const handleHeaderBack = (e) => {
+      if (view !== "summary") {
+        e.preventDefault(); // Prevent navigating away to /home-new
+        if (view === "status") {
+          // If status, return to services (or summary if we don't have selected dept)
+          if (selectedDept) {
+            setView("services");
+          } else {
+            setView("summary");
+            setSelectedCorp(null);
+            setSelectedUlbId(null);
+          }
+        } else if (view === "services") {
+          setView("departments");
+          setSelectedDept(null);
+        } else if (view === "departments") {
+          setView("summary");
+          setSelectedCorp(null);
+          setSelectedUlbId(null);
+        }
+      }
+    };
+
+    window.addEventListener("rts-back-click", handleHeaderBack);
+    return () => {
+      window.removeEventListener("rts-back-click", handleHeaderBack);
+    };
+  }, [view, selectedDept]);
 
   /* ─── Determine current data rows ──────────────────────────────── */
   const currentRows = useMemo(() => {
@@ -249,10 +191,7 @@ const Table_NEW = () => {
     return [];
   }, [view, summaryRows, deptCache, serviceCache, selectedCorp, selectedDept]);
 
-  const pagedRows = useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    return currentRows.slice(start, start + rowsPerPage);
-  }, [currentRows, page, rowsPerPage]);
+
 
   const totals = useMemo(() => computeTotals(currentRows), [currentRows]);
 
@@ -323,16 +262,24 @@ const Table_NEW = () => {
     }
   };
 
-  const handleStatusClick = async (columnKey) => {
+  const handleStatusClick = async (columnKey, overrideUlbId, overrideCorpName) => {
     const status = KEY_TO_STATUS[columnKey];
     if (!status) return;
+
+    const targetUlbId = overrideUlbId !== undefined ? overrideUlbId : selectedUlbId;
+    const targetCorpName = overrideCorpName !== undefined ? overrideCorpName : selectedCorp;
+
     setSelectedStatusLabel(COL_LABELS[columnKey]);
+    if (overrideUlbId !== undefined) {
+      setSelectedUlbId(overrideUlbId);
+      setSelectedCorp(overrideCorpName);
+    }
     setView("status");
 
     try {
       setLoadingDrill(true);
-      const url = selectedUlbId
-        ? `${API_BASE_URL}/dashboard/RTSStatusWise?status=${status}&ulbId=${selectedUlbId}`
+      const url = targetUlbId
+        ? `${API_BASE_URL}/dashboard/RTSStatusWise?status=${status}&ulbId=${targetUlbId}`
         : `${API_BASE_URL}/dashboard/RTSStatusWise?status=${status}`;
       const res = await axios.get(url);
       if (!res.data.success) throw new Error(res.data.message || "Status API error");
@@ -520,17 +467,17 @@ const Table_NEW = () => {
                 </tr>
               </thead>
               <tbody>
-                {pagedRows.length === 0 ? (
+                {currentRows.length === 0 ? (
                   <tr>
                     <td colSpan={9} className="text-center rts-no-data">
                       No data available
                     </td>
                   </tr>
                 ) : (
-                  pagedRows.map((row, idx) => (
+                  currentRows.map((row, idx) => (
                     <tr key={idx}>
                       <td className="text-center">
-                        {(page - 1) * rowsPerPage + idx + 1}
+                        {idx + 1}
                       </td>
                       <td>{firstColRender(row, idx)}</td>
                       {COL_KEYS.map((k) => {
@@ -539,7 +486,7 @@ const Table_NEW = () => {
                           <td key={k} className="text-center">
                             <span
                               style={{
-                                color: val === 0 ? "#94a3b8" : COL_COLORS[k],
+                                color: val === 0 ? "#000000" : COL_COLORS[k],
                                 fontWeight: val === 0 ? 400 : 600,
                               }}
                             >
@@ -556,26 +503,29 @@ const Table_NEW = () => {
                 <tr>
                   <td />
                   <td>TOTAL</td>
-                  {COL_KEYS.map((k) => (
-                    <td key={k} className="text-center">
-                      {fmt(totals[k])}
-                    </td>
-                  ))}
+                  {COL_KEYS.map((k) => {
+                    const val = totals[k] || 0;
+                    return (
+                      <td key={k} className="text-center">
+                        {val === 0 ? (
+                          <span>0</span>
+                        ) : view === "services" ? (
+                          <button
+                            className="rts-total-link"
+                            onClick={() => handleStatusClick(k)}
+                          >
+                            {fmt(val)}
+                          </button>
+                        ) : (
+                          <span>{fmt(val)}</span>
+                        )}
+                      </td>
+                    );
+                  })}
                 </tr>
               </tfoot>
             </table>
           </div>
-
-          <Pagination
-            total={currentRows.length}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            onPage={(p) => setPage(p)}
-            onRowsPerPage={(n) => {
-              setRowsPerPage(n);
-              setPage(1);
-            }}
-          />
         </>
       )}
     </div>

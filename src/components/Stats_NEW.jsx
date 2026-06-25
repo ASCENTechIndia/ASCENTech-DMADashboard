@@ -1,6 +1,9 @@
-// Stats_NEW.jsx – Static 7 KPI cards with updated icons + larger size
-
+// Stats_NEW.jsx – 7 KPI cards with API integration
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import SummaryCard_NEW from "./SummaryCard_NEW";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /* ── Inline SVG Icons (matching reference image) ────────────────────── */
 
@@ -72,64 +75,116 @@ const IconCertificate = () => (
   </svg>
 );
 
-/* ── Static card data ───────────────────────────────────────────────── */
-const STATIC_CARDS = [
-  {
-    icon: <IconBuilding />,
-    label: "Corporations",
-    value: "8",
-    sub: "Total Corporations",
-    color: "navy",
-  },
-  {
-    icon: <IconClipboard />,
-    label: "Applications Received",
-    value: "32,715",
-    sub: "Total Received",
-    color: "blue",
-  },
-  {
-    icon: <IconCheckCircle />,
-    label: "Approved",
-    value: "4,053",
-    sub: "Total Approved",
-    color: "green",
-  },
-  {
-    icon: <IconXCircle />,
-    label: "Authorization Pending",
-    value: "9,058",
-    sub: "Pending",
-    color: "red",
-  },
-  {
-    icon: <IconClock />,
-    label: "Payment Pending",
-    value: "1,506",
-    sub: "Pending",
-    color: "orange",
-  },
-  {
-    icon: <IconCard />,
-    label: "Payment Received",
-    value: "3,697",
-    sub: "Total Received",
-    color: "teal",
-  },
-  {
-    icon: <IconCertificate />,
-    label: "Certificates Issued",
-    value: "28,071",
-    sub: "Total Issued",
-    color: "purple",
-  },
-];
-
 /* ── Stats_NEW component ────────────────────────────────────────────── */
 function Stats_NEW() {
+  const [stats, setStats] = useState({
+    corporations: 0,
+    applicationReceived: 0,
+    approved: 0,
+    authorisationPending: 0,
+    paymentPending: 0,
+    paymentReceived: 0,
+    certificateIssued: 0,
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(`${API_BASE_URL}/dashboard/RTSULBWiseadd`);
+        if (res.data && res.data.success) {
+          const items = res.data.data || [];
+          const aggregated = items.reduce(
+            (acc, item) => {
+              acc.applicationReceived += Number(item.TOTAL || 0);
+              acc.approved += Number(item.APPROVED || 0);
+              acc.authorisationPending += Number(item.AUTHORISATION_PENDING || 0);
+              acc.paymentPending += Number(item.PAYMENT_PENDING || 0);
+              acc.paymentReceived += Number(item.NEW || 0);
+              acc.certificateIssued += Number(item.DELIVERD || 0);
+              return acc;
+            },
+            {
+              applicationReceived: 0,
+              approved: 0,
+              authorisationPending: 0,
+              paymentPending: 0,
+              paymentReceived: 0,
+              certificateIssued: 0,
+            }
+          );
+          setStats({
+            corporations: items.length,
+            ...aggregated,
+          });
+        }
+      } catch (err) {
+        console.error("fetchStats error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  const fmt = (n) => Number(n || 0).toLocaleString("en-IN");
+
+  const cards = [
+    {
+      icon: <IconBuilding />,
+      label: "Corporations",
+      value: loading ? "..." : fmt(stats.corporations),
+      sub: "Total Corporations",
+      color: "navy",
+    },
+    {
+      icon: <IconClipboard />,
+      label: "Applications Received",
+      value: loading ? "..." : fmt(stats.applicationReceived),
+      sub: "Total Received",
+      color: "blue",
+    },
+    {
+      icon: <IconCheckCircle />,
+      label: "Approved",
+      value: loading ? "..." : fmt(stats.approved),
+      sub: "Total Approved",
+      color: "green",
+    },
+    {
+      icon: <IconXCircle />,
+      label: "Authorization Pending",
+      value: loading ? "..." : fmt(stats.authorisationPending),
+      sub: "Pending",
+      color: "red",
+    },
+    {
+      icon: <IconClock />,
+      label: "Payment Pending",
+      value: loading ? "..." : fmt(stats.paymentPending),
+      sub: "Pending",
+      color: "orange",
+    },
+    {
+      icon: <IconCard />,
+      label: "Payment Received",
+      value: loading ? "..." : fmt(stats.paymentReceived),
+      sub: "Total Received",
+      color: "teal",
+    },
+    {
+      icon: <IconCertificate />,
+      label: "Certificates Issued",
+      value: loading ? "..." : fmt(stats.certificateIssued),
+      sub: "Total Issued",
+      color: "purple",
+    },
+  ];
+
   return (
     <div className="rts-stats-grid">
-      {STATIC_CARDS.map((card, idx) => (
+      {cards.map((card, idx) => (
         <SummaryCard_NEW key={idx} {...card} />
       ))}
     </div>

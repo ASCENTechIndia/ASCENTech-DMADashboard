@@ -17,8 +17,16 @@ const CARD_META_LIST = [
     color: "blue",
     route: "/propertydashboard",
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2L2 7v2h20V7L12 2zm0 4.18L5.72 7.5 12 8.82 18.28 7.5 12 6.18zM3 11h3v9H3v-9zm6 0h3v9H9v-9zm6 0h3v9h-3v-9zm6 0h3v9h-3v-9zM2 22h20v-2H2v2z"/>
+      <svg width="20" height="20" viewBox="-1 1.5 24 24" fill="none">
+        <rect x="2" y="7" width="13" height="15" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
+        <rect x="15" y="11" width="7" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
+        <rect x="5" y="10" width="2.5" height="2.5" rx="0.5" fill="currentColor" opacity="0.7" />
+        <rect x="9.5" y="10" width="2.5" height="2.5" rx="0.5" fill="currentColor" opacity="0.7" />
+        <rect x="5" y="14.5" width="2.5" height="2.5" rx="0.5" fill="currentColor" opacity="0.7" />
+        <rect x="9.5" y="14.5" width="2.5" height="2.5" rx="0.5" fill="currentColor" opacity="0.7" />
+        <rect x="17" y="14" width="2" height="2" rx="0.4" fill="currentColor" opacity="0.7" />
+        <rect x="17" y="18" width="2" height="2" rx="0.4" fill="currentColor" opacity="0.7" />
+        <rect x="7" y="19" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.6" />
       </svg>
     ),
   },
@@ -37,8 +45,8 @@ const CARD_META_LIST = [
     color: "red",
     route: null,
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+      <svg width="24" height="24" viewBox="0 0 576 512" fill="currentColor">
+        <path d="M416 192c0-88.4-93.1-160-208-160S0 103.6 0 192c0 34.3 14.1 65.9 38 92-13.4 30.2-35.5 54.2-35.8 54.5-2.2 2.3-2.8 5.7-1.5 8.7S4.8 352 8 352c36.6 0 66.9-12.3 88.7-25 32.2 15.7 70.3 25 111.3 25 114.9 0 208-71.6 208-160zm122 220c23.9-26 38-57.7 38-92 0-66.9-53.5-124.2-129.3-148.1.9 6.6 1.3 13.3 1.3 20.1 0 105.9-107.7 192-240 192-10.8 0-21.3-.8-31.7-1.9C207.8 439.6 281.8 480 368 480c41 0 79.1-9.2 111.3-25 21.8 12.7 52.1 25 88.7 25 3.2 0 6.1-1.9 7.3-4.8 1.3-2.9.7-6.3-1.5-8.7-.3-.3-22.4-24.2-35.8-54.5z" />
       </svg>
     ),
   },
@@ -47,8 +55,8 @@ const CARD_META_LIST = [
     color: "purple",
     route: null,
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8V9h8v10zm-2-8h-4v2h4v-2zm0 4h-4v2h4v-2z"/>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+        <path fillRule="evenodd" d="M3 2.25a.75.75 0 0 0 0 1.5v16.5h-.75a.75.75 0 0 0 0 1.5H15v-18a.75.75 0 0 0 0-1.5H3ZM6.75 19.5v-2.25a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-.75.75h-3a.75.75 0 0 1-.75-.75ZM6 6.75A.75.75 0 0 1 6.75 6h.75a.75.75 0 0 1 0 1.5h-.75A.75.75 0 0 1 6 6.75ZM6.75 9a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75ZM6 12.75a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 0 1.5h-.75a.75.75 0 0 1-.75-.75ZM10.5 6a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75Zm-.75 3.75A.75.75 0 0 1 10.5 9h.75a.75.75 0 0 1 0 1.5h-.75a.75.75 0 0 1-.75-.75ZM10.5 12a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75ZM16.5 6.75v15h5.25a.75.75 0 0 0 0-1.5H21v-12a.75.75 0 0 0 0-1.5h-4.5Zm1.5 4.5a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm.75 2.25a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75v-.008a.75.75 0 0 0-.75-.75h-.008ZM18 17.25a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Z" clipRule="evenodd" />
       </svg>
     ),
   },
@@ -77,8 +85,8 @@ const CARD_META_LIST = [
     color: "orange",
     route: null,
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8V9h8v10zm-2-8h-4v2h4v-2zm0 4h-4v2h4v-2z"/>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+        <path fillRule="evenodd" d="M3 2.25a.75.75 0 0 0 0 1.5v16.5h-.75a.75.75 0 0 0 0 1.5H15v-18a.75.75 0 0 0 0-1.5H3ZM6.75 19.5v-2.25a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-.75.75h-3a.75.75 0 0 1-.75-.75ZM6 6.75A.75.75 0 0 1 6.75 6h.75a.75.75 0 0 1 0 1.5h-.75A.75.75 0 0 1 6 6.75ZM6.75 9a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75ZM6 12.75a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 0 1.5h-.75a.75.75 0 0 1-.75-.75ZM10.5 6a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75Zm-.75 3.75A.75.75 0 0 1 10.5 9h.75a.75.75 0 0 1 0 1.5h-.75a.75.75 0 0 1-.75-.75ZM10.5 12a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75ZM16.5 6.75v15h5.25a.75.75 0 0 0 0-1.5H21v-12a.75.75 0 0 0 0-1.5h-4.5Zm1.5 4.5a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm.75 2.25a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75v-.008a.75.75 0 0 0-.75-.75h-.008ZM18 17.25a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Z" clipRule="evenodd" />
       </svg>
     ),
   },
@@ -87,8 +95,8 @@ const CARD_META_LIST = [
     color: "teal",
     route: null,
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+      <svg width="24" height="24" viewBox="0 0 576 512" fill="currentColor">
+        <path d="M416 192c0-88.4-93.1-160-208-160S0 103.6 0 192c0 34.3 14.1 65.9 38 92-13.4 30.2-35.5 54.2-35.8 54.5-2.2 2.3-2.8 5.7-1.5 8.7S4.8 352 8 352c36.6 0 66.9-12.3 88.7-25 32.2 15.7 70.3 25 111.3 25 114.9 0 208-71.6 208-160zm122 220c23.9-26 38-57.7 38-92 0-66.9-53.5-124.2-129.3-148.1.9 6.6 1.3 13.3 1.3 20.1 0 105.9-107.7 192-240 192-10.8 0-21.3-.8-31.7-1.9C207.8 439.6 281.8 480 368 480c41 0 79.1-9.2 111.3-25 21.8 12.7 52.1 25 88.7 25 3.2 0 6.1-1.9 7.3-4.8 1.3-2.9.7-6.3-1.5-8.7-.3-.3-22.4-24.2-35.8-54.5z" />
       </svg>
     ),
   },
@@ -104,11 +112,13 @@ const CARD_META_LIST = [
   },
   /* 9: Asset Management */
   {
-    color: "purple",
+    color: "blue",
     route: null,
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5v-5l-10 5-10-5v5zM2 12l10 5 10-5V7l-10 5-10-5v5z"/>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+        <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+        <line x1="12" y1="22.08" x2="12" y2="12" />
       </svg>
     ),
   },
@@ -127,8 +137,19 @@ const CARD_META_LIST = [
     color: "purple",
     route: null,
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5l-1-1h-5l-1 1H5v2h14V4h-3.5z"/>
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+        {/* Loop Handle */}
+        <path d="M 8.5 7 A 3.5 3.5 0 0 1 15.5 7" stroke="currentColor" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+        {/* Canister Cap */}
+        <rect x="6.5" y="7" width="11" height="2.2" rx="0.6" fill="currentColor" />
+        {/* Canister Neck */}
+        <rect x="9.5" y="9.2" width="5" height="1.8" fill="currentColor" />
+        {/* Canister Body */}
+        <rect x="5.5" y="11" width="13" height="11.5" rx="1.5" fill="currentColor" />
+        {/* Cutout text using purple fill */}
+        <text x="12" y="14.3" fontFamily="Inter, system-ui, -apple-system, sans-serif" fontWeight="900" fontSize="3" letterSpacing="0.2" textAnchor="middle" fill="var(--hn-purple)">SEP</text>
+        <text x="12" y="17.5" fontFamily="Inter, system-ui, -apple-system, sans-serif" fontWeight="900" fontSize="3" letterSpacing="0.2" textAnchor="middle" fill="var(--hn-purple)">TIC</text>
+        <text x="12" y="20.7" fontFamily="Inter, system-ui, -apple-system, sans-serif" fontWeight="900" fontSize="3" letterSpacing="0.2" textAnchor="middle" fill="var(--hn-purple)">TNK</text>
       </svg>
     ),
   },
@@ -157,8 +178,9 @@ const CARD_META_LIST = [
     color: "blue",
     route: null,
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        <path d="M12 15a2.5 2.5 0 0 0 2.5-2.5V9.5a1 1 0 0 0-2 0v1h-1v-2a1 1 0 0 0-2 0v2h-1v-1a1 1 0 0 0-2 0v3.5A2.5 2.5 0 0 0 12 15z" fill="currentColor" fillOpacity="0.3" />
       </svg>
     ),
   },
@@ -177,8 +199,18 @@ const CARD_META_LIST = [
     color: "purple",
     route: null,
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M19 21H5c-1.1 0-2-.9-2-2v-3h18v3c0 1.1-.9 2-2 2zM12 2a5 5 0 0 0-5 5v7h10V7a5 5 0 0 0-5-5zm2 5h-4V5h4v2z"/>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        {/* Sounding block at bottom-left */}
+        <rect x="2" y="17" width="10" height="2.5" rx="1.25" fill="currentColor" />
+        {/* Gavel rotated at 45 deg, mallet center at (8.5, 9.5) */}
+        <g transform="translate(8.5, 9.5) rotate(45)">
+          {/* Mallet Head */}
+          <rect x="-2.5" y="-6" width="5" height="12" rx="1.2" fill="currentColor" />
+          {/* Head Ridge/Band */}
+          <rect x="-3" y="-1.5" width="6" height="3" fill="currentColor" />
+          {/* Handle */}
+          <rect x="2" y="-1" width="14" height="2" rx="1" fill="currentColor" />
+        </g>
       </svg>
     ),
   },
@@ -207,8 +239,10 @@ const CARD_META_LIST = [
     color: "teal",
     route: null,
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="3,5 8.5,2.25 8.5,19.25 3,22" />
+        <polygon points="9.5,2.25 14.5,4.75 14.5,21.75 9.5,19.25" />
+        <polygon points="15.5,4.75 21,2 21,19 15.5,21.75" />
       </svg>
     ),
   },
@@ -237,8 +271,15 @@ const CARD_META_LIST = [
     color: "pink",
     route: null,
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        {/* Back Heart (Smaller, shifted top-left) */}
+        <g transform="translate(1.5, 2.5) scale(0.62)">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+        </g>
+        {/* Front Heart (Larger, shifted bottom-right) */}
+        <g transform="translate(7, 4.5) scale(0.76)">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+        </g>
       </svg>
     ),
   },
@@ -257,8 +298,16 @@ const CARD_META_LIST = [
     color: "purple",
     route: "/rtsdashboard-new",
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"/>
+      <svg width="20" height="20" viewBox="-1 1.5 24 24" fill="none">
+        <rect x="2" y="7" width="13" height="15" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
+        <rect x="15" y="11" width="7" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
+        <rect x="5" y="10" width="2.5" height="2.5" rx="0.5" fill="currentColor" opacity="0.7" />
+        <rect x="9.5" y="10" width="2.5" height="2.5" rx="0.5" fill="currentColor" opacity="0.7" />
+        <rect x="5" y="14.5" width="2.5" height="2.5" rx="0.5" fill="currentColor" opacity="0.7" />
+        <rect x="9.5" y="14.5" width="2.5" height="2.5" rx="0.5" fill="currentColor" opacity="0.7" />
+        <rect x="17" y="14" width="2" height="2" rx="0.4" fill="currentColor" opacity="0.7" />
+        <rect x="17" y="18" width="2" height="2" rx="0.4" fill="currentColor" opacity="0.7" />
+        <rect x="7" y="19" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.6" />
       </svg>
     ),
   },
@@ -284,11 +333,13 @@ const CARD_META_LIST = [
   },
   /* 27: Tanker */
   {
-    color: "green",
+    color: "teal",
     route: null,
     icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zm-3 10.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm-9 0c-.83 0-1.5-.67-1.5-1.5S7.17 17 8 17s1.5.67 1.5 1.5S8.83 18.5 8 18.5zM17 12V9.5l2.25 2.5H17z"/>
+      <svg width="23" height="23" viewBox="0 0 640 512" fill="currentColor">
+        <g transform="translate(640, 0) scale(-1, 1)">
+          <path d="M624 352h-16V243.9c0-12.7-5.1-24.9-14.1-33.9L494 110.1c-9-9-21.2-14.1-33.9-14.1H416V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48v320c0 26.5 21.5 48 48 48h16c0 53 43 96 96 96s96-43 96-96h128c0 53 43 96 96 96s96-43 96-96h48c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zM160 464c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm320 0c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-208H416V144h44.1l99.9 99.9V256z" />
+        </g>
       </svg>
     ),
   },

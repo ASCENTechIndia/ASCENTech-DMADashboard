@@ -442,17 +442,40 @@
   .dma-summary-grid {
     grid-template-columns: 1fr;
   }
+    .dma-card-body--split {
+    flex-direction: column;
+  }
 
-  .dma-header {
+   .dma-header {
     flex-direction: column;
     text-align: center;
+    gap: 10px;
   }
 
   .dma-header-title {
-    font-size: 22px;
+    font-size: 20px;
+  }
+
+  .dma-header-logo-img {
+    margin-left: 0;
+    padding-right: 0;
   }
 
   .dma-bar-row {
     grid-template-columns: 90px 1fr 56px;
+  }
+
+   .echart-container {
+    height: 240px;
+  }
+
+  .echart-container--donut {
+    height: 220px;
+  }
+}
+
+@media (max-width: 576px) {
+  .dma-summary-grid {
+    grid-template-columns: 1fr;
   }
 }

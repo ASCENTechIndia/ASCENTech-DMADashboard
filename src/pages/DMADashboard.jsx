@@ -24,6 +24,7 @@ const CollectionRankingChart = lazy(() =>
 );
 import DashboardFooter from '../components/DashboardFooter'
 import Header_NEW from '../components/Header_NEW';
+import DashboardFooter_NEW from '../components/DashboardFooter_NEW';
 
 function DMADashboard() {
     const [summaryLoaded, setSummaryLoaded] = useState(false);
@@ -132,7 +133,7 @@ function DMADashboard() {
 
         <div className="row g-3 mt-2">
           <div className="col-12">
-            <DashboardFooter />
+            <DashboardFooter_NEW />
           </div>
         </div>
 

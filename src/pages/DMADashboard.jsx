@@ -23,6 +23,7 @@ const CollectionRankingChart = lazy(() =>
   import("../components/CollectionRankingChart")
 );
 import DashboardFooter from '../components/DashboardFooter'
+import Header_NEW from '../components/Header_NEW';
 
 function DMADashboard() {
     const [summaryLoaded, setSummaryLoaded] = useState(false);
@@ -32,7 +33,7 @@ function DMADashboard() {
 
         <div className="row g-3">
           <div className="col-12">
-            <Header />
+          <Header_NEW title="DMA Dashboard" />
           </div>
         </div>
 

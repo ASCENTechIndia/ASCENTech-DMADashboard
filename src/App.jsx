@@ -134,7 +134,7 @@ function App() {
         <Route path="/propertydashboard" element={<DMADashboard />} />
 
         {/* Existing Home page */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home_NEW />} />
 
         <Route path="/rtsdashboard" element={<RTSDashboard />} />
 
@@ -142,7 +142,7 @@ function App() {
         <Route path="/rtsdashboard-new" element={<RTSDashboard_NEW />} />
 
         {/* NEW Home Dashboard */}
-        <Route path="/home-new" element={<Home_NEW />} />
+        {/* <Route path="/home-new" element={<Home_NEW />} /> */}
       </Routes>
     </Router>
   );

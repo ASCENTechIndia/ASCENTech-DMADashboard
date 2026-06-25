@@ -12,7 +12,7 @@ function Header_NEW({ title = "DMA Dashboard" }) {
             const event = new CustomEvent("rts-back-click", { cancelable: true });
             window.dispatchEvent(event);
             if (!event.defaultPrevented) {
-              navigate("/home-new");
+              navigate("/");
             }
           }}
           aria-label="Go back to Home"

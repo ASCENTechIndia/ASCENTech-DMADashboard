@@ -13,7 +13,7 @@ export default function HomeCards({
           onClick={() => onCardClick?.(card.title)}
           style={{
             cursor:
-              card.title === "RTS"
+              card.title === "RTS" || card.title === "Property Tax"
                 ? "pointer"
                 : "default",
           }}

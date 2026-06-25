@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -19,15 +19,15 @@ function PropertySummaryTable() {
           if (rows.length === 0) {
             setMessage(response.data.message || "No property summary data available.");
           } else {
-            setData(
-              rows.map((item) => ({
-                corporation: item.CORPORATION || "Unknown",
-                residential: Number(item.RESIDENTIAL || 0),
-                commercial: Number(item.COMMERCIAL || 0),
-                mixed: Number(item.MIXED || 0),
-                total: Number(item.TOTAL || 0),
-              }))
-            );
+          setData(
+            rows.map((item) => ({
+              corporation: item.CORPORATION || item.corporation || "Unknown",
+              residential: Number(item.RESIDENTIAL || item.residential || 0),
+              commercial: Number(item.COMMERCIAL || item.commercial || 0),
+              mixed: Number(item.MIXED || item.mixed || 0),
+              total: Number(item.TOTAL || item.total || 0),
+            }))
+          );
           }
         } else {
           setMessage(response.data.message || "Failed to load property summary.");
@@ -117,4 +117,4 @@ function PropertySummaryTable() {
   );
 }
 
-export default PropertySummaryTable;
+export default memo(PropertySummaryTable);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import axios from 'axios';
 import { useEChart } from '../hooks/useEChart';
 
@@ -68,7 +68,7 @@ function PropertyDistributionChart() {
         type: 'category',
         data: data.map((d) => d.corporation),
         axisLine: { lineStyle: { color: COLORS.border } },
-        axisLabel: { color: COLORS.muted, rotate: 35, fontSize: 10 },
+        axisLabel: { color: COLORS.muted, rotate: 65, fontSize: 7 },
       },
       yAxis: {
         type: 'value',
@@ -107,4 +107,4 @@ function PropertyDistributionChart() {
   return <div className="echart-container" ref={ref} />;
 }
 
-export default PropertyDistributionChart;
+export default memo(PropertyDistributionChart);

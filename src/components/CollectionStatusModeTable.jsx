@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -14,6 +14,7 @@ function CollectionStatusModeTable({
 }) {
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState({
     amount: 0,
     percent: 100,
@@ -26,7 +27,7 @@ function CollectionStatusModeTable({
  const fetchModewiseCollection = async () => {
   try {
     setError("");
-
+    setLoading(true);
     const res = await axios.get(
       `${API_BASE_URL}/property/getModewiseCollection`
     );
@@ -79,9 +80,19 @@ function CollectionStatusModeTable({
       amount: 0,
       percent: 0,
     });
+  } finally{
+    setLoading(false);
   }
 };
-
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "150px" }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
   const hasMoreThanMax = data.length > maxRowsBeforeScroll;
 
   return (
@@ -165,4 +176,4 @@ function CollectionStatusModeTable({
   );
 }
 
-export default CollectionStatusModeTable;
+export default memo(CollectionStatusModeTable);

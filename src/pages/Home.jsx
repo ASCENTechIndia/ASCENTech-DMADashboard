@@ -11,12 +11,13 @@ export default function Home() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    const handleCardClick = (title) => {
-    if (title === "RTS") {
-      navigate("/rtsdashboard");
-    }
-  };
-
+  const handleCardClick = (title) => {
+  if (title === "RTS") {
+    navigate("/rtsdashboard");
+  } else if (title === "Property Tax") {
+    navigate("/propertydashboard");
+  }
+};
   useEffect(() => {
     fetchDashboard();
   }, []);
@@ -65,7 +66,7 @@ export default function Home() {
             </div>
           </div>
         ) : (
-         <HomeCards
+         <HomeCards 
   cards={cards}
   onCardClick={handleCardClick}
 />

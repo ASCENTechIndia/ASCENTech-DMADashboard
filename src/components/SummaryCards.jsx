@@ -31,13 +31,14 @@ function StatCard({ label, value, sub, icon, color }) {
   );
 }
 
-function SummaryCards() {
+function SummaryCards({ onLoaded }) {
   const [data, setData] = useState({
     totalDemand: 0,
     totalCollection: 0,
     totalOutstanding: 0,
     collectionPercent: 0
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTilesData = async () => {
@@ -54,10 +55,15 @@ console.log("First Row", response.data.data[0]);
           totalOutstanding: Number(apiData.TOTAL_OUTSTANDING || 0) / 10000000,
           collectionPercent: Number(apiData.COLLECTION_PERCENTAGE || 0),
         });
+        onLoaded?.();
       }
       } catch (error) {
         console.error("Error fetching tiles data:", error);
-      }
+        onLoaded?.();
+      }finally {
+      setLoading(false);
+      onLoaded?.();
+    }
     };
     fetchTilesData();
   }, []);
@@ -93,7 +99,17 @@ console.log("First Row", response.data.data[0]);
       color: "purple",
     },
   ];
-
+if (loading) {
+  return (
+    <div className="dma-summary-grid mt-2">
+      {[1, 2, 3, 4].map((item) => (
+        <div key={item} className="dma-stat-card">
+          <div className="p-4 text-center" style={{ color: "var(--dma-blue)" }}>Loading...</div>
+        </div>
+      ))}
+    </div>
+  );
+}
   return (
     <div className="dma-summary-grid mt-2">
       {cards.map((card, index) => (

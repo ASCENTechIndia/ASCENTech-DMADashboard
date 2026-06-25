@@ -124,12 +124,12 @@
   display: flex;
   gap: 20px;
   align-items: stretch;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .dma-card-body--split>* {
   flex: 1;
-  min-width: 280px;
+  min-width: 180px;
 }
 
 /* ---- header ---------------------------------------------------------- */

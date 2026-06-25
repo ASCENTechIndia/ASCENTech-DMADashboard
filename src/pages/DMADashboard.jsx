@@ -1,5 +1,5 @@
 import '../styles/dashboard.css'
-import { lazy, Suspense } from "react";
+import { lazy, Suspense,useState  } from "react";
 import Header from '../components/Header'
 import SummaryCards from '../components/SummaryCards'
 import DashboardCard from '../components/DashboardCard'
@@ -25,6 +25,7 @@ const CollectionRankingChart = lazy(() =>
 import DashboardFooter from '../components/DashboardFooter'
 
 function DMADashboard() {
+    const [summaryLoaded, setSummaryLoaded] = useState(false);
   return (
     <div className="dma-dashboard">
       <div className="container-fluid px-0">
@@ -37,10 +38,11 @@ function DMADashboard() {
 
         <div className="row g-3">
           <div className="col-12">
-            <SummaryCards />
-          </div>
+<SummaryCards onLoaded={() => setSummaryLoaded(true)} />
+            </div>
         </div>
-
+{/* {summaryLoaded && (
+  <> */}
        <div className="row g-3 mt-2 align-items-stretch">
   {/* <div className="col-lg-4 col-md-4 col-sm-12 d-flex">
     <DashboardCard
@@ -125,6 +127,7 @@ function DMADashboard() {
     </DashboardCard>
   </div>
 </div>
+{/* </>)} */}
 
         <div className="row g-3 mt-2">
           <div className="col-12">

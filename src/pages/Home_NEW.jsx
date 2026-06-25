@@ -271,15 +271,33 @@ const CARD_META_LIST = [
     color: "pink",
     route: null,
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-        {/* Back Heart (Smaller, shifted top-left) */}
-        <g transform="translate(1.5, 2.5) scale(0.62)">
-          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-        </g>
-        {/* Front Heart (Larger, shifted bottom-right) */}
-        <g transform="translate(7, 4.5) scale(0.76)">
-          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-        </g>
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+        {/* Floating Heart */}
+        <path d="M12 4.3c-0.4-0.6-1-0.9-1.7-0.9c-1.2 0-2.2 1-2.2 2.2c0 1.8 3.4 3.9 3.9 4.3c0.5-0.4 3.9-2.5 3.9-4.3c0-1.2-1-2.2-2.2-2.2c-0.7 0-1.3 0.3-1.7 0.9z" fill="currentColor" />
+        {/* Bride Veil (Behind) */}
+        <path d="M7.5 10.8c-2.3 0-3.8 1.5-3.8 4.2v6.2c0 .3.2.5.5.5h6.6c.3 0 .5-.2.5-.5v-6.2c0-2.7-1.5-4.2-3.8-4.2z" fill="currentColor" opacity="0.25" />
+        {/* Bride Bun */}
+        <circle cx="7.5" cy="11.2" r="1.1" fill="currentColor" />
+        {/* Bride Head */}
+        <circle cx="7.5" cy="14" r="2.2" fill="currentColor" />
+        {/* Bride Neck */}
+        <rect x="6.8" y="16.2" width="1.4" height="2.3" fill="currentColor" />
+        {/* Bride Dress */}
+        <path d="M3.5 22c0-2.5 1.5-3.5 4-3.5s4 1 4 3.5h-8z" fill="currentColor" />
+        {/* Bride Sweetheart Cutout */}
+        <path d="M5.5 18.5c0.8 1 3.2 1 4 0z" fill="var(--hn-pink)" />
+        {/* Groom Hair */}
+        <path d="M14.3 13.5c0-1.8 1-2.6 2.2-2.6s2.2 0.8 2.2 2.6z" fill="currentColor" />
+        {/* Groom Head */}
+        <circle cx="16.5" cy="14" r="2.2" fill="currentColor" />
+        {/* Groom Neck */}
+        <rect x="15.8" y="16.2" width="1.4" height="2.3" fill="currentColor" />
+        {/* Groom Suit */}
+        <path d="M12.5 22c0-2.5 1.5-3.5 4-3.5s4 1 4 3.5h-8z" fill="currentColor" />
+        {/* Groom Collar Cutout */}
+        <polygon points="16.5,18.5 15.1,20.5 17.9,20.5" fill="var(--hn-pink)" />
+        {/* Groom Tie */}
+        <polygon points="16.5,19.5 16.1,21.5 16.5,22 16.9,21.5" fill="currentColor" />
       </svg>
     ),
   },

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import React, { memo } from "react";
-import { summaryData } from "../data/dashboardData";
 import { FaFileAlt, FaRupeeSign, FaWallet, FaChartPie } from "react-icons/fa";
 import axios from "axios";
 

@@ -314,7 +314,7 @@ const CARD_META_LIST = [
   /* 24: RTS */
   {
     color: "purple",
-    route: "/rtsdashboard-new",
+    route: "/rtsdashboard",
     icon: (
       <svg width="20" height="20" viewBox="-1 1.5 24 24" fill="none">
         <rect x="2" y="7" width="13" height="15" rx="1.5" stroke="currentColor" strokeWidth="1.7" />

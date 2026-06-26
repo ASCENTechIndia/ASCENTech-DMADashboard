@@ -13,7 +13,7 @@ export default function Home() {
 
   const handleCardClick = (title) => {
   if (title === "RTS") {
-    navigate("/RTSDashboard_NEW");
+    navigate("/rtsdashboard");
   } else if (title === "Property Tax") {
     navigate("/propertydashboard");
   }

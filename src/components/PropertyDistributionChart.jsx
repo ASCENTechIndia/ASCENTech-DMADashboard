@@ -21,6 +21,16 @@ function PropertyDistributionChart() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchPropertySummary = async () => {
@@ -57,32 +67,128 @@ function PropertyDistributionChart() {
 
   const ref = useEChart(
     () => ({
-      tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' },
+        formatter: (params) => {
+          if (!params || params.length === 0) return '';
+          let html = `<div style="font-weight: 700; margin-bottom: 6px; font-size: 13px; color: #1e293b;">${params[0].name}</div>`;
+          let total = 0;
+          params.forEach((p) => {
+            const val = Number(p.value || 0);
+            total += val;
+            html += `<div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; font-size: 12px; margin-bottom: 3px; color: #64748b;">
+              <span>${p.marker} ${p.seriesName}</span>
+              <span style="font-weight: 700; color: #1e293b;">${val.toLocaleString('en-IN')}</span>
+            </div>`;
+          });
+          html += `<div style="border-top: 1px solid rgba(148, 163, 184, 0.25); margin-top: 6px; padding-top: 6px; display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: #1e293b;">
+            <span>Total</span>
+            <span>${total.toLocaleString('en-IN')}</span>
+          </div>`;
+          return html;
+        }
+      },
       legend: {
         top: 0,
         data: ['Residential', 'Commercial', 'Mixed'],
-        textStyle: { color: COLORS.muted },
+        textStyle: { color: COLORS.muted, fontSize: 11 },
+        itemWidth: 14,
+        itemHeight: 14,
+        itemGap: 15,
       },
-      grid: { left: '3%', right: '4%', bottom: '12%', top: '15%', containLabel: true },
+      grid: {
+        left: '2%',
+        right: '15%', // Room for the dataZoom slider
+        bottom: '5%',
+        top: 45,
+        containLabel: true,
+      },
       xAxis: {
-        type: 'category',
-        data: data.map((d) => d.corporation),
-        axisLine: { lineStyle: { color: COLORS.border } },
-        axisLabel: { color: COLORS.muted, rotate: 65, fontSize: 7 },
-      },
-      yAxis: {
         type: 'value',
         axisLine: { show: false },
+        axisTick: { show: false },
         splitLine: { lineStyle: { color: COLORS.border, type: 'dashed' } },
-        axisLabel: { color: COLORS.muted, formatter: (v) => (v >= 1000 ? `${v / 1000}K` : v) },
+        axisLabel: {
+          color: COLORS.muted,
+          fontSize: 10,
+          formatter: (v) => {
+            if (v >= 10000000) return `${(v / 10000000).toFixed(1)}Cr`;
+            if (v >= 100000) return `${(v / 100000).toFixed(0)}L`;
+            if (v >= 1000) return `${(v / 1000).toFixed(0)}K`;
+            return v;
+          },
+        },
       },
+      yAxis: {
+        type: 'category',
+        data: data.map((d) => d.corporation),
+        inverse: true, // Align first corporation at the top
+        axisLine: { lineStyle: { color: COLORS.border } },
+        axisTick: { alignWithLabel: true },
+        axisLabel: {
+          color: '#000000',
+          fontSize: isMobile ? 11 : 12,
+          fontWeight: 500,
+          width: isMobile ? 90 : 180,
+          overflow: 'truncate',
+          ellipsis: '...',
+        },
+      },
+      dataZoom: data.length > 6 ? [
+        {
+          type: 'slider',
+          yAxisIndex: 0,
+          orient: 'vertical',
+          right: '3%',
+          width: 8,
+          start: 0,
+          end: Math.min(100, Math.floor((6 / data.length) * 100)),
+          showDetail: false,
+          showDataShadow: false, // removes the blue line chart inside the track
+          borderColor: 'transparent',
+          backgroundColor: '#f1f5f9', // clean light grey track
+          fillerColor: '#cbd5e1', // clean grey thumb
+          handleIcon: 'path://M 0,0 L 0,0 Z', // hides the drag icons/handles completely
+          handleSize: '0%',
+          brushSelect: false, // behaves strictly as a scrollbar
+        },
+        {
+          type: 'inside',
+          yAxisIndex: 0,
+          zoomOnMouseWheel: false,
+          moveOnMouseMove: true,
+          moveOnMouseWheel: true,
+        }
+      ] : [],
       series: [
-        { name: 'Residential', type: 'bar', stack: 'total', data: data.map((d) => d.residential), itemStyle: { color: COLORS.residential } },
-        { name: 'Commercial', type: 'bar', stack: 'total', data: data.map((d) => d.commercial), itemStyle: { color: COLORS.commercial } },
-        { name: 'Mixed', type: 'bar', stack: 'total', data: data.map((d) => d.mixed), itemStyle: { color: COLORS.mixed } },
+        {
+          name: 'Residential',
+          type: 'bar',
+          stack: 'total',
+          barWidth: 14,
+          data: data.map((d) => d.residential),
+          itemStyle: { color: COLORS.residential },
+        },
+        {
+          name: 'Commercial',
+          type: 'bar',
+          stack: 'total',
+          barWidth: 14,
+          data: data.map((d) => d.commercial),
+          itemStyle: { color: COLORS.commercial },
+        },
+        {
+          name: 'Mixed',
+          type: 'bar',
+          stack: 'total',
+          barWidth: 14,
+          data: data.map((d) => d.mixed),
+          itemStyle: { color: COLORS.mixed },
+        },
       ],
     }),
-    [data]
+    [data, isMobile]
   );
 
   if (loading) {
@@ -104,11 +210,7 @@ function PropertyDistributionChart() {
     );
   }
 
-  return (
-    <div className="echart-scroll-wrapper">
-      <div className="echart-container" ref={ref} />
-    </div>
-  );
+  return <div className="echart-container" ref={ref} />;
 }
 
 export default memo(PropertyDistributionChart);

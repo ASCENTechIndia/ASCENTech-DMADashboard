@@ -516,12 +516,7 @@
   }
 
   .echart-container {
-    height: 240px;
-  }
-
-  .echart-scroll-wrapper .echart-container {
-    min-width: 650px;
-    height: 320px;
+    height: 300px;
   }
 
   .echart-container--donut {
@@ -599,7 +594,7 @@
   }
 
   .echart-container {
-    height: 200px;
+    height: 280px;
   }
 }
 

@@ -7,14 +7,14 @@
 
 /* ── Root tokens ─────────────────────────────────────────────────────── */
 :root {
-  --hn-bg:            #f0f4f8;
-  --hn-card-bg:       #ffffff;
-  --hn-border:        #e2e8f0;
-  --hn-shadow:        0 2px 12px rgba(16, 42, 107, 0.07);
-  --hn-shadow-hover:  0 8px 28px rgba(16, 42, 107, 0.14);
-  --hn-radius:        14px;
-  --hn-navy:          #102a6b;
-  --hn-text:          #1e293b;
+  --hn-bg: #f0f4f8;
+  --hn-card-bg: #ffffff;
+  --hn-border: #e2e8f0;
+  --hn-shadow: 0 2px 12px rgba(16, 42, 107, 0.07);
+  --hn-shadow-hover: 0 8px 28px rgba(16, 42, 107, 0.14);
+  --hn-radius: 14px;
+  --hn-navy: #102a6b;
+  --hn-text: #1e293b;
   --hn-muted:         #64748b;
   --hn-divider:       #f1f5f9;
 

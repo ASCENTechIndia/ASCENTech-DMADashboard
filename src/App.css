@@ -36,6 +36,8 @@
 
 body {
   width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
   font-family:
     "Poppins",
     "Inter",
@@ -54,6 +56,7 @@ body {
   font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   position: relative;
   color: var(--dma-text);
+  overflow-x: hidden;
 }
 
 .dma-grid {
@@ -421,8 +424,13 @@ body {
   white-space: nowrap;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
+  .dma-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
+@media (max-width: 1100px) {
   .dma-row-1-2,
   .dma-row-14-1,
   .dma-row-3 {
@@ -430,34 +438,146 @@ body {
   }
 }
 
-@media (max-width: 1200px) {
+/* ── 768px – tablet ────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .dma-dashboard {
+    padding: 12px;
+    padding-top: 80px;
+  }
+
   .dma-summary-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .dma-summary-grid {
-    grid-template-columns: 1fr;
+    gap: 10px;
   }
 
   .dma-header {
-    flex-direction: row;
-    text-align: center;
+    padding: 10px 16px;
+    gap: 10px;
   }
 
   .dma-header-logo-mark {
-    height: 40px;
-    width: 40px;
+    height: 36px;
+    width: 36px;
   }
 
   .dma-header-title {
-    font-size: 10px;
-    display: none;
+    font-size: 18px;
+  }
+
+  .dma-stat-card {
+    padding: 14px 14px;
+    gap: 12px;
+  }
+
+  .dma-stat-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .dma-stat-value {
+    font-size: 22px;
   }
 
   .dma-bar-row {
     grid-template-columns: 90px 1fr 56px;
+    font-size: 12px;
+  }
+
+  .dma-card-body--split {
+    flex-direction: column;
+  }
+
+  .dma-footer {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    padding: 10px 16px;
+    font-size: 11.5px;
+  }
+
+  .dma-footer-date {
+    white-space: normal;
+    justify-content: center;
+  }
+}
+
+/* ── 480px – large phone ───────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .dma-dashboard {
+    padding: 8px;
+    padding-top: 75px;
+  }
+
+  .dma-summary-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  /* Header stays in ONE horizontal row – do not stack */
+  .dma-header {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .dma-header-title {
+    font-size: 15px;
+  }
+
+  .dma-header-logo-mark {
+    width: 36px;
+    height: 36px;
+  }
+
+  .dma-header-org-name {
+    display: none;
+  }
+
+  .dma-stat-card {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .dma-stat-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .dma-stat-value {
+    font-size: 20px;
+  }
+
+  .dma-stat-label {
+    font-size: 10px;
+  }
+
+  .dma-bar-row {
+    grid-template-columns: 76px 1fr 48px;
+    font-size: 11px;
+  }
+
+  .dma-bar-track {
+    height: 12px;
+  }
+
+  .dma-grid,
+  .dma-row {
+    gap: 8px;
+  }
+
+  .dma-card-title {
+    font-size: 13px;
+  }
+}
+
+/* ── 360px – small phone ───────────────────────────────────────────── */
+@media (max-width: 360px) {
+  .dma-bar-row {
+    grid-template-columns: 64px 1fr 42px;
+    font-size: 10px;
+  }
+
+  .dma-stat-value {
+    font-size: 18px;
   }
 }
 

@@ -3,48 +3,101 @@ import React from "react";
 
 export default function Navbar() {
   return (
-    <nav className="sticky top-0 z-50 shadow-xl w-full">
-      <div className="w-full flex h-[94px]">
+    <>
+      <style>{`
+        .navbar-root {
+          position: sticky;
+          top: 0;
+          z-index: 50;
+          width: 100%;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+        }
+        .navbar-inner {
+          width: 100%;
+          display: flex;
+          height: 94px;
+        }
+        .navbar-logo-panel {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid #054b65;
+          background: white;
+          min-width: 80px;
+          width: 10%;
+          flex-shrink: 0;
+        }
+        .navbar-logo-img {
+          height: 64px;
+          width: auto;
+          object-fit: contain;
+        }
+        .navbar-title-panel {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #054b65;
+          padding: 0 12px;
+          min-width: 0;
+        }
+        .navbar-title {
+          color: white;
+          font-weight: 700;
+          text-align: center;
+          font-size: clamp(1rem, 3vw, 1.8rem);
+          line-height: 1.2;
+          margin: 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        @media (max-width: 640px) {
+          .navbar-inner {
+            height: 60px;
+          }
+          .navbar-logo-panel {
+            display: none;
+          }
+          .navbar-title {
+            font-size: clamp(0.9rem, 5vw, 1.3rem);
+            white-space: normal;
+            line-height: 1.25;
+          }
+        }
+        @media (max-width: 400px) {
+          .navbar-inner {
+            height: 56px;
+          }
+        }
+      `}</style>
 
-        {/* LEFT LOGO */}
-        <div
-          className="flex items-center justify-center border border-[#054b65]"
-          style={{ background: "white", width: "10%" }}
-        >
-          <img
-            // src={logo}
-            alt="Logo"
-            className="h-16 w-auto object-contain"
-          />
-        </div>
+      <nav className="navbar-root">
+        <div className="navbar-inner">
 
-        {/* CENTER TITLE */}
-        <div
-          className="flex-1 flex items-center justify-center"
-          style={{ background: "#054b65" }}
-        >
-          <h1
-            className="text-white font-bold text-center"
-            style={{
-              fontSize: "calc(1.325rem + .9vw)",
-              lineHeight: 1.2,
-            }}
-          >
-            DMA Dashboard
-          </h1>
-        </div>
+          {/* LEFT LOGO */}
+          <div className="navbar-logo-panel">
+            <img
+              // src={logo}
+              alt="Logo"
+              className="navbar-logo-img"
+            />
+          </div>
 
-        {/* RIGHT SECTION */}
-        <div
-          className="flex items-center justify-center border border-[#054b65]"
-          style={{
-            background: "white",
-            width: "10%",
-          }}
-        >
-        
+          {/* CENTER TITLE */}
+          <div className="navbar-title-panel">
+            <h1 className="navbar-title">
+              DMA Dashboard
+            </h1>
+          </div>
+
+          {/* RIGHT SECTION */}
+          <div className="navbar-logo-panel">
+            {/* Right logo or content */}
+          </div>
+
         </div>
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 }

@@ -22,7 +22,6 @@ const PaymentModeAnalysisChart = lazy(() =>
 const CollectionRankingChart = lazy(() =>
   import("../components/CollectionRankingChart")
 );
-import DashboardFooter from '../components/DashboardFooter'
 import Header_NEW from '../components/Header_NEW';
 import DashboardFooter_NEW from '../components/DashboardFooter_NEW';
 

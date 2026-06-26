@@ -162,6 +162,8 @@
 
 .hn-card--clickable {
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .hn-card--clickable:hover {
@@ -371,21 +373,98 @@
   50% { opacity: 0.55; }
 }
 
-/* ── Responsive ──────────────────────────────────────────────────────── */
+/* ── Responsive ──────────────────────────────────────────────── */
+
+/* ≤ 1200px: 4 → 3 columns */
 @media (max-width: 1200px) {
   .hn-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
+/* ≤ 900px: 3 → 2 columns, shrink header */
 @media (max-width: 900px) {
   .hn-grid { grid-template-columns: repeat(2, 1fr); }
   .hn-header { padding: 10px 16px; }
   .hn-header-title { font-size: 20px; }
+  .hn-header-subtitle { font-size: 11px; }
   .hn-body { padding: 14px 14px 28px; }
+  .hn-brand-logo { height: 44px; }
 }
 
+/* ≤ 768px: compress header further */
+@media (max-width: 768px) {
+  .hn-header {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 14px;
+  }
+
+  .hn-header-left {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .hn-header-subtitle {
+    display: none;
+  }
+
+  .hn-header-title { font-size: 18px; }
+
+  .hn-date-badge {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
+  .hn-body { padding: 12px 10px 24px; }
+
+  .hn-section-title { font-size: 14px; }
+}
+
+/* ≤ 576px: 2 → 1 column, header stacks */
 @media (max-width: 576px) {
   .hn-grid { grid-template-columns: 1fr; }
-  .hn-header { flex-wrap: wrap; gap: 10px; }
-  .hn-brand-logo { height: 38px; }
-  .hn-header-title { font-size: 18px; }
+
+  .hn-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .hn-header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .hn-brand-logo { height: 36px; }
+  .hn-header-logo { height: 36px; }
+  .hn-header-title { font-size: 16px; }
+
+  .hn-date-badge {
+    font-size: 11px;
+    padding: 5px 8px;
+    gap: 5px;
+  }
+
+  .hn-body { padding: 10px 8px 20px; }
+
+  .hn-card-header { padding: 10px 12px 9px; }
+  .hn-card-body { padding: 6px 12px 10px; }
+  .hn-card-title { font-size: 13.5px; }
+  .hn-metric-label { font-size: 12px; }
+  .hn-metric-value { font-size: 13px; }
+}
+
+/* ≤ 360px: micro screens */
+@media (max-width: 360px) {
+  .hn-header-title { font-size: 14px; }
+  .hn-brand-logo { height: 30px; }
+  .hn-header-logo { height: 30px; }
+
+  .hn-date-badge {
+    font-size: 10px;
+    padding: 4px 6px;
+  }
+
+  .hn-card-icon {
+    width: 32px;
+    height: 32px;
+  }
 }

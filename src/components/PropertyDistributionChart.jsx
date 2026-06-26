@@ -104,7 +104,11 @@ function PropertyDistributionChart() {
     );
   }
 
-  return <div className="echart-container" ref={ref} />;
+  return (
+    <div className="echart-scroll-wrapper">
+      <div className="echart-container" ref={ref} />
+    </div>
+  );
 }
 
 export default memo(PropertyDistributionChart);

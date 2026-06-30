@@ -75,7 +75,7 @@ function CollectionStatusDonutChart() {
       series: [
         {
           type: "pie",
-          radius: ["40%", "80%"],
+          radius: ["48%", "80%"],
           avoidLabelOverlap: false,
           label: {
             show: true,
@@ -116,8 +116,8 @@ function CollectionStatusDonutChart() {
             left: "center",
             top: "52%",
             style: {
-              text: `${total.toFixed(2)}`,
-              fontSize: 15,
+              text: total.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+              fontSize: 12,
               fill: "#1e2939",
               fontWeight: 800,
             },

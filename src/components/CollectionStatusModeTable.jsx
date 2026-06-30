@@ -34,31 +34,31 @@ function CollectionStatusModeTable({
 
     const row = res.data.data;
 
+    const totalAmount =
+      Number(row.ONLINE_AMOUNT || 0) +
+      Number(row.OFFLINE_AMOUNT || 0) +
+      Number(row.CASH_AMOUNT || 0);
+
     const tableData = [
       {
         mode: "Online",
         amount: Number(row.ONLINE_AMOUNT || 0),
-        percent: Number(row.ONLINE_PERCENTAGE || 0),
+        percent: totalAmount > 0 ? (Number(row.ONLINE_AMOUNT || 0) / totalAmount) * 100 : 0,
         color: "blue",
       },
       {
         mode: "Offline",
         amount: Number(row.OFFLINE_AMOUNT || 0),
-        percent: Number(row.OFFLINE_PERCENTAGE || 0),
+        percent: totalAmount > 0 ? (Number(row.OFFLINE_AMOUNT || 0) / totalAmount) * 100 : 0,
         color: "orange",
       },
       {
         mode: "Cash",
         amount: Number(row.CASH_AMOUNT || 0),
-        percent: Number(row.CASH_PERCENTAGE || 0),
+        percent: totalAmount > 0 ? (Number(row.CASH_AMOUNT || 0) / totalAmount) * 100 : 0,
         color: "red",
       },
     ];
-
-    const totalAmount =
-      Number(row.ONLINE_AMOUNT || 0) +
-      Number(row.OFFLINE_AMOUNT || 0) +
-      Number(row.CASH_AMOUNT || 0);
 
     setData(tableData);
 

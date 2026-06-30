@@ -14,7 +14,7 @@ function StatCard({ label, value, sub, icon, color }) {
           background: `var(--dma-${color}-light)`,
           color: `var(--dma-${color})`,
         }}
-      >
+      > 
         {icon}
       </span>
       <div>

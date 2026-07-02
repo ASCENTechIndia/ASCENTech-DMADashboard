@@ -680,22 +680,29 @@
   .rts-header {
     padding: 10px 14px;
     gap: 8px;
+    justify-content: flex-start;
+  }
+
+  .rts-header-left {
+    flex: 0 0 auto;
+    gap: 8px;
   }
 
   .rts-header-title {
     font-size: 14px;
     letter-spacing: 0;
-    text-align: center;
+    text-align: left;
     min-width: 0;
+    flex: 1 1 auto;
   }
 
   .rts-header-logo {
     height: 30px;
   }
 
-  /* Brand logo shrinks but stays visible */
-  .rts-header-brand-logo {
-    height: 34px;
+  /* Hide the brand logo container on mobile */
+  .rts-header-right {
+    display: none;
   }
 
   .rts-back-btn svg {
@@ -756,15 +763,11 @@
 /* ≤ 400px: further micro squeeze */
 @media (max-width: 400px) {
   .rts-header-title {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .rts-header-logo {
     height: 26px;
-  }
-
-  .rts-header-brand-logo {
-    height: 30px;
   }
 
   .rts-back-btn {
@@ -813,12 +816,11 @@
   color: #e2e8f0 !important;
 }
 
-/* ── Inline Back Button ─────────────────────────────────────────────── */
 .rts-back-btn-row {
   display: flex;
   justify-content: flex-start;
-  margin-top: 4px;
-  margin-bottom: 12px;
+  margin-top: -10px;
+  margin-bottom: 6px;
 }
 
 .rts-back-btn-inline {

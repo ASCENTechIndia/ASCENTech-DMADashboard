@@ -46,7 +46,7 @@ function DMADashboard() {
         </div>
 
         {/* Back Arrow button */}
-        <div className="row g-3 mt-1">
+        <div className="row g-0" style={{ marginTop: "4px", marginBottom: "-12px" }}>
           <div className="col-12 d-flex justify-content-start">
             <button
               onClick={() => navigate("/")}
@@ -82,7 +82,7 @@ function DMADashboard() {
           </div>
         </div>
 
-        <div className="row g-3 mt-2 align-items-stretch">
+        <div className="row g-3 mt-0 align-items-stretch">
   {/* <div className="col-lg-4 col-md-4 col-sm-12 d-flex">
     <DashboardCard
       className="h-100 w-100"
@@ -105,43 +105,6 @@ function DMADashboard() {
       <PropertySummaryTable />
     <Suspense fallback={<div>Loading Chart...</div>}>  <PropertyDistributionChart /></Suspense>
     </DashboardCard>
-  </div>
-</div>
-
-{/* Back Arrow button */}
-<div className="row g-3 mt-1">
-  <div className="col-12 d-flex justify-content-start">
-    <button
-      onClick={() => navigate("/")}
-      style={{
-        background: "var(--dma-card-bg, #fff)",
-        border: "1px solid var(--dma-border, #e3e7f0)",
-        color: "var(--dma-navy, #102a6b)",
-        cursor: "pointer",
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "40px",
-        height: "40px",
-        borderRadius: "50%",
-        boxShadow: "var(--dma-shadow)",
-        transition: "background-color 0.15s, color 0.15s"
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = "#f1f5f9";
-        e.currentTarget.style.color = "var(--dma-blue, #2f6fed)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = "var(--dma-card-bg, #fff)";
-        e.currentTarget.style.color = "var(--dma-navy, #102a6b)";
-      }}
-      title="Go Back to Home"
-    >
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
-        <line x1="19" y1="12" x2="5" y2="12" />
-        <polyline points="12 19 5 12 12 5" />
-      </svg>
-    </button>
   </div>
 </div>
 
@@ -168,43 +131,6 @@ function DMADashboard() {
     <Suspense fallback={<div>Loading Chart...</div>}>  <CollectionStatusDonutChart /></Suspense>
       <CollectionStatusModeTable />
     </DashboardCard>
-  </div>
-</div>
-
-{/* Back Arrow button */}
-<div className="row g-3 mt-1">
-  <div className="col-12 d-flex justify-content-start">
-    <button
-      onClick={() => navigate("/")}
-      style={{
-        background: "var(--dma-card-bg, #fff)",
-        border: "1px solid var(--dma-border, #e3e7f0)",
-        color: "var(--dma-navy, #102a6b)",
-        cursor: "pointer",
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "40px",
-        height: "40px",
-        borderRadius: "50%",
-        boxShadow: "var(--dma-shadow)",
-        transition: "background-color 0.15s, color 0.15s"
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = "#f1f5f9";
-        e.currentTarget.style.color = "var(--dma-blue, #2f6fed)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = "var(--dma-card-bg, #fff)";
-        e.currentTarget.style.color = "var(--dma-navy, #102a6b)";
-      }}
-      title="Go Back to Home"
-    >
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
-        <line x1="19" y1="12" x2="5" y2="12" />
-        <polyline points="12 19 5 12 12 5" />
-      </svg>
-    </button>
   </div>
 </div>
 
@@ -244,7 +170,7 @@ function DMADashboard() {
 </div>
 
 {/* Back Arrow button */}
-<div className="row g-3 mt-1">
+<div className="row g-0" style={{ marginTop: "4px", marginBottom: "-12px" }}>
   <div className="col-12 d-flex justify-content-start">
     <button
       onClick={() => navigate("/")}

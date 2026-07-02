@@ -73,7 +73,7 @@ function RTSDashboard_NEW() {
       </DashboardCard_NEW>
 
       {/* Back Arrow button below the table */}
-      <div className="rts-back-btn-row" style={{ marginTop: "16px" }}>
+      <div className="rts-back-btn-row" style={{ marginTop: "10px" }}>
         <button
           onClick={() => navigate("/")}
           className="rts-back-btn-inline"

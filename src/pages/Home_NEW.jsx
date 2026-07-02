@@ -444,7 +444,29 @@ export default function Home_NEW() {
       setLoading(true);
       setError(null);
       const res = await axios.get(`${API_BASE_URL}/dashboard/DashboardDataNew`);
-      setCards(res.data?.data || []);
+      const rawCards = res.data?.data || [];
+      const cardsWithIndex = rawCards.map((card, index) => ({
+        ...card,
+        origIndex: index,
+      }));
+
+      // Rearrange sequence: RTS (24), Property Tax (0), Water Tax (1), Grievances (2) first
+      const targetIndices = [24, 0, 1, 2];
+      const frontCards = [];
+      const remainingCards = [];
+
+      targetIndices.forEach((idx) => {
+        const found = cardsWithIndex.find((c) => c.origIndex === idx);
+        if (found) frontCards.push(found);
+      });
+
+      cardsWithIndex.forEach((c) => {
+        if (!targetIndices.includes(c.origIndex)) {
+          remainingCards.push(c);
+        }
+      });
+
+      setCards([...frontCards, ...remainingCards]);
     } catch (err) {
       console.error("Dashboard Error:", err);
       setError("Failed to load dashboard data. Please try again.");
@@ -475,8 +497,7 @@ export default function Home_NEW() {
             onError={(e) => { e.currentTarget.style.display = "none"; }}
           />
           <div className="hn-header-title-wrap">
-            <h1 className="hn-header-title">DMA Dashboard</h1>
-            <p className="hn-header-subtitle">Digital Municipal Administration</p>
+            <h1 className="hn-header-title">Dashboard</h1>
           </div>
         </div>
 
@@ -520,17 +541,17 @@ export default function Home_NEW() {
 
         {!loading && !error && (
           <div className="hn-grid">
-            {cards.map((card, idx) => {
-              const meta = getCardMeta(card.title, idx);
+            {cards.map((card) => {
+              const meta = getCardMeta(card.title, card.origIndex);
               const isClickable = !!meta.route;
               return (
                 <HomeCard_NEW
-                  key={`${card.code ?? card.title}-${idx}`}
+                  key={`${card.code ?? card.title}-${card.origIndex}`}
                   title={card.title}
                   color={meta.color}
                   icon={meta.icon}
                   clickable={isClickable}
-                  onClick={() => handleCardClick(card, idx)}
+                  onClick={() => handleCardClick(card, card.origIndex)}
                   metrics={card.metrics || []}
                 />
               );

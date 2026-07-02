@@ -1,5 +1,6 @@
 import '../styles/dashboard.css'
-import { lazy, Suspense,useState  } from "react";
+import { lazy, Suspense, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from '../components/Header'
 import SummaryCards from '../components/SummaryCards'
 import DashboardCard from '../components/DashboardCard'
@@ -23,9 +24,10 @@ const CollectionRankingChart = lazy(() =>
   import("../components/CollectionRankingChart")
 );
 import Header_NEW from '../components/Header_NEW';
-import DashboardFooter_NEW from '../components/DashboardFooter_NEW';
+// import DashboardFooter_NEW from '../components/DashboardFooter_NEW';
 
 function DMADashboard() {
+    const navigate = useNavigate();
     const [summaryLoaded, setSummaryLoaded] = useState(false);
   return (
     <div className="dma-dashboard">
@@ -33,18 +35,54 @@ function DMADashboard() {
 
         <div className="row g-3">
           <div className="col-12">
-          <Header_NEW title="DMA Dashboard" />
+          <Header_NEW title="Property Tax Dashboard" />
           </div>
         </div>
 
         <div className="row g-3">
           <div className="col-12">
-<SummaryCards onLoaded={() => setSummaryLoaded(true)} />
-            </div>
+            <SummaryCards onLoaded={() => setSummaryLoaded(true)} />
+          </div>
         </div>
-{/* {summaryLoaded && (
-  <> */}
-       <div className="row g-3 mt-2 align-items-stretch">
+
+        {/* Back Arrow button */}
+        <div className="row g-3 mt-1">
+          <div className="col-12 d-flex justify-content-start">
+            <button
+              onClick={() => navigate("/")}
+              style={{
+                background: "var(--dma-card-bg, #fff)",
+                border: "1px solid var(--dma-border, #e3e7f0)",
+                color: "var(--dma-navy, #102a6b)",
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "40px",
+                height: "40px",
+                borderRadius: "50%",
+                boxShadow: "var(--dma-shadow)",
+                transition: "background-color 0.15s, color 0.15s"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "#f1f5f9";
+                e.currentTarget.style.color = "var(--dma-blue, #2f6fed)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--dma-card-bg, #fff)";
+                e.currentTarget.style.color = "var(--dma-navy, #102a6b)";
+              }}
+              title="Go Back to Home"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div className="row g-3 mt-2 align-items-stretch">
   {/* <div className="col-lg-4 col-md-4 col-sm-12 d-flex">
     <DashboardCard
       className="h-100 w-100"
@@ -69,7 +107,45 @@ function DMADashboard() {
     </DashboardCard>
   </div>
 </div>
-      <div className="row g-3 mt-2 align-items-stretch">
+
+{/* Back Arrow button */}
+<div className="row g-3 mt-1">
+  <div className="col-12 d-flex justify-content-start">
+    <button
+      onClick={() => navigate("/")}
+      style={{
+        background: "var(--dma-card-bg, #fff)",
+        border: "1px solid var(--dma-border, #e3e7f0)",
+        color: "var(--dma-navy, #102a6b)",
+        cursor: "pointer",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "40px",
+        height: "40px",
+        borderRadius: "50%",
+        boxShadow: "var(--dma-shadow)",
+        transition: "background-color 0.15s, color 0.15s"
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = "#f1f5f9";
+        e.currentTarget.style.color = "var(--dma-blue, #2f6fed)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = "var(--dma-card-bg, #fff)";
+        e.currentTarget.style.color = "var(--dma-navy, #102a6b)";
+      }}
+      title="Go Back to Home"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12" />
+        <polyline points="12 19 5 12 12 5" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+<div className="row g-3 mt-2 align-items-stretch">
   <div className="col-lg-6 col-md-12 d-flex">
     <DashboardCard
       className="h-100 w-100"
@@ -94,7 +170,45 @@ function DMADashboard() {
     </DashboardCard>
   </div>
 </div>
-      <div className="row g-3 mt-2 align-items-stretch">
+
+{/* Back Arrow button */}
+<div className="row g-3 mt-1">
+  <div className="col-12 d-flex justify-content-start">
+    <button
+      onClick={() => navigate("/")}
+      style={{
+        background: "var(--dma-card-bg, #fff)",
+        border: "1px solid var(--dma-border, #e3e7f0)",
+        color: "var(--dma-navy, #102a6b)",
+        cursor: "pointer",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "40px",
+        height: "40px",
+        borderRadius: "50%",
+        boxShadow: "var(--dma-shadow)",
+        transition: "background-color 0.15s, color 0.15s"
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = "#f1f5f9";
+        e.currentTarget.style.color = "var(--dma-blue, #2f6fed)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = "var(--dma-card-bg, #fff)";
+        e.currentTarget.style.color = "var(--dma-navy, #102a6b)";
+      }}
+      title="Go Back to Home"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12" />
+        <polyline points="12 19 5 12 12 5" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+<div className="row g-3 mt-2 align-items-stretch">
   <div className="col-lg-4 col-md-6 col-sm-12 d-flex">
     <DashboardCard
       className="h-100 w-100"
@@ -128,13 +242,51 @@ function DMADashboard() {
     </DashboardCard>
   </div>
 </div>
+
+{/* Back Arrow button */}
+<div className="row g-3 mt-1">
+  <div className="col-12 d-flex justify-content-start">
+    <button
+      onClick={() => navigate("/")}
+      style={{
+        background: "var(--dma-card-bg, #fff)",
+        border: "1px solid var(--dma-border, #e3e7f0)",
+        color: "var(--dma-navy, #102a6b)",
+        cursor: "pointer",
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "40px",
+        height: "40px",
+        borderRadius: "50%",
+        boxShadow: "var(--dma-shadow)",
+        transition: "background-color 0.15s, color 0.15s"
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = "#f1f5f9";
+        e.currentTarget.style.color = "var(--dma-blue, #2f6fed)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = "var(--dma-card-bg, #fff)";
+        e.currentTarget.style.color = "var(--dma-navy, #102a6b)";
+      }}
+      title="Go Back to Home"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12" />
+        <polyline points="12 19 5 12 12 5" />
+      </svg>
+    </button>
+  </div>
+</div>
+
 {/* </>)} */}
 
-        <div className="row g-3 mt-2">
+        {/* <div className="row g-3 mt-2">
           <div className="col-12">
             <DashboardFooter_NEW />
           </div>
-        </div>
+        </div> */}
 
       </div>
     </div>

@@ -28,7 +28,8 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  flex-shrink: 0;
+  flex: 1 1 0%;
+  justify-content: flex-start;
 }
 
 .rts-back-btn {
@@ -64,13 +65,17 @@
   font-weight: 800;
   color: var(--rts-navy);
   text-align: center;
-  flex: 1;
+  flex: 0 0 auto;
   margin: 0;
   letter-spacing: 0.3px;
 }
 
 .rts-header-right {
-  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1 1 0%;
+  justify-content: flex-end;
 }
 
 .rts-header-brand-logo {
@@ -125,13 +130,25 @@
   flex-wrap: wrap;
 }
 
+.rts-date-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+  margin-top: -4px;
+}
+
 .rts-last-updated {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  background: var(--dma-blue-light, #e8f0ff);
+  color: var(--dma-blue, #2f6fed);
+  border: 1px solid #bfd1f9;
+  border-radius: 10px;
+  padding: 6px 14px;
   font-size: 13px;
-  color: var(--dma-text-muted);
-  font-weight: 500;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .rts-export-btn {
@@ -272,6 +289,9 @@
 }
 
 .rts-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   background: var(--rts-navy);
   color: #fff;
   font-weight: 700;
@@ -305,6 +325,9 @@
 }
 
 .rts-table tfoot td {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
   background: var(--rts-navy);
   color: #fff;
   font-weight: 700;
@@ -788,4 +811,32 @@
 
 .rts-total-link:hover {
   color: #e2e8f0 !important;
+}
+
+/* ── Inline Back Button ─────────────────────────────────────────────── */
+.rts-back-btn-row {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 4px;
+  margin-bottom: 12px;
+}
+
+.rts-back-btn-inline {
+  background: var(--dma-card-bg, #fff);
+  border: 1px solid var(--dma-border, #e3e7f0);
+  color: var(--dma-navy, #102a6b);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: var(--dma-shadow);
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.rts-back-btn-inline:hover {
+  background-color: #f1f5f9;
+  color: var(--dma-blue, #2f6fed);
 }

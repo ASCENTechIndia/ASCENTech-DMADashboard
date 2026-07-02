@@ -29,7 +29,7 @@ const fetchCollectionPercent = async () => {
     );
 
     const rows = res.data.data || [];
-
+    console.log("Rows", rows)
     const totalRow = rows.find(
       (r) => r.CORPORATION === "TOTAL"
     );
@@ -43,6 +43,7 @@ const fetchCollectionPercent = async () => {
         outstanding: Number(r.TOTAL_OUTSTANDING || 0),
         percent: Number(r.COLLECTION_PERCENTAGE || 0),
       }));
+console.log("corprows",corporationRows);
 
     setData(corporationRows);
 
@@ -64,7 +65,9 @@ const fetchCollectionPercent = async () => {
     setLoading(false);
   }
 };
-
+useEffect(() => {
+  console.log("Data State:", data);
+}, [data]);
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "150px" }}>
@@ -79,6 +82,7 @@ const fetchCollectionPercent = async () => {
     data.length > maxRowsBeforeScroll;
 
   return (
+    
     <div
       className="dma-table-scroll"
       style={{
@@ -90,6 +94,7 @@ const fetchCollectionPercent = async () => {
           : "visible",
       }}
     >
+     
       <table className="dma-table">
         <thead>
           <tr>
@@ -108,7 +113,8 @@ const fetchCollectionPercent = async () => {
         </thead>
 
     <tbody>
-  {message ? (
+      
+  {false ? (
     <tr>
       <td colSpan="5" className="text-center text-danger">
         {message}
@@ -120,15 +126,15 @@ const fetchCollectionPercent = async () => {
         <td>{row.corporation}</td>
 
         <td className="dma-text-center">
-          {(row.demand / 10000000).toFixed(2)}
+          {row.demand.toFixed(2)}
         </td>
 
         <td className="dma-text-center">
-          {(row.collection / 10000000).toFixed(2)}
+          {row.collection.toFixed(2)}
         </td>
 
         <td className="dma-text-center">
-          {(row.outstanding / 10000000).toFixed(2)}
+          {row.outstanding .toFixed(2)}
         </td>
 
         <td>
@@ -157,15 +163,15 @@ const fetchCollectionPercent = async () => {
       <td>Total</td>
 
       <td className="dma-text-center">
-        {(total.demand / 10000000).toFixed(2)}
+        {total.demand.toFixed(2)}
       </td>
 
       <td className="dma-text-center">
-        {(total.collection / 10000000).toFixed(2)}
+        {total.collection.toFixed(2)}
       </td>
 
       <td className="dma-text-center">
-        {(total.outstanding / 10000000).toFixed(2)}
+        {total.outstanding.toFixed(2)}
       </td>
 
       <td className="dma-text-center">

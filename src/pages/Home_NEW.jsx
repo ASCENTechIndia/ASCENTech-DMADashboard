@@ -12,28 +12,10 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 /* ── Card metadata list: exact color + route + solid SVG icon by index ── */
 const CARD_META_LIST = [
-  /* 24: RTS */
-  {
-    color: "purple",
-    route: "/propertydashboard",
-    icon: (
-      <svg width="20" height="20" viewBox="-1 1.5 24 24" fill="none">
-        <rect x="2" y="7" width="13" height="15" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
-        <rect x="15" y="11" width="7" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
-        <rect x="5" y="10" width="2.5" height="2.5" rx="0.5" fill="currentColor" opacity="0.7" />
-        <rect x="9.5" y="10" width="2.5" height="2.5" rx="0.5" fill="currentColor" opacity="0.7" />
-        <rect x="5" y="14.5" width="2.5" height="2.5" rx="0.5" fill="currentColor" opacity="0.7" />
-        <rect x="9.5" y="14.5" width="2.5" height="2.5" rx="0.5" fill="currentColor" opacity="0.7" />
-        <rect x="17" y="14" width="2" height="2" rx="0.4" fill="currentColor" opacity="0.7" />
-        <rect x="17" y="18" width="2" height="2" rx="0.4" fill="currentColor" opacity="0.7" />
-        <rect x="7" y="19" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.6" />
-      </svg>
-    ),
-  },
   /* 0: Property Tax */
   {
     color: "blue",
-    route: null,
+    route: "/propertydashboard",
     icon: (
       <svg width="20" height="20" viewBox="-1 1.5 24 24" fill="none">
         <rect x="2" y="7" width="13" height="15" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
@@ -68,16 +50,6 @@ const CARD_META_LIST = [
       </svg>
     ),
   },
-   /* 4: CFC */
-  {
-    color: "green",
-    route: null,
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-      </svg>
-    ),
-  },
   /* 3: Estate */
   {
     color: "purple",
@@ -85,6 +57,16 @@ const CARD_META_LIST = [
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
         <path fillRule="evenodd" d="M3 2.25a.75.75 0 0 0 0 1.5v16.5h-.75a.75.75 0 0 0 0 1.5H15v-18a.75.75 0 0 0 0-1.5H3ZM6.75 19.5v-2.25a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-.75.75h-3a.75.75 0 0 1-.75-.75ZM6 6.75A.75.75 0 0 1 6.75 6h.75a.75.75 0 0 1 0 1.5h-.75A.75.75 0 0 1 6 6.75ZM6.75 9a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75ZM6 12.75a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 0 1.5h-.75a.75.75 0 0 1-.75-.75ZM10.5 6a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75Zm-.75 3.75A.75.75 0 0 1 10.5 9h.75a.75.75 0 0 1 0 1.5h-.75a.75.75 0 0 1-.75-.75ZM10.5 12a.75.75 0 0 0 0 1.5h.75a.75.75 0 0 0 0-1.5h-.75ZM16.5 6.75v15h5.25a.75.75 0 0 0 0-1.5H21v-12a.75.75 0 0 0 0-1.5h-4.5Zm1.5 4.5a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Zm.75 2.25a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75v-.008a.75.75 0 0 0-.75-.75h-.008ZM18 17.25a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75h-.008a.75.75 0 0 1-.75-.75v-.008Z" clipRule="evenodd" />
+      </svg>
+    ),
+  },
+  /* 4: CFC */
+  {
+    color: "green",
+    route: null,
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
       </svg>
     ),
   },
@@ -245,7 +227,7 @@ const CARD_META_LIST = [
   /* 18: Medicine Inventory */
   {
     color: "green",
-    route: "/rtsdashboard",
+    route: null,
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
         <path d="M19 3H5c-1.1 0-1.99.9-1.99 2L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/>
@@ -329,6 +311,24 @@ const CARD_META_LIST = [
       </svg>
     ),
   },
+  /* 24: RTS */
+  {
+    color: "purple",
+    route: "/rtsdashboard",
+    icon: (
+      <svg width="20" height="20" viewBox="-1 1.5 24 24" fill="none">
+        <rect x="2" y="7" width="13" height="15" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
+        <rect x="15" y="11" width="7" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
+        <rect x="5" y="10" width="2.5" height="2.5" rx="0.5" fill="currentColor" opacity="0.7" />
+        <rect x="9.5" y="10" width="2.5" height="2.5" rx="0.5" fill="currentColor" opacity="0.7" />
+        <rect x="5" y="14.5" width="2.5" height="2.5" rx="0.5" fill="currentColor" opacity="0.7" />
+        <rect x="9.5" y="14.5" width="2.5" height="2.5" rx="0.5" fill="currentColor" opacity="0.7" />
+        <rect x="17" y="14" width="2" height="2" rx="0.4" fill="currentColor" opacity="0.7" />
+        <rect x="17" y="18" width="2" height="2" rx="0.4" fill="currentColor" opacity="0.7" />
+        <rect x="7" y="19" width="3" height="3" rx="0.5" fill="currentColor" opacity="0.6" />
+      </svg>
+    ),
+  },
   /* 25: OPD */
   {
     color: "blue",
@@ -383,8 +383,48 @@ const CARD_META_LIST = [
   },
 ];
 
+/** Mapping card titles to their original hardcoded index in CARD_META_LIST */
+const TITLE_TO_INDEX_MAP = {
+  "property tax": 0,
+  "water tax": 1,
+  "grievances": 2,
+  "estate": 3,
+  "cfc": 4,
+  "accounts": 5,
+  "social welfare": 8,
+  "asset management": 9,
+  "project management": 10,
+  "septic tank": 11,
+  "inward outward": 12,
+  "birth & death": 13,
+  "smart parking": 15,
+  "legal": 16,
+  "market": 17,
+  "medicine inventory": 18,
+  "open land": 19,
+  "fire": 20,
+  "works": 21,
+  "marriage registration": 22,
+  "visitor management": 23,
+  "rts": 24,
+  "opd": 25,
+  "digital library": 26,
+  "tanker": 27,
+  "advertisement": 28,
+  "bombay nursing act": 29
+};
+
 /** Default fallback metadata for unknown card indexes/titles */
 function getCardMeta(title, index) {
+  // First, try title-based lookup to avoid API order mismatch
+  if (title) {
+    const mappedIndex = TITLE_TO_INDEX_MAP[title.toLowerCase()];
+    if (mappedIndex !== undefined && CARD_META_LIST[mappedIndex]) {
+      return CARD_META_LIST[mappedIndex];
+    }
+  }
+
+  // Fallback to array index
   if (index !== undefined && CARD_META_LIST[index]) {
     return CARD_META_LIST[index];
   }
@@ -449,19 +489,20 @@ export default function Home_NEW() {
         ...card,
         origIndex: index,
       }));
-      
-      // Rearrange sequence: RTS (24), Property Tax (0), Water Tax (1), Grievances (2) first
-      const targetIndices = [19, 0, 1, 3];
+
+      // Rearrange sequence by title: RTS, Property Tax, Water Tax, Grievances first
+      const targetTitles = ["RTS", "Property Tax", "Water Tax", "Grievances"];
       const frontCards = [];
       const remainingCards = [];
 
-      targetIndices.forEach((idx) => {
-        const found = cardsWithIndex.find((c) => c.origIndex === idx);
+      targetTitles.forEach((title) => {
+        const found = cardsWithIndex.find((c) => c.title?.toLowerCase() === title.toLowerCase());
         if (found) frontCards.push(found);
       });
 
       cardsWithIndex.forEach((c) => {
-        if (!targetIndices.includes(c.origIndex)) {
+        const isTarget = targetTitles.some(t => t.toLowerCase() === c.title?.toLowerCase());
+        if (!isTarget) {
           remainingCards.push(c);
         }
       });

@@ -56,25 +56,32 @@ function PaymentModeAnalysisChart() {
 
       setData(chartData);
     } catch (err) {
-  console.error("Modewise Collection Error:", err);
+      console.error("Modewise Collection Error:", err);
 
-  setError(
-    err?.response?.data?.message ||
-    err?.message ||
-    "Failed to load data"
-  );
+      setError(
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to load data"
+      );
 
-  setData([]);
-    } finally{
+      setData([]);
+    } finally {
       setLoading(false);
     }
+  };
+
+  const formatCrore = (amount) => {
+    return `${(amount / 10000000).toFixed(2)}`;
   };
 
   const ref = useEChart(
     () => ({
       tooltip: {
         trigger: "item",
-        formatter: "{b}: {c} ({d}%)",
+        formatter: "{b}: {c} Cr ({d}%)",
+        position: function (point, params, dom, rect, size) {
+          return [size.viewSize[0] - dom.offsetWidth - 10, point[1]];
+        },
       },
       series: [
         {
@@ -87,7 +94,7 @@ function PaymentModeAnalysisChart() {
             borderWidth: 3,
           },
           data: data.map((d) => ({
-            value: d.amount,
+            value: formatCrore(d.amount),
             name: d.mode,
             itemStyle: {
               color: COLOR_MAP[d.color],
@@ -98,7 +105,7 @@ function PaymentModeAnalysisChart() {
     }),
     [data]
   );
-  
+
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "150px" }}>
@@ -108,22 +115,22 @@ function PaymentModeAnalysisChart() {
       </div>
     );
   }
-  
-if (error) {
-  return (
-    <div
-      style={{
-        height: "220px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        color: "red",
-      }}
-    >
-      {error}
-    </div>
-  );
-}
+
+  if (error) {
+    return (
+      <div
+        style={{
+          height: "220px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          color: "red",
+        }}
+      >
+        {error}
+      </div>
+    );
+  }
   return (
     <div className="dma-card-body--split">
       <div
@@ -151,7 +158,7 @@ if (error) {
               </div>
 
               <div className="dma-legend-sub">
-                {row.amount.toFixed(2)}
+                {formatCrore(row.amount)} Cr
                 {" "}
                 ({row.percent.toFixed(2)}%)
               </div>

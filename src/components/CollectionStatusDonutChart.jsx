@@ -13,19 +13,19 @@ const COLOR_MAP = {
 function CollectionStatusDonutChart() {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
-   const [message, setMessage] = useState("");
-  const[loading, setLoading] = useState(true);
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     fetchModewiseCollection();
   }, []);
 
-const formatCrore = (amount) => {
-  return `${(amount / 10000000).toFixed(2)} Cr`;
-};
+  const formatCrore = (amount) => {
+    return `${(amount / 10000000).toFixed(2)} Cr`;
+  };
 
   const fetchModewiseCollection = async () => {
     try {
-      setMessage(""); 
+      setMessage("");
       setLoading(true);
       const res = await axios.get(
         `${API_BASE_URL}/property/getModewiseCollection`
@@ -60,21 +60,22 @@ const formatCrore = (amount) => {
       setTotal(totalCollection);
     } catch (err) {
       console.error("Modewise Collection Error:", err);
-        setMessage(
-    err?.response?.data?.message ||
-    err?.message ||
-    "Failed to load data"
-  );
-    } finally{
+      setMessage(
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to load data"
+      );
+    } finally {
       setLoading(false);
     }
   };
 
-    const ref = useEChart(
+  const ref = useEChart(
     () => ({
       tooltip: {
         trigger: "item",
-        formatter: "{b}: {c} ({d}%)",
+        formatter: (params) =>
+          `${params.name}: ${(params.value / 10000000).toFixed(2)} Cr (${params.percent}%)`,
       },
       series: [
         {
@@ -120,7 +121,7 @@ const formatCrore = (amount) => {
             left: "center",
             top: "52%",
             style: {
-             text: formatCrore(total),
+              text: formatCrore(total),
               fontSize: 12,
               fill: "#1e2939",
               fontWeight: 800,
@@ -131,8 +132,8 @@ const formatCrore = (amount) => {
     }),
     [data, total]
   );
-  
-    if (loading) {
+
+  if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "150px" }}>
         <div className="spinner-border text-primary" role="status">

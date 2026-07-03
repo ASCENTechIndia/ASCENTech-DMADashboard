@@ -9,6 +9,11 @@ const COLOR_MAP = {
   red: "#e6453c",
 };
 
+const formatCrore = (amount) => {
+  return `${(amount / 10000000).toFixed(2)}`;
+};
+
+
 function CollectionStatusModeTable({
   maxRowsBeforeScroll = 5,
 }) {
@@ -24,66 +29,66 @@ function CollectionStatusModeTable({
     fetchModewiseCollection();
   }, []);
 
- const fetchModewiseCollection = async () => {
-  try {
-    setError("");
-    setLoading(true);
-    const res = await axios.get(
-      `${API_BASE_URL}/property/getModewiseCollection`
-    );
+  const fetchModewiseCollection = async () => {
+    try {
+      setError("");
+      setLoading(true);
+      const res = await axios.get(
+        `${API_BASE_URL}/property/getModewiseCollection`
+      );
 
-    const row = res.data.data;
+      const row = res.data.data;
 
-    const totalAmount =
-      Number(row.ONLINE_AMOUNT || 0) +
-      Number(row.OFFLINE_AMOUNT || 0) +
-      Number(row.CASH_AMOUNT || 0);
+      const totalAmount =
+        Number(row.ONLINE_AMOUNT || 0) +
+        Number(row.OFFLINE_AMOUNT || 0) +
+        Number(row.CASH_AMOUNT || 0);
 
-    const tableData = [
-      {
-        mode: "Online",
-        amount: Number(row.ONLINE_AMOUNT || 0),
-        percent: totalAmount > 0 ? (Number(row.ONLINE_AMOUNT || 0) / totalAmount) * 100 : 0,
-        color: "blue",
-      },
-      {
-        mode: "Offline",
-        amount: Number(row.OFFLINE_AMOUNT || 0),
-        percent: totalAmount > 0 ? (Number(row.OFFLINE_AMOUNT || 0) / totalAmount) * 100 : 0,
-        color: "orange",
-      },
-      {
-        mode: "Cash",
-        amount: Number(row.CASH_AMOUNT || 0),
-        percent: totalAmount > 0 ? (Number(row.CASH_AMOUNT || 0) / totalAmount) * 100 : 0,
-        color: "red",
-      },
-    ];
+      const tableData = [
+        {
+          mode: "Online",
+          amount: Number(row.ONLINE_AMOUNT || 0),
+          percent: totalAmount > 0 ? (Number(row.ONLINE_AMOUNT || 0) / totalAmount) * 100 : 0,
+          color: "blue",
+        },
+        {
+          mode: "Offline",
+          amount: Number(row.OFFLINE_AMOUNT || 0),
+          percent: totalAmount > 0 ? (Number(row.OFFLINE_AMOUNT || 0) / totalAmount) * 100 : 0,
+          color: "orange",
+        },
+        {
+          mode: "Cash",
+          amount: Number(row.CASH_AMOUNT || 0),
+          percent: totalAmount > 0 ? (Number(row.CASH_AMOUNT || 0) / totalAmount) * 100 : 0,
+          color: "red",
+        },
+      ];
 
-    setData(tableData);
+      setData(tableData);
 
-    setTotal({
-      amount: totalAmount,
-      percent: 100,
-    });
-  } catch (err) {
-    console.error("Modewise Collection Error:", err);
+      setTotal({
+        amount: totalAmount,
+        percent: 100,
+      });
+    } catch (err) {
+      console.error("Modewise Collection Error:", err);
 
-    setError(
-      err?.response?.data?.message ||
-      err?.message ||
-      "Failed to load data"
-    );
+      setError(
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to load data"
+      );
 
-    setData([]);
-    setTotal({
-      amount: 0,
-      percent: 0,
-    });
-  } finally{
-    setLoading(false);
-  }
-};
+      setData([]);
+      setTotal({
+        amount: 0,
+        percent: 0,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "150px" }}>
@@ -113,64 +118,64 @@ function CollectionStatusModeTable({
           </tr>
         </thead>
 
-    <tbody>
-  {error ? (
-    <tr>
-      <td
-        colSpan="3"
-        className="text-center text-danger"
-      >
-        {error}
-      </td>
-    </tr>
-  ) : (
-    data.map((row) => (
-      <tr key={row.mode}>
-        <td>
-          <span
-            className="dma-legend-dot"
-            style={{
-              display: "inline-block",
-              width: 12,
-              height: 12,
-              borderRadius: "50%",
-              background: COLOR_MAP[row.color],
-              marginRight: 8,
-            }}
-          />
-          {row.mode}
-        </td>
+        <tbody>
+          {error ? (
+            <tr>
+              <td
+                colSpan="3"
+                className="text-center text-danger"
+              >
+                {error}
+              </td>
+            </tr>
+          ) : (
+            data.map((row) => (
+              <tr key={row.mode}>
+                <td>
+                  <span
+                    className="dma-legend-dot"
+                    style={{
+                      display: "inline-block",
+                      width: 12,
+                      height: 12,
+                      borderRadius: "50%",
+                      background: COLOR_MAP[row.color],
+                      marginRight: 8,
+                    }}
+                  />
+                  {row.mode}
+                </td>
 
-        <td className="dma-text-center">
-          {row.amount.toFixed(2)}
-        </td>
+                <td className="dma-text-center">
+                  {formatCrore(row.amount)} Cr
+                </td>
 
-        <td className="dma-text-center">
-          {row.percent.toFixed(2)}%
-        </td>
-      </tr>
-    ))
-  )}
-</tbody>
-      {!error && (
-  <tfoot>
-    <tr>
-      <td>
-        <strong>Total</strong>
-      </td>
+                <td className="dma-text-center">
+                  {row.percent.toFixed(2)}%
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+        {!error && (
+          <tfoot>
+            <tr>
+              <td>
+                <strong>Total</strong>
+              </td>
 
-      <td className="dma-text-center">
-        <strong>
-          {total.amount.toFixed(2)}
-        </strong>
-      </td>
+              <td className="dma-text-center">
+                <strong>
+                  {formatCrore(total.amount)} Cr
+                </strong>
+              </td>
 
-      <td className="dma-text-center">
-        <strong>100%</strong>
-      </td>
-    </tr>
-  </tfoot>
-)}
+              <td className="dma-text-center">
+                <strong>100%</strong>
+              </td>
+            </tr>
+          </tfoot>
+        )}
       </table>
     </div>
   );

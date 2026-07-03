@@ -19,6 +19,10 @@ function CollectionStatusDonutChart() {
     fetchModewiseCollection();
   }, []);
 
+const formatCrore = (amount) => {
+  return `${(amount / 10000000).toFixed(2)} Cr`;
+};
+
   const fetchModewiseCollection = async () => {
     try {
       setMessage(""); 
@@ -116,7 +120,7 @@ function CollectionStatusDonutChart() {
             left: "center",
             top: "52%",
             style: {
-              text: total.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+             text: formatCrore(total),
               fontSize: 12,
               fill: "#1e2939",
               fontWeight: 800,

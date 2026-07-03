@@ -29,7 +29,7 @@ const fetchCollectionPercent = async () => {
     );
 
     const rows = res.data.data || [];
-    console.log("Rows", rows)
+    // console.log("Rows", rows)
     const totalRow = rows.find(
       (r) => r.CORPORATION === "TOTAL"
     );
@@ -43,7 +43,7 @@ const fetchCollectionPercent = async () => {
         outstanding: Number(r.TOTAL_OUTSTANDING || 0),
         percent: Number(r.COLLECTION_PERCENTAGE || 0),
       }));
-console.log("corprows",corporationRows);
+// console.log("corprows",corporationRows);
 
     setData(corporationRows);
 
@@ -65,9 +65,9 @@ console.log("corprows",corporationRows);
     setLoading(false);
   }
 };
-useEffect(() => {
-  console.log("Data State:", data);
-}, [data]);
+// useEffect(() => {
+//   console.log("Data State:", data);
+// }, [data]);
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "150px" }}>

@@ -98,7 +98,7 @@ function PropertySummaryTable() {
               <td>
                 {row.corporation === "Vasai Virar City Municipal Corporation" ? (
                   <a
-                    href="https://crmdashboard.onlinevvcmc.in/"
+                    href="https://dashboard.onlinevvcmc.in/"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{

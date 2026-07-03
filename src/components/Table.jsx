@@ -395,15 +395,30 @@ const Table = () => {
                         {colKeys.map((key) => {
                           const value = row[key];
                           const isZero = value === 0;
+                          const isDhuleAppReceived =
+                            row.corporation &&
+                            row.corporation.toString().toLowerCase().trim() === "dhule" &&
+                            key === "applicationReceived";
+
                           return (
                             <td key={key} className="text-center">
-                              {isZero ? (
+                              {isDhuleAppReceived ? (
+                                <a
+                                  href="https://rtsdashboard.dhulecorporation.in/"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="btn btn-link btn-sm p-0 text-primary text-decoration-underline"
+                                  style={{ cursor: "pointer", color: "var(--dma-blue)" }}
+                                >
+                                  {formatNumber(value)}
+                                </a>
+                              ) : isZero ? (
                                 <span className="text-muted">{formatNumber(value)}</span>
                               ) : (
                                 <button
                                   className="btn btn-link btn-sm p-0 text-primary text-decoration-none"
                                   onClick={() => handleCellClick(row.corporation, key, value)}
-                                  style={{ cursor: 'pointer', color: 'var(--dma-blue)' }}
+                                  style={{ cursor: "pointer", color: "var(--dma-blue)" }}
                                 >
                                   {formatNumber(value)}
                                   <i className="bi bi-chevron-right ms-1 small"></i>

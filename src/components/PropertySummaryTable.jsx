@@ -19,15 +19,15 @@ function PropertySummaryTable() {
           if (rows.length === 0) {
             setMessage(response.data.message || "No property summary data available.");
           } else {
-          setData(
-            rows.map((item) => ({
-              corporation: item.CORPORATION || item.corporation || "Unknown",
-              residential: Number(item.RESIDENTIAL || item.residential || 0),
-              commercial: Number(item.COMMERCIAL || item.commercial || 0),
-              mixed: Number(item.MIXED || item.mixed || 0),
-              total: Number(item.TOTAL || item.total || 0),
-            }))
-          );
+            setData(
+              rows.map((item) => ({
+                corporation: item.CORPORATION || item.corporation || "Unknown",
+                residential: Number(item.RESIDENTIAL || item.residential || 0),
+                commercial: Number(item.COMMERCIAL || item.commercial || 0),
+                mixed: Number(item.MIXED || item.mixed || 0),
+                total: Number(item.TOTAL || item.total || 0),
+              }))
+            );
           }
         } else {
           setMessage(response.data.message || "Failed to load property summary.");
@@ -95,7 +95,24 @@ function PropertySummaryTable() {
         <tbody>
           {data.map((row, idx) => (
             <tr key={idx}>
-              <td>{row.corporation}</td>
+              <td>
+                {row.corporation === "Vasai Virar City Municipal Corporation" ? (
+                  <a
+                    href="https://crmdashboard.onlinevvcmc.in/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: "#0d6efd",
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {row.corporation}
+                  </a>
+                ) : (
+                  row.corporation
+                )}
+              </td>
               <td className="dma-text-center">{row.residential.toLocaleString("en-IN")}</td>
               <td className="dma-text-center">{row.commercial.toLocaleString("en-IN")}</td>
               <td className="dma-text-center">{row.mixed.toLocaleString("en-IN")}</td>

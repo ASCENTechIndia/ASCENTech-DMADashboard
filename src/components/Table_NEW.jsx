@@ -482,16 +482,37 @@ const Table_NEW = () => {
                       <td>{firstColRender(row, idx)}</td>
                       {COL_KEYS.map((k) => {
                         const val = row[k] || 0;
+                        const isDhuleAppReceived =
+                          view === "summary" &&
+                          row.corporation &&
+                          row.corporation.toString().toLowerCase().trim() === "dhule" &&
+                          k === "applicationReceived";
+
                         return (
                           <td key={k} className="text-center">
-                            <span
-                              style={{
-                                color: val === 0 ? "#000000" : COL_COLORS[k],
-                                fontWeight: val === 0 ? 400 : 600,
-                              }}
-                            >
-                              {fmt(val)}
-                            </span>
+                            {isDhuleAppReceived ? (
+                              <a
+                                href="https://rtsdashboard.dhulecorporation.in/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  color: val === 0 ? "#000000" : COL_COLORS[k],
+                                  fontWeight: val === 0 ? 400 : 600,
+                                  textDecoration: "underline",
+                                }}
+                              >
+                                {fmt(val)}
+                              </a>
+                            ) : (
+                              <span
+                                style={{
+                                  color: val === 0 ? "#000000" : COL_COLORS[k],
+                                  fontWeight: val === 0 ? 400 : 600,
+                                }}
+                              >
+                                {fmt(val)}
+                              </span>
+                            )}
                           </td>
                         );
                       })}

@@ -96,9 +96,9 @@ function PropertySummaryTable() {
           {data.map((row, idx) => (
             <tr key={idx}>
               <td>
-                {row.corporation === "Vasai Virar City Municipal Corporation" ? (
+                {row.corporation === "वसई-विरार मनपा" ? (
                   <a
-                    href="https://dashboard.onlinevvcmc.in/"
+                    href="https://dashboard.onlinevvcmc.in/property/mode"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{

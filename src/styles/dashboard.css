@@ -398,7 +398,8 @@
 }
 
 .dma-bar-name {
-  font-weight: 700;
+  /* font-size: 13px; */
+  font-weight: 600;
   color: var(--dma-text);
   white-space: nowrap;
   overflow: hidden;

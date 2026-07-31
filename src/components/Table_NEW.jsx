@@ -278,15 +278,22 @@ const Table_NEW = () => {
 
     try {
       setLoadingDrill(true);
-      const url = targetUlbId
-        ? `${API_BASE_URL}/dashboard/RTSStatusWise?status=${status}&ulbId=${targetUlbId}`
-        : `${API_BASE_URL}/dashboard/RTSStatusWise?status=${status}`;
+      // Assuming selectedDeptId is available when view === "services"
+      const url = `${API_BASE_URL}/dashboard/RTSApplicationDetail?dept=${selectedDeptId}&status=${status}&ulbId=${targetUlbId}`;
       const res = await axios.get(url);
-      if (!res.data.success) throw new Error(res.data.message || "Status API error");
+      if (!res.data.success) throw new Error(res.data.message || "Application Detail API error");
       const items = res.data.data || [];
       const formatted = items.map((item) => ({
-        department: item.VAR_DEPT_ENGNAME || "Unknown",
-        count: Number(item.STATUS || 0),
+        department: item.DEPTNAME || "Unknown",
+        service: item.SERVICENAME || "Unknown",
+        citizenName: item.OWNERNAME || "",
+        mobileNumber: item.MOBNO || "",
+        emailId: item.EMAIL || "",
+        applicationDate: item.APPLIDATE || "",
+        amount: Number(item.AMOUNT || 0),
+        receiptDate: item.RECIEPTDATE || "",
+        certificateIssued: item.STATUS || "NO",
+        certificateIssuedDate: item.CERTIISSDATE || "",
       }));
       setStatusData(formatted);
     } catch (err) {
@@ -363,9 +370,8 @@ const Table_NEW = () => {
   /* ─── Render loading ────────────────────────────────────────────── */
   if (loadingSummary) return <Loader />;
 
-  /* ─── Render status table ───────────────────────────────────────── */
+  /* ─── Render status table (Detail view) ───────── */
   if (view === "status") {
-    const statusTotal = statusData.reduce((s, i) => s + i.count, 0);
     return (
       <div>
         {breadcrumb()}
@@ -376,27 +382,53 @@ const Table_NEW = () => {
             <table className="rts-table">
               <thead>
                 <tr>
-                  <th style={{ width: 50 }}>Sr. No.</th>
-                  <th className="text-center">Department</th>
-                  <th className="text-center">{selectedStatusLabel}</th>
+                  <th style={{ width: 44 }}>Sr. No.</th>
+                  <th>Department</th>
+                  <th>Service</th>
+                  <th>Citizen Name</th>
+                  <th>Mobile Number</th>
+                  <th>Email Id</th>
+                  <th>Application Date</th>
+                  <th className="text-center">Amount</th>
+                  <th>Receipt Date</th>
+                  <th className="text-center">Certificate Issued</th>
+                  <th>Certificate Issued Date</th>
                 </tr>
               </thead>
               <tbody>
-                {statusData.map((item, idx) => (
-                  <tr key={idx}>
-                    <td className="text-center">{idx + 1}</td>
-                    <td>{item.department}</td>
-                    <td className="text-center" style={{ color: "#2f6fed", fontWeight: 600 }}>
-                      {fmt(item.count)}
+                {statusData.length === 0 ? (
+                  <tr>
+                    <td colSpan={11} className="text-center rts-no-data">
+                      No data available
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  statusData.map((item, idx) => (
+                    <tr key={idx}>
+                      <td className="text-center">{idx + 1}</td>
+                      <td>{item.department}</td>
+                      <td>{item.service}</td>
+                      <td>{item.citizenName}</td>
+                      <td className="text-center">{item.mobileNumber}</td>
+                      <td>{item.emailId}</td>
+                      <td className="text-center">{item.applicationDate}</td>
+                      <td className="text-center" style={{ color: item.amount === 0 ? "#000" : "#2f6fed", fontWeight: item.amount === 0 ? 400 : 600 }}>
+                        {item.amount}
+                      </td>
+                      <td className="text-center">{item.receiptDate}</td>
+                      <td className="text-center" style={{ color: item.certificateIssued === "NO" ? "#e6453c" : "#1fa854", fontWeight: 600 }}>
+                        {item.certificateIssued}
+                      </td>
+                      <td className="text-center">{item.certificateIssuedDate}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
               <tfoot>
                 <tr>
-                  <td />
-                  <td>TOTAL</td>
-                  <td className="text-center">{fmt(statusTotal)}</td>
+                  <td colSpan={11} className="text-center">
+                    Showing {statusData.length} records
+                  </td>
                 </tr>
               </tfoot>
             </table>
@@ -482,37 +514,16 @@ const Table_NEW = () => {
                       <td>{firstColRender(row, idx)}</td>
                       {COL_KEYS.map((k) => {
                         const val = row[k] || 0;
-                        const isDhuleAppReceived =
-                          view === "summary" &&
-                          row.corporation &&
-                          row.corporation.toString().toLowerCase().trim() === "dhule" &&
-                          k === "applicationReceived";
-
                         return (
                           <td key={k} className="text-center">
-                            {isDhuleAppReceived ? (
-                              <a
-                                href="https://rtsdashboard.dhulecorporation.in/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                  color: val === 0 ? "#000000" : COL_COLORS[k],
-                                  fontWeight: val === 0 ? 400 : 600,
-                                  textDecoration: "underline",
-                                }}
-                              >
-                                {fmt(val)}
-                              </a>
-                            ) : (
-                              <span
-                                style={{
-                                  color: val === 0 ? "#000000" : COL_COLORS[k],
-                                  fontWeight: val === 0 ? 400 : 600,
-                                }}
-                              >
-                                {fmt(val)}
-                              </span>
-                            )}
+                            <span
+                              style={{
+                                color: val === 0 ? "#000000" : COL_COLORS[k],
+                                fontWeight: val === 0 ? 400 : 600,
+                              }}
+                            >
+                              {fmt(val)}
+                            </span>
                           </td>
                         );
                       })}

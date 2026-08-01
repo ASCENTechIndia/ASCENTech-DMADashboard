@@ -477,7 +477,7 @@ export default function Home_NEW() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [ulbList, setUlbList] = useState([]);
-  const [selectedUlbId, setSelectedUlbId] = useState(null);
+  const [selectedUlbId, setSelectedUlbId] = useState("ALL");
   const navigate = useNavigate();
   const { date, day } = getFormattedDate();
 
@@ -487,10 +487,6 @@ export default function Home_NEW() {
       const res = await axios.get(`${API_BASE_URL}/dashboard/ULBList`);
       const list = res.data?.data || [];
       setUlbList(list);
-      // Auto-select first corporation
-      if (list.length > 0 && !selectedUlbId) {
-        setSelectedUlbId(list[0].CORPID);
-      }
     } catch (err) {
       console.error("ULB List Fetch Error:", err);
     }
@@ -564,12 +560,13 @@ export default function Home_NEW() {
         <div className="hn-header-right">
           <select
             className="hn-dropdown"
-            value={selectedUlbId ?? ""}
-            onChange={(e) => setSelectedUlbId(Number(e.target.value))}
+            value={selectedUlbId}
+            onChange={(e) => {
+              const val = e.target.value;
+              setSelectedUlbId(val === "ALL" ? "ALL" : Number(val));
+            }}
           >
-            {ulbList.length === 0 && (
-              <option value="">Loading...</option>
-            )}
+            <option value="ALL">All Municipal Corporations</option>
             {ulbList.map((ulb) => (
               <option key={ulb.CORPID} value={ulb.CORPID}>
                 {ulb.ENGNAME || ulb.MARNAME}

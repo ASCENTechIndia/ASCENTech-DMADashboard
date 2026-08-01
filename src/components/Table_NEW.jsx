@@ -541,7 +541,7 @@ const Table_NEW = () => {
                       <td key={k} className="text-center">
                         {val === 0 ? (
                           <span>0</span>
-                        ) : view === "services" ? (
+                        ) : view === "services" && k !== "applicationReceived" ? (
                           <button
                             className="rts-total-link"
                             onClick={() => handleStatusClick(k)}

@@ -476,41 +476,40 @@ export default function Home_NEW() {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [ulbList, setUlbList] = useState([]);
+  const [selectedUlbId, setSelectedUlbId] = useState(null);
   const navigate = useNavigate();
   const { date, day } = getFormattedDate();
 
-  const fetchDashboard = useCallback(async () => {
+  // Fetch ULB (Corporation) list from API
+  const fetchULBList = useCallback(async () => {
+    try {
+      const res = await axios.get(`${API_BASE_URL}/dashboard/ULBList`);
+      const list = res.data?.data || [];
+      setUlbList(list);
+      // Auto-select first corporation
+      if (list.length > 0 && !selectedUlbId) {
+        setSelectedUlbId(list[0].CORPID);
+      }
+    } catch (err) {
+      console.error("ULB List Fetch Error:", err);
+    }
+  }, []);
+
+  // Fetch dashboard cards for the selected ulbId
+  const fetchDashboard = useCallback(async (ulbId) => {
+    if (!ulbId) return;
     try {
       setLoading(true);
       setError(null);
-      const res = await axios.get(`${API_BASE_URL}/dashboard/DashboardDataNew`);
+      const res = await axios.get(`${API_BASE_URL}/dashboard/DashboardDataNew`, {
+        params: { ulbId },
+      });
       const rawCards = res.data?.data || [];
       const cardsWithIndex = rawCards.map((card, index) => ({
         ...card,
         origIndex: index,
       }));
-
-      // Rearrange sequence by title: RTS, Property Tax, Water Tax, Grievances first
-      /*
-      const targetTitles = ["RTS", "Property Tax", "Water Tax", "CFC","Grievances"];
-      const frontCards = [];
-      const remainingCards = [];
-
-      targetTitles.forEach((title) => {
-        const found = cardsWithIndex.find((c) => c.title?.toLowerCase() === title.toLowerCase());
-        if (found) frontCards.push(found);
-      });
-
-      cardsWithIndex.forEach((c) => {
-        const isTarget = targetTitles.some(t => t.toLowerCase() === c.title?.toLowerCase());
-        if (!isTarget) {
-          remainingCards.push(c);
-        }
-      });
-
-      setCards([...frontCards, ...remainingCards]);
-      */
-
       setCards(cardsWithIndex);
     } catch (err) {
       console.error("Dashboard Error:", err);
@@ -520,9 +519,17 @@ export default function Home_NEW() {
     }
   }, []);
 
+  // On mount: fetch ULB list
   useEffect(() => {
-    fetchDashboard();
-  }, [fetchDashboard]);
+    fetchULBList();
+  }, [fetchULBList]);
+
+  // Whenever selectedUlbId changes: refetch dashboard
+  useEffect(() => {
+    if (selectedUlbId) {
+      fetchDashboard(selectedUlbId);
+    }
+  }, [selectedUlbId, fetchDashboard]);
 
   const handleCardClick = (card, index) => {
     const meta = getCardMeta(card.title, index);
@@ -553,8 +560,22 @@ export default function Home_NEW() {
           </div>
         </div>
 
-        {/* Right: Nagar Karyawali logo + date badge */}
+        {/* Right: Dynamic ULB Dropdown + Nagar Karyawali logo + date badge */}
         <div className="hn-header-right">
+          <select
+            className="hn-dropdown"
+            value={selectedUlbId ?? ""}
+            onChange={(e) => setSelectedUlbId(Number(e.target.value))}
+          >
+            {ulbList.length === 0 && (
+              <option value="">Loading...</option>
+            )}
+            {ulbList.map((ulb) => (
+              <option key={ulb.CORPID} value={ulb.CORPID}>
+                {ulb.ENGNAME || ulb.MARNAME}
+              </option>
+            ))}
+          </select>
           <img
             src="/Images/MasterPageLogo.png"
             alt="Nagar Karyawali"
@@ -585,7 +606,7 @@ export default function Home_NEW() {
               <path d="M12 8v4M12 16h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             </svg>
             <span style={{ flex: 1 }}>{error}</span>
-            <button className="hn-error-retry" onClick={fetchDashboard}>
+            <button className="hn-error-retry" onClick={() => fetchDashboard(selectedUlbId)}>
               Retry
             </button>
           </div>

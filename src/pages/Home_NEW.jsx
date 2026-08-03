@@ -534,7 +534,8 @@ export default function Home_NEW() {
       if (route.startsWith("http://") || route.startsWith("https://")) {
         window.open(route, "_blank", "noopener,noreferrer");
       } else {
-        navigate(route);
+        // Pass selectedUlbId via route state so the target page can filter by ULB
+        navigate(route, { state: { ulbId: selectedUlbId } });
       }
     }
   };

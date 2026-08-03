@@ -103,7 +103,7 @@ function Loader() {
 }
 
 /* ── Main Table_NEW ─────────────────────────────────────────────────── */
-const Table_NEW = () => {
+const Table_NEW = ({ ulbId = "ALL" }) => {
   /* ─── State: summary (main) ────────────────────────────────────── */
   const [summaryRows, setSummaryRows] = useState([]);
   const [loadingSummary, setLoadingSummary] = useState(true);
@@ -127,7 +127,10 @@ const Table_NEW = () => {
     const fetchSummary = async () => {
       try {
         setLoadingSummary(true);
-        const res = await axios.get(`${API_BASE_URL}/dashboard/RTSULBWiseadd`);
+        const url = (ulbId && ulbId !== "ALL")
+          ? `${API_BASE_URL}/dashboard/RTSULBWiseadd?ulbId=${ulbId}`
+          : `${API_BASE_URL}/dashboard/RTSULBWiseadd`;
+        const res = await axios.get(url);
         if (!res.data.success) throw new Error(res.data.message || "API error");
         const items = res.data.data || [];
         const formatted = items.map((item) => ({
@@ -141,6 +144,7 @@ const Table_NEW = () => {
           paymentReceived: Number(item.NEW || 0),
           certificateIssued: Number(item.DELIVERD || 0),
         }));
+
         setSummaryRows(formatted);
       } catch (err) {
         console.error("fetchSummary error:", err);
@@ -150,7 +154,7 @@ const Table_NEW = () => {
       }
     };
     fetchSummary();
-  }, []);
+  }, [ulbId]); // ← ulbId बदलल्यावर re-fetch
 
   /* ─── Handle header back click step by step ─────────────────────── */
   useEffect(() => {

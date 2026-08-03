@@ -75,8 +75,8 @@ const IconCertificate = () => (
   </svg>
 );
 
-/* ── Stats_NEW component ────────────────────────────────────────────── */
-function Stats_NEW() {
+/* ── Stats_NEW component ──────────────────────────────────────────── */
+function Stats_NEW({ ulbId = "ALL" }) {
   const [stats, setStats] = useState({
     corporations: 0,
     applicationReceived: 0,
@@ -92,9 +92,13 @@ function Stats_NEW() {
     const fetchStats = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`${API_BASE_URL}/dashboard/RTSULBWiseadd`);
+        const url = (ulbId && ulbId !== "ALL")
+          ? `${API_BASE_URL}/dashboard/RTSULBWiseadd?ulbId=${ulbId}`
+          : `${API_BASE_URL}/dashboard/RTSULBWiseadd`;
+        const res = await axios.get(url);
         if (res.data && res.data.success) {
           const items = res.data.data || [];
+
           const aggregated = items.reduce(
             (acc, item) => {
               acc.applicationReceived += Number(item.TOTAL || 0);
@@ -126,7 +130,7 @@ function Stats_NEW() {
       }
     };
     fetchStats();
-  }, []);
+  }, [ulbId]); // ← ulbId बदलल्यावर re-fetch
 
   const fmt = (n) => Number(n || 0).toLocaleString("en-IN");
 

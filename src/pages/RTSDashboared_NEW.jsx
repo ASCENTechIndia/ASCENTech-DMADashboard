@@ -1,6 +1,6 @@
 // RTSDashboared_NEW.jsx
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/dashboard.css";
 import "../styles/rts-new.css";
 
@@ -11,6 +11,10 @@ import Table_NEW from "../components/Table_NEW";
 
 function RTSDashboard_NEW() {
   const navigate = useNavigate();
+  const location = useLocation();
+  // ulbId comes from Home_NEW via: navigate("/rtsdashboard", { state: { ulbId } })
+  // If "ALL" or undefined → no filter (show all ULBs)
+  const selectedUlbId = location.state?.ulbId ?? "ALL";
   const [lastUpdated, setLastUpdated] = useState("");
 
   useEffect(() => {
@@ -51,7 +55,7 @@ function RTSDashboard_NEW() {
       )}
 
       {/* 3 ── 7 KPI Summary Cards ─────────────────────────────────── */}
-      <Stats_NEW />
+      <Stats_NEW ulbId={selectedUlbId} />
 
       {/* Back Arrow button */}
       <div className="rts-back-btn-row">
@@ -69,7 +73,7 @@ function RTSDashboard_NEW() {
 
       {/* 4 ── Corporation-wise Table ──────────────────────────────── */}
       <DashboardCard_NEW className="rts-table-card">
-        <Table_NEW />
+        <Table_NEW ulbId={selectedUlbId} />
       </DashboardCard_NEW>
 
       {/* Back Arrow button below the table */}

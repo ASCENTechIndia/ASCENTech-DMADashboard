@@ -1,6 +1,6 @@
 import '../styles/dashboard.css'
 import { lazy, Suspense, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Header from '../components/Header'
 import SummaryCards from '../components/SummaryCards'
 import DashboardCard from '../components/DashboardCard'
@@ -28,6 +28,8 @@ import Header_NEW from '../components/Header_NEW';
 
 function DMADashboard() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const selectedUlbId = location.state?.ulbId ?? "ALL";
     const [summaryLoaded, setSummaryLoaded] = useState(false);
   return (
     <div className="dma-dashboard">
@@ -41,7 +43,7 @@ function DMADashboard() {
 
         <div className="row g-3">
           <div className="col-12">
-            <SummaryCards onLoaded={() => setSummaryLoaded(true)} />
+            <SummaryCards ulbId={selectedUlbId} onLoaded={() => setSummaryLoaded(true)} />
           </div>
         </div>
 
@@ -102,8 +104,8 @@ function DMADashboard() {
       color="blue"
       split
     >
-      <PropertySummaryTable />
-    <Suspense fallback={<div>Loading Chart...</div>}>  <PropertyDistributionChart /></Suspense>
+      <PropertySummaryTable ulbId={selectedUlbId} />
+    <Suspense fallback={<div>Loading Chart...</div>}>  <PropertyDistributionChart ulbId={selectedUlbId} /></Suspense>
     </DashboardCard>
   </div>
 </div>
@@ -116,7 +118,7 @@ function DMADashboard() {
       icon="pie"
       color="blue"
     >
-      <CollectionPercentTable />
+      <CollectionPercentTable ulbId={selectedUlbId} />
     </DashboardCard>
   </div>
 
@@ -128,8 +130,8 @@ function DMADashboard() {
       color="blue"
       split
     >
-    <Suspense fallback={<div>Loading Chart...</div>}>  <CollectionStatusDonutChart /></Suspense>
-      <CollectionStatusModeTable />
+    <Suspense fallback={<div>Loading Chart...</div>}>  <CollectionStatusDonutChart ulbId={selectedUlbId} /></Suspense>
+      <CollectionStatusModeTable ulbId={selectedUlbId} />
     </DashboardCard>
   </div>
 </div>
@@ -142,7 +144,7 @@ function DMADashboard() {
       icon="bars"
       color="green"
     >
-    <Suspense fallback={<div>Loading Chart...</div>}> <TopPerformingCorporationsChart /></Suspense>
+    <Suspense fallback={<div>Loading Chart...</div>}> <TopPerformingCorporationsChart ulbId={selectedUlbId} /></Suspense>
     </DashboardCard>
   </div>
 
@@ -153,7 +155,7 @@ function DMADashboard() {
       icon="donut"
       color="blue"
     >
-    <Suspense fallback={<div>Loading Chart...</div>}>   <PaymentModeAnalysisChart /></Suspense>
+    <Suspense fallback={<div>Loading Chart...</div>}>   <PaymentModeAnalysisChart ulbId={selectedUlbId} /></Suspense>
     </DashboardCard>
   </div>
 
@@ -164,7 +166,7 @@ function DMADashboard() {
       icon="trophy"
       color="purple"
     >
-    <Suspense fallback={<div>Loading Chart...</div>}>  <CollectionRankingChart /></Suspense>
+    <Suspense fallback={<div>Loading Chart...</div>}>  <CollectionRankingChart ulbId={selectedUlbId} /></Suspense>
     </DashboardCard>
   </div>
 </div>

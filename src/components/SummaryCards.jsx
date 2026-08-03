@@ -30,7 +30,7 @@ function StatCard({ label, value, sub, icon, color }) {
   );
 }
 
-function SummaryCards({ onLoaded }) {
+function SummaryCards({ ulbId = "ALL", onLoaded }) {
   const [data, setData] = useState({
     totalDemand: 0,
     totalCollection: 0,
@@ -42,7 +42,7 @@ function SummaryCards({ onLoaded }) {
   useEffect(() => {
     const fetchTilesData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/property/getTilesData`);
+        const response = await axios.get((ulbId && ulbId !== "ALL") ? `${API_BASE_URL}/property/getTilesData?ulbId=${ulbId}` : `${API_BASE_URL}/property/getTilesData`);
         console.log(response.data);
        if (response.data.success && response.data.data?.length > 0) {
         const apiData = response.data.data[0];
@@ -65,7 +65,7 @@ console.log("First Row", response.data.data[0]);
     }
     };
     fetchTilesData();
-  }, []);
+  }, [ulbId]);
 
   // Card configuration array
   const cards = [

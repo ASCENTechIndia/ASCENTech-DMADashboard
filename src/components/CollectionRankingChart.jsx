@@ -3,7 +3,7 @@ import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-function CollectionRankingChart() {
+function CollectionRankingChart({ ulbId = "ALL" }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState(null);
@@ -12,7 +12,7 @@ function CollectionRankingChart() {
     const fetchCollectionRanking = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${API_BASE_URL}/property/getTotalPerfCorpCollection`);
+        const response = await axios.get((ulbId && ulbId !== "ALL") ? `${API_BASE_URL}/property/getTotalPerfCorpCollection?ulbId=${ulbId}` : `${API_BASE_URL}/property/getTotalPerfCorpCollection`);
         if (response.data.success) {
           const rows = response.data.data || [];
           if (rows.length === 0) {
@@ -38,7 +38,7 @@ function CollectionRankingChart() {
     };
 
     fetchCollectionRanking();
-  }, []);
+  }, [ulbId]);
 
   if (loading) {
     return (

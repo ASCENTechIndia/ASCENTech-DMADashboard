@@ -3,7 +3,7 @@ import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-function PropertySummaryTable() {
+function PropertySummaryTable({ ulbId = "ALL" }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState(null);
@@ -12,7 +12,7 @@ function PropertySummaryTable() {
     const fetchPropertySummary = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${API_BASE_URL}/property/getPropertySummary`);
+        const response = await axios.get((ulbId && ulbId !== "ALL") ? `${API_BASE_URL}/property/getPropertySummary?ulbId=${ulbId}` : `${API_BASE_URL}/property/getPropertySummary`);
         console.log(response.data);
         if (response.data.success) {
           const rows = response.data.data || [];
@@ -41,7 +41,7 @@ function PropertySummaryTable() {
     };
 
     fetchPropertySummary();
-  }, []);
+  }, [ulbId]);
 
   const total = data.reduce(
     (acc, row) => ({

@@ -67,7 +67,7 @@ const fetchCollectionPercent = async () => {
 };
 // useEffect(() => {
 //   console.log("Data State:", data);
-// }, [data]);
+// }, [data, ulbId]);
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "150px" }}>

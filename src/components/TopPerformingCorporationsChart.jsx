@@ -3,20 +3,22 @@ import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-function TopPerformingCorporationsChart() {
+function TopPerformingCorporationsChart({ ulbId = "ALL" }) {
   const [data, setData] = useState([]);
     const [error, setError] = useState("");
     const[loading, setLoading] = useState(true);
   useEffect(() => {
     fetchTopPerforming();
-  }, []);
+  }, [ulbId]);
 
   const fetchTopPerforming = async () => {
     try {
       setError("");
       setLoading(true);
       const res = await axios.get(
-        `${API_BASE_URL}/property/getTotalPerfCorpbyColl`
+        (ulbId && ulbId !== "ALL")
+          ? `${API_BASE_URL}/property/getTotalPerfCorpbyColl?ulbId=${ulbId}`
+          : `${API_BASE_URL}/property/getTotalPerfCorpbyColl`
       );
 
       const formattedData = (res.data.data || []).map((row) => ({

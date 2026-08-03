@@ -10,14 +10,14 @@ const COLOR_MAP = {
   red: "#e6453c",
 };
 
-function CollectionStatusDonutChart() {
+function CollectionStatusDonutChart({ ulbId = "ALL" }) {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     fetchModewiseCollection();
-  }, []);
+  }, [ulbId]);
 
   const formatCrore = (amount) => {
     return `${(amount / 10000000).toFixed(2)} Cr`;
@@ -28,7 +28,9 @@ function CollectionStatusDonutChart() {
       setMessage("");
       setLoading(true);
       const res = await axios.get(
-        `${API_BASE_URL}/property/getModewiseCollection`
+        (ulbId && ulbId !== "ALL")
+          ? `${API_BASE_URL}/property/getModewiseCollection?ulbId=${ulbId}`
+          : `${API_BASE_URL}/property/getModewiseCollection`
       );
 
       const row = res.data.data;

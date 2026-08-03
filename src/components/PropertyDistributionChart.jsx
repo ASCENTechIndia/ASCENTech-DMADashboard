@@ -17,7 +17,7 @@ const COLORS = {
  * Stacked bar chart: Residential / Commercial / Mixed counts per corporation.
  * Pairs with <PropertySummaryTable /> inside the "Property Summary" card.
  */
-function PropertyDistributionChart() {
+function PropertyDistributionChart({ ulbId = "ALL" }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState(null);
@@ -30,13 +30,13 @@ function PropertyDistributionChart() {
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [ulbId]);
 
   useEffect(() => {
     const fetchPropertySummary = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${API_BASE_URL}/property/getPropertySummary`);
+        const response = await axios.get((ulbId && ulbId !== "ALL") ? `${API_BASE_URL}/property/getPropertySummary?ulbId=${ulbId}` : `${API_BASE_URL}/property/getPropertySummary`);
         if (response.data.success) {
           const rows = response.data.data || [];
           if (rows.length === 0) {
@@ -63,7 +63,7 @@ function PropertyDistributionChart() {
     };
 
     fetchPropertySummary();
-  }, []);
+  }, [ulbId]);
 
   const ref = useEChart(
     () => ({

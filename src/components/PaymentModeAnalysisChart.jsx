@@ -10,20 +10,22 @@ const COLOR_MAP = {
   red: "#e6453c",
 };
 
-function PaymentModeAnalysisChart() {
+function PaymentModeAnalysisChart({ ulbId = "ALL" }) {
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     fetchModewiseCollection();
-  }, []);
+  }, [ulbId]);
 
   const fetchModewiseCollection = async () => {
     try {
       setError("")
       setLoading(true);
       const res = await axios.get(
-        `${API_BASE_URL}/property/getModewiseCollection`
+        (ulbId && ulbId !== "ALL")
+          ? `${API_BASE_URL}/property/getModewiseCollection?ulbId=${ulbId}`
+          : `${API_BASE_URL}/property/getModewiseCollection`
       );
 
       const row = res.data.data;

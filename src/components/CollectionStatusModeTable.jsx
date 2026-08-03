@@ -15,6 +15,7 @@ const formatCrore = (amount) => {
 
 
 function CollectionStatusModeTable({
+  ulbId = "ALL",
   maxRowsBeforeScroll = 5,
 }) {
   const [data, setData] = useState([]);
@@ -27,14 +28,16 @@ function CollectionStatusModeTable({
 
   useEffect(() => {
     fetchModewiseCollection();
-  }, []);
+  }, [ulbId]);
 
   const fetchModewiseCollection = async () => {
     try {
       setError("");
       setLoading(true);
       const res = await axios.get(
-        `${API_BASE_URL}/property/getModewiseCollection`
+        (ulbId && ulbId !== "ALL")
+          ? `${API_BASE_URL}/property/getModewiseCollection?ulbId=${ulbId}`
+          : `${API_BASE_URL}/property/getModewiseCollection`
       );
 
       const row = res.data.data;

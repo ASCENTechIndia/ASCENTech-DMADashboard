@@ -60,7 +60,7 @@ function RTSDashboard_NEW() {
       {/* Back Arrow button */}
       <div className="rts-back-btn-row">
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate(location.state?.from || "/")}
           className="rts-back-btn-inline"
           title="Go Back to Home"
         >
@@ -79,7 +79,7 @@ function RTSDashboard_NEW() {
       {/* Back Arrow button below the table */}
       <div className="rts-back-btn-row" style={{ marginTop: "10px" }}>
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate(location.state?.from || "/")}
           className="rts-back-btn-inline"
           title="Go Back to Home"
         >

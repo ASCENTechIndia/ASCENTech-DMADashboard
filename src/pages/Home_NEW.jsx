@@ -477,7 +477,12 @@ export default function Home_NEW() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [ulbList, setUlbList] = useState([]);
-  const [selectedUlbId, setSelectedUlbId] = useState("ALL");
+  
+  // Initialize state from sessionStorage to remember selection when navigating back
+  const [selectedUlbId, setSelectedUlbId] = useState(() => {
+    return sessionStorage.getItem("home_selectedUlbId") || "ALL";
+  });
+
   const navigate = useNavigate();
   const { date, day } = getFormattedDate();
 
@@ -520,9 +525,10 @@ export default function Home_NEW() {
     fetchULBList();
   }, [fetchULBList]);
 
-  // Whenever selectedUlbId changes: refetch dashboard
+  // Whenever selectedUlbId changes: save to sessionStorage and refetch dashboard
   useEffect(() => {
     if (selectedUlbId) {
+      sessionStorage.setItem("home_selectedUlbId", selectedUlbId);
       fetchDashboard(selectedUlbId);
     }
   }, [selectedUlbId, fetchDashboard]);
@@ -531,11 +537,17 @@ export default function Home_NEW() {
     const meta = getCardMeta(card.title, index);
     const route = card.link || meta.route;
     if (route) {
+      let finalRoute = route;
+      if (selectedUlbId && selectedUlbId !== "ALL") {
+        const separator = route.includes("?") ? "&" : "?";
+        finalRoute = `${route}${separator}ulbId=${selectedUlbId}`;
+      }
+
       if (route.startsWith("http://") || route.startsWith("https://")) {
-        window.open(route, "_blank", "noopener,noreferrer");
+        window.open(finalRoute, "_blank", "noopener,noreferrer");
       } else {
         // Pass selectedUlbId via route state so the target page can filter by ULB
-        navigate(route, { state: { ulbId: selectedUlbId } });
+        navigate(finalRoute, { state: { ulbId: selectedUlbId } });
       }
     }
   };

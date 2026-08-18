@@ -1,7 +1,8 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function Header_NEW({ title = "DMA Dashboard" }) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <header className="rts-header">
@@ -12,7 +13,7 @@ function Header_NEW({ title = "DMA Dashboard" }) {
             const event = new CustomEvent("rts-back-click", { cancelable: true });
             window.dispatchEvent(event);
             if (!event.defaultPrevented) {
-              navigate("/");
+              navigate(location.state?.from || "/");
             }
           }}
           aria-label="Go back to Home"

@@ -29,7 +29,18 @@ import Header_NEW from '../components/Header_NEW';
 function DMADashboard() {
     const navigate = useNavigate();
     const location = useLocation();
-    const selectedUlbId = location.state?.ulbId ?? "ALL";
+    const queryParams = new URLSearchParams(location.search);
+    const urlUlbId = queryParams.get("ulbId");
+    
+    // Check if urlUlbId is a valid number, otherwise default to "ALL"
+    let parsedUrlUlbId = null;
+    if (urlUlbId && urlUlbId !== "ALL") {
+      parsedUrlUlbId = Number(urlUlbId);
+    } else if (urlUlbId === "ALL") {
+      parsedUrlUlbId = "ALL";
+    }
+
+    const selectedUlbId = parsedUrlUlbId ?? location.state?.ulbId ?? "ALL";
     const [summaryLoaded, setSummaryLoaded] = useState(false);
   return (
     <div className="dma-dashboard">
@@ -51,7 +62,7 @@ function DMADashboard() {
         <div className="row g-0" style={{ marginTop: "4px", marginBottom: "-12px" }}>
           <div className="col-12 d-flex justify-content-start">
             <button
-              onClick={() => navigate("/")}
+              onClick={() => navigate(location.state?.from || "/")}
               style={{
                 background: "var(--dma-card-bg, #fff)",
                 border: "1px solid var(--dma-border, #e3e7f0)",
@@ -175,7 +186,7 @@ function DMADashboard() {
 <div className="row g-0" style={{ marginTop: "4px", marginBottom: "-12px" }}>
   <div className="col-12 d-flex justify-content-start">
     <button
-      onClick={() => navigate("/")}
+      onClick={() => navigate(location.state?.from || "/")}
       style={{
         background: "var(--dma-card-bg, #fff)",
         border: "1px solid var(--dma-border, #e3e7f0)",

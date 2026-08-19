@@ -6,6 +6,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import HomeCard_NEW from "../components/HomeCard_NEW";
 import "../styles/home-new.css";
+import QuickLinkCards from "../components/QuickLinkCards";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const DHULE_ULB_ID = import.meta.env.VITE_DHULE_ULB_ID || 5;
@@ -290,7 +291,7 @@ const CARD_META_LIST = [
     /* 24: RTS */
     {
         color: "purple",
-        route: "/rtsdashboard",
+        route: "https://rtsdashboard.dhulecorporation.in/",
         icon: (
             <svg width="20" height="20" viewBox="-1 1.5 24 24" fill="none">
                 <rect x="2" y="7" width="13" height="15" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
@@ -597,6 +598,8 @@ export default function Dhule_Dashboard() {
                         })}
                     </div>
                 )}
+
+                <QuickLinkCards />
             </div>
         </div>
     );

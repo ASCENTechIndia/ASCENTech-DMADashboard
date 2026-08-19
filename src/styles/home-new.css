@@ -544,3 +544,169 @@
     height: 32px;
   }
 }
+
+/* ── Quick Link Cards Styles ─────────────────────────────────────────── */
+.hn-quick-links-section {
+  margin-top: 36px;
+  border-top: 2px dashed var(--hn-border);
+  padding-top: 28px;
+}
+
+.hn-quick-links-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px !important;
+}
+
+.hn-quick-links-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+}
+
+.hn-quick-card {
+  background: var(--hn-card-bg);
+  border-radius: var(--hn-radius);
+  border: 1px solid var(--hn-border);
+  box-shadow: var(--hn-shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 14px 18px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  min-height: 145px;
+}
+
+.hn-quick-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Colorful thematic card glow effects on hover */
+.hn-quick-card--blue:hover {
+  border-color: rgba(47, 111, 237, 0.45);
+  box-shadow: 0 10px 24px rgba(47, 111, 237, 0.14);
+}
+.hn-quick-card--orange:hover {
+  border-color: rgba(249, 115, 22, 0.45);
+  box-shadow: 0 10px 24px rgba(249, 115, 22, 0.14);
+}
+.hn-quick-card--red:hover {
+  border-color: rgba(220, 38, 38, 0.45);
+  box-shadow: 0 10px 24px rgba(220, 38, 38, 0.14);
+}
+.hn-quick-card--teal:hover {
+  border-color: rgba(14, 165, 196, 0.45);
+  box-shadow: 0 10px 24px rgba(14, 165, 196, 0.14);
+}
+.hn-quick-card--pink:hover {
+  border-color: rgba(219, 39, 119, 0.45);
+  box-shadow: 0 10px 24px rgba(219, 39, 119, 0.14);
+}
+.hn-quick-card--gold:hover {
+  border-color: rgba(217, 119, 6, 0.45);
+  box-shadow: 0 10px 24px rgba(217, 119, 6, 0.14);
+}
+
+/* Icon circles and matching custom brand themes */
+.hn-quick-card-icon-wrap {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.hn-quick-card:hover .hn-quick-card-icon-wrap {
+  transform: scale(1.12);
+}
+
+/* Soft backgrounds for icons */
+.hn-icon-bg-blue { background: var(--hn-blue-bg); color: var(--hn-blue); }
+.hn-icon-bg-orange { background: var(--hn-orange-bg); color: var(--hn-orange); }
+.hn-icon-bg-red { background: var(--hn-red-bg); color: var(--hn-red); }
+.hn-icon-bg-teal { background: var(--hn-teal-bg); color: var(--hn-teal); }
+.hn-icon-bg-pink { background: var(--hn-pink-bg); color: var(--hn-pink); }
+.hn-icon-bg-gold { background: var(--hn-gold-bg); color: var(--hn-gold); }
+
+.hn-quick-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hn-quick-card-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.hn-quick-card-img--large {
+  width: 44px;
+  height: 44px;
+}
+
+.hn-quick-card-name {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--hn-navy);
+  line-height: 1.35;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.hn-quick-card-action {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--hn-muted);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.hn-quick-card:hover .hn-quick-card-action {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hn-quick-card--blue:hover .hn-quick-card-action { color: var(--hn-blue); }
+.hn-quick-card--orange:hover .hn-quick-card-action { color: var(--hn-orange); }
+.hn-quick-card--red:hover .hn-quick-card-action { color: var(--hn-red); }
+.hn-quick-card--teal:hover .hn-quick-card-action { color: var(--hn-teal); }
+.hn-quick-card--pink:hover .hn-quick-card-action { color: var(--hn-pink); }
+.hn-quick-card--gold:hover .hn-quick-card-action { color: var(--hn-gold); }
+
+/* Quick link grid responsiveness */
+@media (max-width: 1200px) {
+  .hn-quick-links-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .hn-quick-links-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .hn-quick-card {
+    min-height: 130px;
+    padding: 18px 12px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hn-quick-links-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

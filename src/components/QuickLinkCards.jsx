@@ -1,5 +1,4 @@
-// QuickLinkCards.jsx
-// Reusable component that displays a row of 6 external portal quick cards.
+// Reusable component that displays a row of 8 external portal quick cards.
 // Each card has a centered logo (SVG or image) and a label below it.
 // Clicking redirects to the URL in a new tab.
 
@@ -39,9 +38,21 @@ const DEFAULT_LINKS = [
   },
   {
     name: "Aaple Sarkar",
-    url: "https://aaplesarkar.mahaonline.gov.in/",
+    url: "https://grievances.maharashtra.gov.in/admin/mr/users/login",
     color: "gold",
     image: "/Images/aaple-sarkar-seeklogo.jpg",
+  },
+  {
+    name: "eHRMS",
+    url: "https://ehrms.dhulecorporation.in/admin/super-admin/login#/admin/commissioner",
+    color: "indigo",
+    image: "/Images/eHRMS.jpg",
+  },
+  {
+    name: "HOD",
+    url: "https://pathvikreta.dhulecorporation.in/hod",
+    color: "purple",
+    image: "/Images/HOD-icon.png",
   },
 ];
 
@@ -59,7 +70,7 @@ export function QuickLinkCard({ name, url, color = "blue", icon, image }) {
           <img 
             src={image} 
             alt={name} 
-            className={`hn-quick-card-img${name.toLowerCase() === "aaple sarkar" ? " hn-quick-card-img--large" : ""}`} 
+            className={`hn-quick-card-img${["aaple sarkar", "ehrms", "hod"].includes(name.toLowerCase()) ? " hn-quick-card-img--large" : ""}`} 
           />
         ) : (
           <span className="hn-quick-card-icon">{icon}</span>

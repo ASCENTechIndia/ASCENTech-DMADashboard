@@ -561,7 +561,7 @@
 
 .hn-quick-links-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   gap: 14px;
 }
 
@@ -614,6 +614,14 @@
   border-color: rgba(217, 119, 6, 0.45);
   box-shadow: 0 10px 24px rgba(217, 119, 6, 0.14);
 }
+.hn-quick-card--indigo:hover {
+  border-color: rgba(67, 56, 202, 0.45);
+  box-shadow: 0 10px 24px rgba(67, 56, 202, 0.14);
+}
+.hn-quick-card--purple:hover {
+  border-color: rgba(124, 58, 237, 0.45);
+  box-shadow: 0 10px 24px rgba(124, 58, 237, 0.14);
+}
 
 /* Icon circles and matching custom brand themes */
 .hn-quick-card-icon-wrap {
@@ -638,6 +646,8 @@
 .hn-icon-bg-teal { background: var(--hn-teal-bg); color: var(--hn-teal); }
 .hn-icon-bg-pink { background: var(--hn-pink-bg); color: var(--hn-pink); }
 .hn-icon-bg-gold { background: var(--hn-gold-bg); color: var(--hn-gold); }
+.hn-icon-bg-indigo { background: var(--hn-indigo-bg); color: var(--hn-indigo); }
+.hn-icon-bg-purple { background: var(--hn-purple-bg); color: var(--hn-purple); }
 
 .hn-quick-card-icon {
   display: flex;
@@ -685,9 +695,17 @@
 .hn-quick-card--teal:hover .hn-quick-card-action { color: var(--hn-teal); }
 .hn-quick-card--pink:hover .hn-quick-card-action { color: var(--hn-pink); }
 .hn-quick-card--gold:hover .hn-quick-card-action { color: var(--hn-gold); }
+.hn-quick-card--indigo:hover .hn-quick-card-action { color: var(--hn-indigo); }
+.hn-quick-card--purple:hover .hn-quick-card-action { color: var(--hn-purple); }
 
 /* Quick link grid responsiveness */
 @media (max-width: 1200px) {
+  .hn-quick-links-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
   .hn-quick-links-grid {
     grid-template-columns: repeat(3, 1fr);
   }

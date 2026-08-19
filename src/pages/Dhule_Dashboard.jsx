@@ -476,7 +476,10 @@ export default function Dhule_Dashboard() {
                     ...card,
                     origIndex: index,
                 }))
-                .filter(card => card.title?.toLowerCase() !== "medicine inventory");
+                .filter(card => {
+                    const titleLower = card.title?.toLowerCase();
+                    return titleLower !== "medicine inventory" && titleLower !== "septic tank";
+                });
             setCards(cardsWithIndex);
         } catch (err) {
             console.error("Dhule Dashboard Error:", err);

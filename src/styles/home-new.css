@@ -82,6 +82,7 @@
   color: var(--hn-navy);
   line-height: 1.1;
   letter-spacing: -0.3px;
+  padding-left: 20px;
 }
 
 .hn-header-subtitle {

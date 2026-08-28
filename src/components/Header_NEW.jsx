@@ -24,9 +24,11 @@ function Header_NEW({ title = "DMA Dashboard" }) {
         </button>
         <div className="rts-header-logo-wrap">
           <img
-            src="/Images/AscenTech_Logomini.png"
-            alt="AscenTech Logo"
-            className="rts-header-logo"
+            src="/Images/logos/KarjatLogo.png"
+            alt="Karjat"
+            className="hn-header-logo"
+             style={{ width: "50px", height: "50px" }}
+            onError={(e) => { e.currentTarget.style.display = "none"; }}
           />
         </div>
       </div>

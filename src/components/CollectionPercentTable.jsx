@@ -100,15 +100,15 @@ const fetchCollectionPercent = async () => {
           <tr>
             <th>Corporation</th>
             <th className="dma-text-center">
-              Demand (Cr)
+              Dmd
             </th>
             <th className="dma-text-center">
-              Collection (Cr)
+              Coll
             </th>
             <th className="dma-text-center">
-              Outstanding (Cr)
+              O/S
             </th>
-            <th className="dma-text-center">%</th>
+            <th className="dma-text-center">Collection %</th>
           </tr>
         </thead>
 
@@ -157,7 +157,7 @@ const fetchCollectionPercent = async () => {
     ))
   )}
 </tbody>
- {!message && (
+ {/* {!message && (
   <tfoot>
     <tr>
       <td>Total</td>
@@ -179,7 +179,7 @@ const fetchCollectionPercent = async () => {
       </td>
     </tr>
   </tfoot>
-)}
+)} */}
       </table>
     </div>
   );

@@ -542,14 +542,15 @@ export default function Home_NEW() {
       <header className="hn-header">
         {/* Left: logo + title */}
         <div className="hn-header-left">
-          <img
-            src="/Images/AscenTech_Logomini.png"
-            alt="AscenTech"
+            <img
+            src="/Images/logos/KarjatLogo.png"
+            alt="Karjat"
             className="hn-header-logo"
+             style={{ width: "50px", height: "50px" }}
             onError={(e) => { e.currentTarget.style.display = "none"; }}
           />
           <div className="hn-header-title-wrap">
-            <h1 className="hn-header-title">Dashboard</h1>
+            <h1 className="hn-header-title">Karjat Nagar Parishad - Dashboard</h1>
           </div>
         </div>
 

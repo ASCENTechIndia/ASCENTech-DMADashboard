@@ -1,4 +1,4 @@
-// Dhule_Dashboard.jsx
+// B_bolck.jsx
 // DMC Dashboard – same design as Home_NEW, dropdown replaced with "DMC Dashboard" label.
 
 import { useEffect, useState, useCallback } from "react";
@@ -16,7 +16,7 @@ const CARD_META_LIST = [
     /* 0: Property Tax */
     {
         color: "blue",
-        //route: "https://collectiondashboard.dhulecorporation.in/",
+        route: "https://collectiondashboard.dhulecorporation.in/",
         icon: (
             <svg width="20" height="20" viewBox="-1 1.5 24 24" fill="none">
                 <rect x="2" y="7" width="13" height="15" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
@@ -291,7 +291,7 @@ const CARD_META_LIST = [
     /* 24: RTS */
     {
         color: "purple",
-        //route: "https://rtsdashboard.dhulecorporation.in/",
+        route: "https://rtsdashboard.dhulecorporation.in/",
         icon: (
             <svg width="20" height="20" viewBox="-1 1.5 24 24" fill="none">
                 <rect x="2" y="7" width="13" height="15" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
@@ -452,7 +452,7 @@ function SkeletonGrid() {
 }
 
 /* ── Main Page Component ────────────────────────────────────────────── */
-export default function Dhule_Dashboard() {
+export default function B_bolck() {
     const [cards, setCards] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -569,7 +569,7 @@ export default function Dhule_Dashboard() {
                 </div>
             </header>
 
-            {/* ── BODY ── */}
+            {/* ── BODY (scrollable) ── */}
             <div className="hn-body">
                 {loading && <SkeletonGrid />}
 
@@ -596,17 +596,18 @@ export default function Dhule_Dashboard() {
                                     title={card.title}
                                     color={meta.color}
                                     icon={meta.icon}
-                                    clickable={false}
-                                    // onClick={() => handleCardClick(card, card.origIndex)}
+                                    clickable={true}
+                                    onClick={() => handleCardClick(card, card.origIndex)}
                                     metrics={card.metrics || []}
                                 />
                             );
                         })}
                     </div>
                 )}
-
-                <QuickLinkCards />
             </div>
+
+            {/* ── BOTTOM FIXED BAND ── */}
+            <QuickLinkCards />
         </div>
     );
 }

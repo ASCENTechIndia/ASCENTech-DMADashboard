@@ -41,7 +41,10 @@
 
 /* ── Page wrapper ────────────────────────────────────────────────────── */
 .hn-page {
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background: var(--hn-bg);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
@@ -90,6 +93,24 @@
   font-weight: 500;
   color: var(--hn-muted);
   letter-spacing: 0.3px;
+}
+
+.hn-header-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  user-select: none;
+}
+
+.hn-header-center-title {
+  font-weight: 700;
+  font-size: 22px;
+  color: #1e3a5f;
+  letter-spacing: 0.5px;
+  margin: 0;
+  white-space: nowrap;
 }
 
 .hn-header-right {
@@ -160,10 +181,22 @@
 }
 
 /* ── Body container ──────────────────────────────────────────────────── */
+/*
 .hn-body {
   padding: 20px 24px 32px;
   max-width: 1600px;
   margin: 0 auto;
+}
+*/
+.hn-body {
+    flex: 1;
+    overflow-y: auto;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 10px 24px 16px;
+    /* Ensure scrollbar stays within the body, not the page */
+    box-sizing: border-box;
 }
 
 /* ── Section heading (optional) ─────────────────────────────────────── */
@@ -209,6 +242,7 @@
 }
 
 /* ── Card Header Row ─────────────────────────────────────────────────── */
+/*
 .hn-card-header {
   display: flex;
   align-items: center;
@@ -216,8 +250,17 @@
   padding: 12px 14px 11px;
   border-bottom: 1.5px solid var(--hn-divider);
 }
+*/
+.hn-card-header {
+    border-bottom: 1.5px solid var(--hn-divider);
+    align-items: center;
+    gap: 10px;
+    padding: 5px 15px 2px;
+    display: flex;
+}
 
 /* Colored icon circle */
+/*
 .hn-card-icon {
   width: 40px;
   height: 40px;
@@ -226,6 +269,16 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+*/
+.hn-card-icon {
+    border-radius: 50%;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    display: flex;
 }
 
 /* Title */
@@ -259,12 +312,21 @@
 }
 
 /* Metric row */
+/*
 .hn-metric-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 7px 0;
   border-bottom: 1px solid var(--hn-divider);
+}
+*/
+.hn-metric-row {
+    border-bottom: 1px solid var(--hn-divider);
+    justify-content: space-between;
+    align-items: center;
+    padding: 1px 0;
+    display: flex;
 }
 
 .hn-metric-row:last-child {
@@ -280,12 +342,21 @@
   padding-right: 8px;
 }
 
+/*
 .hn-metric-value {
   font-size: 13.5px;
   font-weight: 700;
   color: var(--hn-text);
   white-space: nowrap;
   flex-shrink: 0;
+}
+*/
+.hn-metric-value {
+    color: var(--hn-text);
+    white-space: nowrap;
+    flex-shrink: 0;
+    font-size: 11.5px;
+    font-weight: 700;
 }
 
 /* ── Color variants for icon bg + title ─────────────────────────────── */
@@ -453,6 +524,20 @@
 
   .hn-header-title { font-size: 18px; }
 
+  .hn-header-center {
+    position: static;
+    transform: none;
+    order: 4;
+    width: 100%;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  .hn-header-center-title {
+    font-size: 18px;
+    white-space: normal;
+  }
+
   .hn-header-right {
     flex-wrap: wrap;
     width: 100%;
@@ -504,6 +589,7 @@
 
   .hn-header-logo { height: 32px; }
   .hn-header-title { font-size: 16px; }
+  .hn-header-center-title { font-size: 16px; }
 
   .hn-date-badge {
     font-size: 11px;
@@ -546,10 +632,22 @@
 }
 
 /* ── Quick Link Cards Styles ─────────────────────────────────────────── */
+/*
 .hn-quick-links-section {
   margin-top: 36px;
   border-top: 2px dashed var(--hn-border);
   padding-top: 28px;
+}
+*/
+/* ── Fixed bottom quick-links band ─────────────────────────────────── */
+.hn-quick-links-section {
+    flex-shrink: 0;
+    background: #ffffff;
+    border-top: 2px solid var(--hn-border);
+    padding: 10px 24px 10px;
+    box-shadow: 0 -4px 16px rgba(16, 42, 107, 0.07);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .hn-quick-links-title {
@@ -565,6 +663,7 @@
   gap: 14px;
 }
 
+/*
 .hn-quick-card {
   background: var(--hn-card-bg);
   border-radius: var(--hn-radius);
@@ -583,6 +682,24 @@
   position: relative;
   overflow: hidden;
   min-height: 145px;
+}
+*/
+.hn-quick-card {
+    background: var(--hn-card-bg);
+    border-radius: var(--hn-radius);
+    border: 1px solid var(--hn-border);
+    box-shadow: var(--hn-shadow);
+    cursor: pointer;
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 117px;
+    padding: 16px 10px 5px;
+    transition: transform .22s cubic-bezier(.16, 1, .3, 1), box-shadow .22s cubic-bezier(.16, 1, .3, 1), border-color .22s cubic-bezier(.16, 1, .3, 1);
+    display: flex;
+    position: relative;
+    overflow: hidden;
 }
 
 .hn-quick-card:hover {
@@ -667,7 +784,7 @@
 }
 
 .hn-quick-card-name {
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--hn-navy);
   line-height: 1.35;

@@ -33,7 +33,7 @@ const CARD_COLUMNS_MAP = {
   "legal":               { cols: ["Total Cases", "Total Closed Cases", "Total Pending Cases", null] },
   "asset management":    { cols: ["Total Assets", "Total Purchased Assets", "Total Issued Assets", "Total Assets Pending for Issue"] },
   "grievances":          { cols: ["Total Complaints", "Resolved", "Pending", "Rejected"] },
-  "cfc":                 { cols: ["Total Applications", "Approved", "Pending", "Rejected"] },
+  "cfc":                 { cols: ["Total Applications", "Total Demand", "Total Collection", "Recovery Percentage"] },
   "accounts":            { cols: ["Total Budget", "Expenditure", "Revenue", "Balance"] },
   "property tax":        { cols: ["Total Demand", "Total Collection", "Total Outstanding", "Recovery Percentage"] },
   "project management":  { cols: ["Total Projects", "Completed", "In Progress", "Pending"] },
@@ -47,7 +47,7 @@ const CARD_COLUMNS_MAP = {
   "opd":                 { cols: ["Total Patients", "Treated", "Referred", null] },
   "digital library":     { cols: ["Total Members", "Books Issued", "Books Returned", "Overdue"] },
   "tanker":              { cols: ["Total Trips", "Completed", "Pending", null] },
-  "advertisement":       { cols: ["Total Licenses", "Active", "Expired", "Pending Renewal"] },
+  "advertisement":       { cols: ["Total Licenses", "Approved", "Pending", null] },
   "bombay nursing act":  { cols: ["Total Registrations", "Active", "Expired", null] },
 };
 
@@ -305,7 +305,8 @@ function matchApiColumn(apiRow, colLabel) {
     "leased properties": "shop",
     "vacant properties": "empty",
     "total collection": "total_collection",
-    "total demand": "total_demand"
+    "total demand": "total_demand",
+    "recovery percentage": "rec_per"
   };
   if (customMap[lowerCol] && keys.includes(customMap[lowerCol])) {
     return customMap[lowerCol];
@@ -605,7 +606,7 @@ export default function CardDetailPage() {
                 displayValue = `${numVal}%`;
               } else if (isCurrency) {
                 displayValue = formatCurrency(numVal);
-                if (titleKey !== "market") {
+                if (titleKey !== "market" && titleKey !== "cfc") {
                   subtitle = "(Amount in Cr)";
                 }
               } else {

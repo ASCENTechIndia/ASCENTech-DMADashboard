@@ -1,4 +1,4 @@
-// CardDetailPage.jsx
+﻿// CardDetailPage.jsx
 // Detail page opened when a Dhule Dashboard card is clicked.
 // Each card type has specific column definitions per the Excel reference table:
 //   Column 1 = Month (filter)
@@ -10,7 +10,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { FaRupeeSign, FaCheckCircle, FaTimesCircle, FaClock, FaFileAlt, FaPercentage, FaBuilding, FaChartLine, FaMoneyBillWave, FaMoneyCheckAlt, FaCreditCard } from "react-icons/fa";
 import * as echarts from "echarts";
-import axios from "axios";
+import axios from "axios"; 
 import "../styles/home-new.css";
 import "../styles/card-detail.css";
 import { getCardMeta } from "./Dhule_Dashboard";
@@ -20,8 +20,10 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000
 /* cleaned */
 const CARD_COLUMNS_MAP = {
   "water":               { cols: ["Total Collection", "Cash", "Cheque", "Online"] },
-  "water tax":           { cols: ["Total Collection", "Cash", "Cheque", "Online"] },
-  "estate":              { cols: ["Total Properties", "Rented Properties", "Leased Properties", "Vacant Properties"] },
+  "water tax":           { cols: ["Total Demand", "Total Collection", "Cash", "Cheque", "Online"],
+                           tableCols: ["Total Collection", "Cash", "Cheque", "Online"] },
+  "estate":              { cols: ["Total Properties", "Rented Properties", "Leased Properties", "Vacant Properties"],
+                           tableCols: ["Rented Property No.", "Rented Demand", "Rented Collection", "Leased Property No.", "Leased Demand", "Leased Collection"] },
   "social welfare":      { cols: ["Total Application", "Approved Applications", "Reject Application", "Pending Applications"] },
   "inward outward":      { cols: ["Total Inward", "Total Outward", null, null] },
   "bnd":                 { cols: ["Total Received", "Total Approved", "Total Rejected", "Total Pending"] },
@@ -130,18 +132,15 @@ function getColValue(colLabel, metrics) {
   function fmtNum(v) {
     const n = Number(String(v).replace(/,/g, ""));
     if (isNaN(n)) return v;
-    if (n >= 10000000) return (n / 10000000).toFixed(1) + " Cr";
-    if (n >= 100000)   return (n / 100000).toFixed(1) + " L";
-    if (n >= 1000)     return (n / 1000).toFixed(1) + "k";
+    if (n >= 10000000) return (n / 10000000).toFixed(2) + " Cr";
+    if (n >= 100000)   return (n / 100000).toFixed(2) + " L";
+    // Values below 1 lakh → show actual number (no 'k' shorthand)
     return n.toLocaleString("en-IN");
   }
 
   function formatCurrency(v) {
-    let fVal = String(fmtNum(v));
-    if (!/[a-zA-Z]/.test(fVal)) {
-      fVal += " Cr";
-    }
-    return `\u20B9 ${fVal}`;
+    // fmtNum already handles Cr / L / actual number correctly
+    return `\u20B9 ${fmtNum(v)}`;
   }
 
 /* cleaned */
@@ -306,7 +305,13 @@ function matchApiColumn(apiRow, colLabel) {
     "vacant properties": "empty",
     "total collection": "total_collection",
     "total demand": "total_demand",
-    "recovery percentage": "rec_per"
+    "recovery percentage": "rec_per",
+    "rented property no.": "rented_propno",
+    "leased property no.": "leased_propno",
+    "rented demand": "rented_demand",
+    "rented collection": "rented_collection",
+    "leased demand": "leased_demand",
+    "leased collection": "leased_collection",
   };
   if (customMap[lowerCol] && keys.includes(customMap[lowerCol])) {
     return customMap[lowerCol];
@@ -396,10 +401,18 @@ export default function CardDetailPage() {
   const colConfig  = CARD_COLUMNS_MAP[titleKey] || null;
   const cols       = colConfig ? colConfig.cols : DEFAULT_COLS;
   const activeCols = cols.filter(Boolean);
+  // For modules with separate table columns (e.g. Estate: stats = property counts, table = demand/collection)
+  const tableActiveCols = (colConfig?.tableCols || []).filter(Boolean).length > 0
+    ? colConfig.tableCols.filter(Boolean)
+    : activeCols;
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [apiData, setApiData] = useState([]);
+  // Water Tax Total Demand fetched from aowt_billprint_mas (already in Crores)
+  const [watTotalDemandCr, setWatTotalDemandCr] = useState(null);
+  // Estate property stats fetched from aost_prop_mas
+  const [estateStats, setEstateStats] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -457,6 +470,42 @@ export default function CardDetailPage() {
     fetchData();
   }, [titleKey]);
 
+  // Fetch Water Tax Total Demand separately from aowt_billprint_mas
+  useEffect(() => {
+    if (titleKey !== 'water tax') return;
+    const fetchWatDemand = async () => {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/dashboard/WaterTaxTotalDemand`, {
+          params: { ulbId, fromDate: '01-Apr-2026' }
+        });
+        if (res.data?.success) {
+          setWatTotalDemandCr(res.data.data?.demand ?? null);
+        }
+      } catch (err) {
+        console.error('Water Tax Total Demand fetch error:', err);
+      }
+    };
+    fetchWatDemand();
+  }, [titleKey, ulbId]);
+
+  // Fetch Estate property stats separately from aost_prop_mas
+  useEffect(() => {
+    if (titleKey !== 'estate') return;
+    const fetchEstate = async () => {
+      try {
+        const res = await axios.get(`${API_BASE_URL}/dashboard/EstateStats`, {
+          params: { ulbId }
+        });
+        if (res.data?.success) {
+          setEstateStats(res.data.data ?? null);
+        }
+      } catch (err) {
+        console.error('Estate Stats fetch error:', err);
+      }
+    };
+    fetchEstate();
+  }, [titleKey, ulbId]);
+
   // Oracle may return month as number (1-12), short name ('Jan'), or uppercase key ('MONTH')
 
   // Use all months from database and include year
@@ -466,7 +515,7 @@ export default function CardDetailPage() {
     const apiRow = apiData.find(d => formatMonthYear(d) === m) || {};
     return {
       month: m,
-      values: activeCols.map(col => {
+      values: tableActiveCols.map(col => {
         const matchedKey = matchApiColumn(apiRow, col);
         return matchedKey ? Number(apiRow[matchedKey]) || 0 : 0;
       })
@@ -515,6 +564,20 @@ export default function CardDetailPage() {
            totalVal += Number(apiRow[matchedKey]) || 0;
         }
       });
+    }
+
+    // For Estate: override each property count stat from direct aost_prop_mas query
+    if (titleKey === 'estate' && estateStats !== null) {
+      const lc = col.toLowerCase();
+      if (lc === 'total properties')  totalVal = estateStats.total_properties;
+      if (lc === 'rented properties') totalVal = estateStats.rented_properties;
+      if (lc === 'leased properties') totalVal = estateStats.lease_properties;
+      if (lc === 'vacant properties') totalVal = estateStats.vacant_properties;
+    }
+
+    // For Water Tax: override Total Demand with the direct billprint query result (already in Cr)
+    if (titleKey === 'water tax' && col.toLowerCase() === 'total demand' && watTotalDemandCr !== null) {
+      totalVal = watTotalDemandCr * 10000000; // Convert Cr back to raw so fmtNum renders "X Cr"
     }
 
     return {
@@ -606,9 +669,9 @@ export default function CardDetailPage() {
                 displayValue = `${numVal}%`;
               } else if (isCurrency) {
                 displayValue = formatCurrency(numVal);
-                if (titleKey !== "market" && titleKey !== "cfc") {
-                  subtitle = "(Amount in Cr)";
-                }
+                // subtitle is determined by actual magnitude, not hardcoded
+                if (numVal >= 10000000) subtitle = "(Amount in Cr)";
+                else if (numVal >= 100000) subtitle = "(Amount in L)";
               } else {
                 displayValue = numVal.toLocaleString("en-IN");
               }
@@ -664,7 +727,7 @@ export default function CardDetailPage() {
                   <thead>
                     <tr>
                       <th>Month</th>
-                      {activeCols.map((col, ci) => (
+                      {tableActiveCols.map((col, ci) => (
                         <th key={ci}>{col}</th>
                       ))}
                     </tr>
@@ -683,8 +746,8 @@ export default function CardDetailPage() {
                             {row.month}
                           </span>
                         </td>
-                        {row.values.map((val, vi) => {
-                            const colName = activeCols[vi];
+                         {row.values.map((val, vi) => {
+                            const colName = tableActiveCols[vi];
                             const isPercentage = colName.toLowerCase().includes("percentage");
                             const isCurrency = /demand|collection|outstanding|budget|expenditure|revenue|balance|cash|cheque|online/i.test(colName);
                             
@@ -710,13 +773,13 @@ export default function CardDetailPage() {
                     {tableRows.length > 0 && (
                       <tr style={{ fontWeight: "bold", background: "#f8fafc" }}>
                         <td>Total</td>
-                          {activeCols.map((colName, ci) => {
+                          {tableActiveCols.map((colName, ci) => {
                             const isPercentage = colName.toLowerCase().includes("percentage");
                             let total = 0;
                             
                             if (isPercentage) {
-                              const demandIdx = activeCols.findIndex(c => c.toLowerCase().includes("demand"));
-                              const collIdx = activeCols.findIndex(c => c.toLowerCase().includes("collection"));
+                              const demandIdx = tableActiveCols.findIndex(c => c.toLowerCase().includes("demand"));
+                              const collIdx = tableActiveCols.findIndex(c => c.toLowerCase().includes("collection"));
                               if (demandIdx >= 0 && collIdx >= 0) {
                                 const sumDemand = tableRows.reduce((sum, row) => sum + (row.values[demandIdx] || 0), 0);
                                 const sumColl = tableRows.reduce((sum, row) => sum + (row.values[collIdx] || 0), 0);
@@ -765,7 +828,7 @@ export default function CardDetailPage() {
                   Monthly Trend - {activeMonth ? activeMonth : "All Months"}
                 </h3>
               </div>
-              <BarChart cols={activeCols} metrics={metrics} color={color} months={activeMonth ? [activeMonth] : displayMonths} apiData={apiData} />
+              <BarChart cols={tableActiveCols} metrics={metrics} color={color} months={activeMonth ? [activeMonth] : displayMonths} apiData={apiData} />
             </div>
           </div>
 

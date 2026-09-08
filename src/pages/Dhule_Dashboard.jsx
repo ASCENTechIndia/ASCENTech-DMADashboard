@@ -358,6 +358,26 @@ const CARD_META_LIST = [
             </svg>
         ),
     },
+    /* 30: Illegal Hoarding */
+    {
+        color: "pink",
+        route: null,
+        icon: (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M4 6h16v12H4zm2 2v8h12V8z" />
+            </svg>
+        ),
+    },
+    /* 31: Mandap */
+    {
+        color: "orange",
+        route: null,
+        icon: (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L2 9h3v12h14V9h3L12 2zM9 19H7v-4h2v4zm6 0h-2v-4h2v4z" />
+            </svg>
+        ),
+    },
 ];
 
 /** Mapping card titles to their original hardcoded index in CARD_META_LIST */
@@ -389,6 +409,9 @@ const TITLE_TO_INDEX_MAP = {
     "tanker": 27,
     "advertisement": 28,
     "bombay nursing act": 29,
+    "illegal hoarding": 30,
+    "illegal hording": 30,
+    "mandap": 31,
 };
 
 /** Default fallback metadata for unknown card indexes/titles */
@@ -478,10 +501,20 @@ export default function Dhule_Dashboard() {
 
             const rawCards = res.data?.data || [];
             const cardsWithIndex = rawCards
-                .map((card, index) => ({
-                    ...card,
-                    origIndex: index,
-                }))
+                .map((card, index) => {
+                    let metrics = card.metrics || [];
+                    if (card.title?.toLowerCase() === 'cfc') {
+                        metrics = metrics.map(m => ({
+                            ...m,
+                            label: m.label ? m.label.replace(/\s*\(cr\)/i, '') : m.label
+                        }));
+                    }
+                    return {
+                        ...card,
+                        metrics,
+                        origIndex: index,
+                    };
+                })
                 .filter(card => {
                     const titleLower = card.title?.toLowerCase();
                     return titleLower !== "medicine inventory" && titleLower !== "septic tank";

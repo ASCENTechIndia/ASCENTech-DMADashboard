@@ -247,7 +247,7 @@
 /* ── Main Content Row (Inline Table & Charts) ─────────────────────── */
 .cd-main-row {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
+  grid-template-columns: 1fr 1fr; /* Table and chart equal width */
   gap: 20px;
   align-items: stretch;
 }
@@ -265,19 +265,21 @@
 .cd-chart-card {
   background: #ffffff;
   border-radius: 12px;
-  padding: 16px 20px;
   box-shadow: 0 4px 16px rgba(16, 42, 107, 0.04);
   border: 1px solid var(--hn-border, #e2e8f0);
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .cd-chart-header {
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--hn-border, #e2e8f0);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 14px;
+  background: var(--hn-divider, #f8fafc);
 }
 
 .cd-chart-title {
@@ -287,6 +289,27 @@
   margin: 0;
   display: flex;
   align-items: center;
+}
+
+.cd-chart-btn {
+  background: #ffffff;
+  border: 1px solid var(--hn-border, #e2e8f0);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--hn-muted, #64748b);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.cd-chart-btn.active {
+  background: var(--cd-accent, var(--hn-blue, #2f6fed));
+  border-color: var(--cd-accent, var(--hn-blue, #2f6fed));
+  color: #fff;
+}
+.cd-chart-btn:hover:not(.active) {
+  background: #f8fafc;
+  color: var(--hn-navy, #102a6b);
 }
 
 .cd-chart-badge {
@@ -300,7 +323,8 @@
 .cd-chart-container {
   flex-grow: 1;
   width: 100%;
-  min-height: 350px;
+  min-height: 400px;
+  padding: 16px 20px 20px 20px;
 }
 
 /* ── Summary Table ────────────────────────────────────────────────── */
@@ -358,14 +382,14 @@
 }
 
 .cd-table thead th {
-  padding: 8px 12px;
+  padding: 8px 6px; /* Reduced from 8px 12px to save width */
   text-align: left;
-  font-size: 11.5px;
+  font-size: 11px; /* Slightly reduced */
   font-weight: 700;
   color: var(--hn-navy, #102a6b);
   border-bottom: 2px solid var(--hn-border, #e2e8f0);
   border-right: 1px solid var(--hn-border, #e2e8f0);
-  white-space: nowrap;
+  white-space: normal; /* wrap long headers to reduce column width */
   vertical-align: bottom;
   text-transform: uppercase;
 }
@@ -396,8 +420,10 @@
 }
 
 .cd-table tbody td {
-  padding: 8px 12px;
+  padding: 8px 6px; /* Reduced from 8px 12px */
   color: var(--hn-text, #1e293b);
+  font-weight: 500;
+  font-size: 12.5px; /* Slightly reduced */
   vertical-align: middle;
   border-right: 1px solid var(--hn-border, #f1f5f9);
 }

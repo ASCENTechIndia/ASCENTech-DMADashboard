@@ -201,14 +201,24 @@ function BarChart({ cols, metrics, color, months, apiData, chartType }) {
         textStyle: { color: "#1e293b", fontSize: 12 },
         axisPointer: { type: "shadow", shadowStyle: { color: "rgba(0,0,0,0.03)" } },
         formatter: chartType === 'pie' ? function (params) {
-          let val = params.value;
-          const isPerc = params.name.toLowerCase().includes("percentage");
-          const isCurrency = /demand|collection|outstanding|budget|expenditure|revenue|balance|cash|cheque|online/i.test(params.name);
-          if (isPerc) val = `${val}%`;
-          else if (isCurrency) val = formatCurrency(val);
-          else val = Number(val).toLocaleString("en-IN");
-          return `<div style="font-weight:600;margin-bottom:5px;">${params.name}</div>
-                  <div>${params.marker} <span style="font-weight:bold;">${val}</span></div>`;
+          const monthIndex = params.dataIndex;
+          let html = `<div style="font-weight:600;margin-bottom:5px;">${params.name}</div>`;
+          
+          cols.forEach((colName, idx) => {
+            let val = series[idx]?.data[monthIndex] || 0;
+            const isPerc = colName.toLowerCase().includes("percentage");
+            const isCurrency = /demand|collection|outstanding|budget|expenditure|revenue|balance|cash|cheque|online/i.test(colName);
+            if (isPerc) val = `${val}%`;
+            else if (isCurrency) val = formatCurrency(val);
+            else val = Number(val).toLocaleString("en-IN");
+            
+            const dot = idx === 0 ? params.marker : `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#cbd5e1;"></span>`;
+            html += `<div style="display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:2px;">
+              <span>${dot} ${colName}</span>
+              <span style="font-weight:bold;">${val}</span>
+            </div>`;
+          });
+          return html;
         } : function (params) {
           let html = `<div style="font-weight:600;margin-bottom:5px;">${params[0].name}</div>`;
           params.forEach(p => {
@@ -248,12 +258,9 @@ function BarChart({ cols, metrics, color, months, apiData, chartType }) {
         radius: ['40%', '70%'],
         center: ['50%', '50%'],
         itemStyle: { borderRadius: 5, borderColor: '#fff', borderWidth: 2 },
-        data: cols.map((col, i) => ({
-          name: col,
-          value: series[i]?.data.reduce((sum, val) => sum + val, 0) || 0,
-          itemStyle: {
-            color: i === 0 ? palette.main : i === 1 ? "#38bdf8" : i === 2 ? "#fbbf24" : "#a78bfa"
-          }
+        data: months.map((m, i) => ({
+          name: m,
+          value: series[0]?.data[i] || 0
         }))
       }] : cols.map((col, i) => ({
         name: col,
@@ -683,7 +690,7 @@ export default function CardDetailPage() {
                     {title} - Monthly Summary
                   </h3>
                   <span className="cd-table-count">
-                    {activeMonth ? "1 Month" : `${tableRows.length} Month${tableRows.length !== 1 ? 's' : ''}`}
+                    {activeMonth ? activeMonth : `${tableRows.length} Month${tableRows.length !== 1 ? 's' : ''}`}
                   </span>
                 </div>
                 <div className="cd-table-wrap">

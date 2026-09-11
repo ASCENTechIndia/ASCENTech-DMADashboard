@@ -16,7 +16,7 @@ const CARD_META_LIST = [
     /* 0: Property Tax */
     {
         color: "blue",
-        //route: "https://collectiondashboard.dhulecorporation.in/",
+       route: "https://collectiondashboard.dhulecorporation.in/",
         icon: (
             <svg width="20" height="20" viewBox="-1 1.5 24 24" fill="none">
                 <rect x="2" y="7" width="13" height="15" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
@@ -291,7 +291,7 @@ const CARD_META_LIST = [
     /* 24: RTS */
     {
         color: "purple",
-        //route: "https://rtsdashboard.dhulecorporation.in/",
+       route: "https://rtsdashboard.dhulecorporation.in/",
         icon: (
             <svg width="20" height="20" viewBox="-1 1.5 24 24" fill="none">
                 <rect x="2" y="7" width="13" height="15" rx="1.5" stroke="currentColor" strokeWidth="1.7" />
@@ -371,7 +371,7 @@ const CARD_META_LIST = [
     /* 31: Mandap */
     {
         color: "orange",
-        route: null,
+        route: "https://mandap.dhulecorporation.in/frmmandapDashboard.aspx?@=B35F2E444FF693DAB0F320CBFA32427E",
         icon: (
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2L2 9h3v12h14V9h3L12 2zM9 19H7v-4h2v4zm6 0h-2v-4h2v4z" />
@@ -629,8 +629,8 @@ export default function Dhule_Dashboard() {
                                     title={card.title}
                                     color={meta.color}
                                     icon={meta.icon}
-                                    clickable={false}
-                                    // onClick={() => handleCardClick(card, card.origIndex)}
+                                    clickable={true}
+                                    onClick={() => handleCardClick(card, card.origIndex)}
                                     metrics={card.metrics || []}
                                 />
                             );

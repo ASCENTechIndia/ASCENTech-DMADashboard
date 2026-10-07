@@ -14,7 +14,9 @@ function RTSDashboard_NEW() {
   const location = useLocation();
   // ulbId comes from Home_NEW via: navigate("/rtsdashboard", { state: { ulbId } })
   // If "ALL" or undefined → no filter (show all ULBs)
-  const selectedUlbId = location.state?.ulbId ?? "ALL";
+  const searchParams = new URLSearchParams(location.search);
+  const queryUlbId = searchParams.get("ulbId");
+  const selectedUlbId = location.state?.ulbId || (queryUlbId && queryUlbId !== "ALL" ? Number(queryUlbId) : "ALL");
   const [lastUpdated, setLastUpdated] = useState("");
 
   useEffect(() => {

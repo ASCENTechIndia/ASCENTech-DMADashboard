@@ -1,0 +1,503 @@
+.config-page {
+  min-height: 100vh;
+  background: #f0f4f8;
+  color: #1e293b;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.config-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 76px;
+  border-bottom: 2px solid #e2e8f0;
+  padding: 10px clamp(16px, 4vw, 48px);
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(16, 42, 107, 0.07);
+}
+
+.config-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.config-header-logo {
+  width: auto;
+  height: 42px;
+  object-fit: contain;
+}
+
+.config-eyebrow {
+  margin: 0 0 3px;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.config-header h1 {
+  margin: 0;
+  color: #102a6b;
+  font-size: clamp(17px, 2.4vw, 22px);
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+
+.config-dashboard-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  color: #2f6fed;
+  font-size: 13px;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.config-dashboard-link:hover {
+  color: #102a6b;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.config-dashboard-link span {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.config-content {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+  padding: clamp(20px, 4vw, 42px) clamp(14px, 3vw, 28px) 48px;
+}
+
+.config-intro {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.config-intro-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid #bfd1f9;
+  border-radius: 13px;
+  background: #e8f0ff;
+  color: #2f6fed;
+}
+
+.config-intro-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+}
+
+.config-intro h2 {
+  margin: 0;
+  color: #102a6b;
+  font-size: clamp(18px, 2.5vw, 22px);
+  font-weight: 750;
+  letter-spacing: -0.35px;
+}
+
+.config-intro p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.config-panel {
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(16, 42, 107, 0.07);
+}
+
+.config-modules-panel {
+  margin-top: 18px;
+}
+
+.config-modules-table-wrap {
+  overflow-x: auto;
+  padding: 0 24px 20px;
+}
+
+.config-modules-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #334155;
+  font-size: 13px;
+  text-align: left;
+}
+
+.config-modules-table th,
+.config-modules-table td {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 12px 14px;
+  white-space: nowrap;
+}
+
+.config-modules-table th {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.config-modules-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.config-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 24px 18px;
+}
+
+.config-section-kicker {
+  display: block;
+  margin-bottom: 5px;
+  color: #2f6fed;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.config-panel-heading h2 {
+  margin: 0;
+  color: #102a6b;
+  font-size: 17px;
+  font-weight: 750;
+}
+
+.config-active-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+  border: 1px solid #bbebcb;
+  border-radius: 999px;
+  padding: 7px 11px;
+  background: #f0fbf4;
+  color: #168644;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.config-active-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #1fa854;
+}
+
+.config-corporation-field {
+  display: grid;
+  grid-template-columns: minmax(140px, 190px) minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  border-top: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f1f5f9;
+  padding: 18px 24px;
+  background: #fbfcfe;
+}
+
+.config-field-label {
+  color: #334155;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.config-select {
+  width: 100%;
+  max-width: 540px;
+  min-height: 44px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0 38px 0 13px;
+  appearance: none;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m7 10 5 5 5-5'/%3E%3C/svg%3E");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  color: #102a6b;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.config-select:hover:not(:disabled) {
+  border-color: #94a3b8;
+}
+
+.config-select:focus {
+  border-color: #2f6fed;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.15);
+}
+
+.config-select:disabled {
+  background-color: #f8fafc;
+  color: #94a3b8;
+  cursor: wait;
+}
+
+.config-selected-corporation {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 24px 0;
+  border: 1px solid #dbe7ff;
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: #f7f9ff;
+}
+
+.config-corporation-avatar {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 10px;
+  background: #e8f0ff;
+  color: #2f6fed;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.config-selected-corporation div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.config-corporation-label {
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.config-selected-corporation strong {
+  overflow: hidden;
+  color: #102a6b;
+  font-size: 13px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.config-service-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 12px;
+  padding: 20px 24px 24px;
+}
+
+.config-service-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 70px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+}
+
+.config-service-item:hover {
+  border-color: #b9c9e4;
+  box-shadow: 0 2px 8px rgba(16, 42, 107, 0.05);
+}
+
+.config-service-item.is-active {
+  border-color: #b7e4c5;
+  background: #f8fdf9;
+}
+
+.config-service-item.is-active:hover {
+  border-color: #75c58e;
+}
+
+.config-service-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.config-service-name {
+  overflow: hidden;
+  color: #1e293b;
+  font-size: 13px;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.config-service-status {
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.config-service-status.is-active {
+  color: #168644;
+}
+
+.config-service-item input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.config-toggle {
+  position: relative;
+  width: 38px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: #cbd5e1;
+  transition: background-color 150ms ease;
+}
+
+.config-toggle::after {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.2);
+  content: "";
+  transition: transform 150ms ease;
+}
+
+.config-service-item input:checked + .config-toggle {
+  background: #1fa854;
+}
+
+.config-service-item input:checked + .config-toggle::after {
+  transform: translateX(16px);
+}
+
+.config-service-item input:focus-visible + .config-toggle {
+  outline: 3px solid rgba(47, 111, 237, 0.3);
+  outline-offset: 2px;
+}
+
+.config-message {
+  margin: 18px 24px 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.config-message:last-child {
+  margin-bottom: 20px;
+}
+
+.config-message--error {
+  color: #b42318;
+}
+
+@media (max-width: 600px) {
+  .config-header {
+    min-height: 66px;
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .config-header-logo {
+    height: 34px;
+  }
+
+  .config-header-brand {
+    gap: 9px;
+  }
+
+  .config-dashboard-link {
+    gap: 4px;
+    font-size: 12px;
+  }
+
+  .config-intro {
+    align-items: flex-start;
+  }
+
+  .config-intro-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .config-panel-heading {
+    align-items: flex-start;
+    padding: 18px 16px 15px;
+  }
+
+  .config-corporation-field {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 14px 16px;
+  }
+
+  .config-selected-corporation {
+    margin-right: 16px;
+    margin-left: 16px;
+  }
+
+  .config-service-list {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .config-modules-table-wrap {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  .config-message {
+    margin-right: 16px;
+    margin-left: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .config-select,
+  .config-service-item,
+  .config-toggle,
+  .config-toggle::after {
+    transition: none;
+  }
+}

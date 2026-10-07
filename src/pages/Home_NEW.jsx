@@ -1,12 +1,13 @@
-// Home_NEW.jsx
-// DMA Dashboard – Home page (new design, matches screenshot).
-// Fetches cards from API and renders them in a 4-column grid.
+
 
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import HomeCard_NEW from "../components/HomeCard_NEW";
 import "../styles/home-new.css";
+import { filterConfiguredServices } from "../utils/serviceConfiguration";
+import RTSOptionsModal from "../components/RTSOptionsModal";
+import "../styles/rts-services.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -474,13 +475,18 @@ function SkeletonGrid() {
 /* ── Main Page Component ────────────────────────────────────────────── */
 export default function Home_NEW() {
   const [cards, setCards] = useState([]);
+  const [rtsModalOpen, setRtsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [ulbList, setUlbList] = useState([]);
   
   // Initialize state from sessionStorage to remember selection when navigating back
+  // sessionStorage always returns strings, so we parse the stored value back to a number
   const [selectedUlbId, setSelectedUlbId] = useState(() => {
-    return sessionStorage.getItem("home_selectedUlbId") || "ALL";
+    const stored = sessionStorage.getItem("home_selectedUlbId");
+    if (!stored || stored === "ALL") return "ALL";
+    const parsed = Number(stored);
+    return isNaN(parsed) ? "ALL" : parsed;
   });
 
   const navigate = useNavigate();
@@ -511,7 +517,13 @@ export default function Home_NEW() {
         ...card,
         origIndex: index,
       }));
-      setCards(cardsWithIndex);
+      let configuredCards = cardsWithIndex;
+      try {
+        configuredCards = filterConfiguredServices(cardsWithIndex, ulbId);
+      } catch (e) {
+        console.warn("Configuration filter warning:", e);
+      }
+      setCards(configuredCards);
     } catch (err) {
       console.error("Dashboard Error:", err);
       setError("Failed to load dashboard data. Please try again.");
@@ -533,27 +545,120 @@ export default function Home_NEW() {
     }
   }, [selectedUlbId, fetchDashboard]);
 
-  const handleCardClick = (card, index) => {
-    const meta = getCardMeta(card.title, index);
-    const route = card.link || meta.route;
-    if (route) {
-      let finalRoute = route;
-      if (selectedUlbId && selectedUlbId !== "ALL") {
-        const separator = route.includes("?") ? "&" : "?";
-        finalRoute = `${route}${separator}ulbId=${selectedUlbId}`;
-      }
+  /* RTS Modal handlers for Dhule */
+  const handleRTSDashboard = () => {
+    setRtsModalOpen(false);
+    window.open("https://rtsdashboard.dhulecorporation.in/", "_blank", "noopener,noreferrer");
+  };
 
-      if (route.startsWith("http://") || route.startsWith("https://")) {
-        window.open(finalRoute, "_blank", "noopener,noreferrer");
-      } else {
-        // Pass selectedUlbId via route state so the target page can filter by ULB
-        navigate(finalRoute, { state: { ulbId: selectedUlbId } });
+  const handleRTSServices = () => {
+    setRtsModalOpen(false);
+    navigate("/dhuledashboard/rts-services", { state: { from: "/", ulbId: 1670 } });
+  };
+
+  const handleCardClick = (card, index) => {
+    const selectedUlb = ulbList.find((u) => Number(u.CORPID) === Number(selectedUlbId));
+    const isLatur =
+      Number(selectedUlbId) === 1610 ||
+      selectedUlb?.CORPCODE === 'LCMC' ||
+      (selectedUlb?.ENGNAME && selectedUlb.ENGNAME.toLowerCase().includes('latur')) ||
+      (selectedUlb?.MARNAME && selectedUlb.MARNAME.includes('लातूर')) ||
+      (typeof window !== 'undefined' && window.location.hostname.includes('mclatur.in'));
+
+    const isDhule =
+      Number(selectedUlbId) === 1670 ||
+      Number(selectedUlbId) === Number(import.meta.env.VITE_DHULE_ULB_ID) ||
+      selectedUlb?.CORPCODE === 'DMC' ||
+      (selectedUlb?.ENGNAME && selectedUlb.ENGNAME.toLowerCase().includes('dhule')) ||
+      (selectedUlb?.MARNAME && selectedUlb.MARNAME.includes('धुळे')) ||
+      (typeof window !== 'undefined' && window.location.hostname.includes('dhulecorporation.in'));
+
+    const isPropertyTax =
+      card.code === 'PTAX' ||
+      (card.title && card.title.toLowerCase().trim() === 'property tax') ||
+      (card.title && card.title.includes('मालमत्ता'));
+
+    const isRts =
+      card.code === 'RTS' ||
+      (card.title && card.title.toLowerCase().trim() === 'rts');
+
+    // Latur Corporation Property Tax opens external dashboard
+    if (isLatur && isPropertyTax) {
+      window.open('https://ptaxdashboard.mclatur.in/', '_blank', 'noopener,noreferrer');
+      return;
+    }
+
+    // Dhule Corporation: RTS opens modal, Property Tax opens collection dashboard
+    if (isDhule) {
+      if (isRts) {
+        setRtsModalOpen(true);
+        return;
+      }
+      if (isPropertyTax) {
+        window.open('https://collectiondashboard.dhulecorporation.in/?ulbId=1670', '_blank', 'noopener,noreferrer');
+        return;
+      }
+      if (card.title?.toLowerCase().includes("mandap")) {
+        window.open('https://mandap.dhulecorporation.in/frmmandapDashboard.aspx?@=B35F2E444FF693DAB0F320CBFA32427E', '_blank', 'noopener,noreferrer');
+        return;
       }
     }
+
+    const meta = getCardMeta(card.title, index);
+    const dedicatedRoute = card.link || meta.route;
+
+    // Cards with a dedicated dashboard (Property Tax → /propertydashboard, RTS → /rtsdashboard)
+    // still go to their own pages.
+    if (dedicatedRoute) {
+      let finalRoute = dedicatedRoute;
+      if (selectedUlbId && selectedUlbId !== "ALL") {
+        const separator = dedicatedRoute.includes("?") ? "&" : "?";
+        finalRoute = `${dedicatedRoute}${separator}ulbId=${selectedUlbId}`;
+      }
+      if (dedicatedRoute.startsWith("http://") || dedicatedRoute.startsWith("https://")) {
+        window.open(finalRoute, "_blank", "noopener,noreferrer");
+      } else {
+        navigate(finalRoute, { state: { ulbId: selectedUlbId } });
+      }
+      return;
+    }
+
+    // All other cards → open CardDetailPage
+    const titleForKey = (card.title || "").toLowerCase().trim();
+    const cardKey = titleForKey === "birth & death"
+      ? "birth--death"
+      : titleForKey.replace(/\s+/g, "-").replace(/&/g, "-");
+
+    // ulbId: 0 = ALL corporations (Oracle procedure handles 0 as ALL)
+    //        positive number = specific corporation
+    const numericUlbId = (selectedUlbId !== "ALL" && !isNaN(Number(selectedUlbId)))
+      ? Number(selectedUlbId)
+      : 0;
+
+    const corpName = selectedUlb ? (selectedUlb.ENGNAME || selectedUlb.MARNAME) : "All Municipal Corporations";
+
+    navigate(`/home/detail/${cardKey}`, {
+      state: {
+        title: card.title,
+        color: meta.color,
+        metrics: card.metrics || [],
+        ulbId: numericUlbId,
+        corpName: corpName,
+      },
+    });
   };
 
   return (
     <div className="hn-page">
+      {/* ── RTS Options Modal for Dhule ── */}
+      {rtsModalOpen && (
+        <RTSOptionsModal
+          onClose={() => setRtsModalOpen(false)}
+          onRTSDashboard={handleRTSDashboard}
+          onRTSServices={handleRTSServices}
+        />
+      )}
+
       {/* ── TOP HEADER ── */}
       <header className="hn-header">
         {/* Left: logo + title */}
@@ -622,11 +727,19 @@ export default function Home_NEW() {
           </div>
         )}
 
-        {!loading && !error && (
+        {!loading && !error && cards.length === 0 && (
+          <div style={{ textAlign: "center", padding: "60px 20px", color: "#64748b" }}>
+            <p style={{ fontSize: "16px", fontWeight: "500" }}>No dashboard cards available for this corporation.</p>
+          </div>
+        )}
+
+        {!loading && !error && cards.length > 0 && (
           <div className="hn-grid">
             {cards.map((card) => {
               const meta = getCardMeta(card.title, card.origIndex);
-              const isClickable = !!(card.link || meta.route);
+              // Every card is clickable: dedicated-route cards go to their own page,
+              // all others open CardDetailPage.
+              const isClickable = true;
               return (
                 <HomeCard_NEW
                   key={`${card.code ?? card.title}-${card.origIndex}`}

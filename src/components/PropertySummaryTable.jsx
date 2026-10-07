@@ -109,6 +109,19 @@ function PropertySummaryTable({ ulbId = "ALL" }) {
                   >
                     {row.corporation}
                   </a>
+                ) : row.corporation && (row.corporation.includes("लातूर") || row.corporation.toLowerCase().includes("latur")) ? (
+                  <a
+                    href="https://ptaxdashboard.mclatur.in/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: "#0d6efd",
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {row.corporation}
+                  </a>
                 ) : (
                   row.corporation
                 )}

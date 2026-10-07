@@ -25,8 +25,12 @@ const CARD_COLUMNS_MAP = {
   "legal": { cols: ["Total Cases", "Total Closed Cases", "Total Pending Cases", null] },
   "asset management": { cols: ["Total Assets", "Total Purchased Assets", "Total Issued Assets", "Total Assets Pending for Issue"] },
   "grievances": { cols: ["Total Complaints", "Resolved", "Pending", "Rejected"] },
+  "grievance": { cols: ["Total Complaints", "Resolved", "Pending", "Rejected"] },
+  "crmd": { cols: ["Total Complaints", "Resolved", "Pending", "Rejected"] },
   "cfc": { cols: ["Total Applications", "Total Demand", "Total Collection", "Recovery Percentage"] },
-  "accounts": { cols: ["Total Budget", "Expenditure", "Revenue", "Balance"] },
+  "accounts": { cols: ["Total Receipts", "Total Payments", "Bank Balance"], tableCols: ["Total Receipts", "Total Payments"] },
+  "account": { cols: ["Total Receipts", "Total Payments", "Bank Balance"], tableCols: ["Total Receipts", "Total Payments"] },
+  "acc": { cols: ["Total Receipts", "Total Payments", "Bank Balance"], tableCols: ["Total Receipts", "Total Payments"] },
   "property tax": { cols: ["Total Demand", "Total Collection", "Total Outstanding", "Recovery Percentage"] },
   "project management": { cols: ["Total Projects", "Completed", "In Progress", "Pending"] },
   "septic tank": { cols: ["Total Requests", "Completed", "Pending", null] },
@@ -39,7 +43,7 @@ const CARD_COLUMNS_MAP = {
   "opd": { cols: ["Total Patients", "Treated", "Referred", null] },
   "digital library": { cols: ["Total Members", "Books Issued", "Books Returned", "Overdue"] },
   "tanker": { cols: ["Total Trips", "Completed", "Pending", null] },
-  "advertisement": { cols: ["Total Licenses", "Approved", "Pending", null] },
+  "advertisement": { cols: ["Total Licenses", "Approved", "Pending", "Total Amount"], tableCols: ["Total Licenses", "Approved", "Pending", "Total Amount"] },
   "bombay nursing act": { cols: ["Total Registrations", "Active", "Expired", null] },
   "illegal hoarding": { cols: ["Panchnama Count", "Total Notices", "Notice Gen. Amt (In Lacs)", null] },
   "illegal hording": { cols: ["Panchnama Count", "Total Notices", "Notice Gen. Amt (In Lacs)", null] },
@@ -299,6 +303,15 @@ function matchApiColumn(apiRow, colLabel) {
   const lowerCol = (colLabel || "").toLowerCase().trim();
   const keys = Object.keys(apiRow);
    const customMap = {
+    "total receipts": "cash_receipts",
+    "cash receipts": "cash_receipts",
+    "bank receipts": "bank_receipts",
+    // Accounts: backend labels Total Receipts = cash_receipts, Total Payments = bank_receipts
+    "total payments": "bank_receipts",
+    "bank balance": null,
+    "total complaints": "received",
+    "total complaint": "received",
+    "complaints": "received",
     "total received": "total",
     "total rejected": "total_reject",
     "leased properties": "shop",
@@ -314,12 +327,20 @@ function matchApiColumn(apiRow, colLabel) {
     "leased collection": "leased_collection",
     "panchnama count": "panchnama_count",
     "total notices": "notice_count",
-    "notice gen. amt (in lacs)": "notice_amount"
+    "notice gen. amt (in lacs)": "notice_amount",
+    "total amount": "amount",
+    "total licenses": "total",
+    "approved": "approve"
   };
+
+  // If the column is explicitly mapped to null, it means no API key exists → skip
+  if (lowerCol in customMap && customMap[lowerCol] === null) return null;
 
   if (customMap[lowerCol] && keys.includes(customMap[lowerCol])) {
     return customMap[lowerCol];
   }
+  // Do not fall back to generic fuzzy match for columns explicitly set to null
+  if (lowerCol in customMap && customMap[lowerCol] === null) return null;
   if (lowerCol === "total collection" && keys.includes("collection") && !keys.includes("total_collection")) {
     return "collection";
   }
@@ -378,7 +399,16 @@ export default function CardDetailPage() {
   const title = state.title || recoveredTitle;
   const color = state.color || "blue";
   const metrics = state.metrics || [];
-  const ulbId = state.ulbId || import.meta.env.VITE_DHULE_ULB_ID || 1670;  // Dhule passes ulbId=1670 via navigation state, fallback to env or 1670
+  // ulbId passed from Home_NEW:
+  //   0             â†’ ALL corporations (Oracle procedure handles 0 as "all")
+  //   positive num  â†’ specific corporation
+  //   null/undefined/"ALL" â†’ treat as ALL (pass 0)
+  const rawUlbId = state.ulbId;
+  const ulbId = (rawUlbId !== null && rawUlbId !== undefined && rawUlbId !== "ALL" && !isNaN(Number(rawUlbId)))
+    ? Number(rawUlbId)
+    : 0;
+  const corpName = state.corpName || (ulbId === 0 ? "All Municipal Corporations" : "");
+  console.log(`[CardDetailPage] title="${title}", ulbId=${ulbId} (raw: ${rawUlbId}), corpName="${corpName}"`);
 
   const meta = getCardMeta(title);
   const icon = meta.icon || null;
@@ -409,13 +439,17 @@ export default function CardDetailPage() {
       setError(null);
       try {
                const res = await axios.get(`${API_BASE_URL}/dashboard/MonthwiseFetch`, {
-          params: { ulbId, flag: titleKey === 'illegal hording' ? 'ILHORD' : titleKey }
+          params: { ulbId, flag: (titleKey === 'illegal hording' || titleKey === 'illegal hoarding') ? 'ILHORD' : (titleKey === 'account' || titleKey === 'acc' || titleKey === 'accounts') ? 'ACCOUNT' : (titleKey === 'grievances' || titleKey === 'grievance' || titleKey === 'crmd') ? 'CRMD' : titleKey }
 
         });
         if (res.data?.success) {
           const rawData = res.data.data || [];
           const filteredData = rawData.map(d => {
             const item = { ...d };
+            if (item.cash_receipts !== undefined || item.bank_receipts !== undefined) {
+              item.total_receipts = (Number(item.cash_receipts) || 0) + (Number(item.bank_receipts) || 0);
+            }
+
             if (item.cash_collection !== undefined && item.cheque_collection !== undefined && item.online_collection !== undefined && item.total_collection === undefined) {
               item.total_collection = Number(item.cash_collection) + Number(item.cheque_collection) + Number(item.online_collection);
               item.total_collection = Number(item.total_collection.toFixed(2));
@@ -453,7 +487,7 @@ export default function CardDetailPage() {
       }
     };
     fetchData();
-  }, [titleKey]);
+  }, [titleKey, ulbId]);
 
   useEffect(() => {
     if (titleKey !== 'water tax') return;
@@ -508,6 +542,14 @@ export default function CardDetailPage() {
       ? apiData.filter(d => formatMonthYear(d) === activeMonth)
       : apiData;
 
+    // Find metric passed directly from Home Card (exact or partial match)
+    const matchingHomeMetric = metrics.find(m => {
+      const ml = (m.label || "").toLowerCase();
+      const cl = col.toLowerCase();
+      const cleanMl = ml.replace(/\s*\(cr\)/g, "").replace(/\s*\(in lacs\)/g, "").trim();
+      return ml.includes(cl) || cl.includes(cleanMl) || cleanMl.includes(cl);
+    });
+
     if (col.toLowerCase().includes("percentage")) {
       let sumDemand = 0;
       let sumCollection = 0;
@@ -531,7 +573,10 @@ export default function CardDetailPage() {
       if (sumDemand > 0) {
         totalVal = (sumCollection / sumDemand) * 100;
       } else if (count > 0) {
-        totalVal = sumPercentage / count; 
+        totalVal = sumPercentage / count;
+      } else if (matchingHomeMetric) {
+        const parsed = parseFloat(String(matchingHomeMetric.value).replace(/%/g, ""));
+        if (!isNaN(parsed)) totalVal = parsed;
       }
     } else {
       rowsToProcess.forEach(apiRow => {
@@ -540,17 +585,50 @@ export default function CardDetailPage() {
           totalVal += Number(apiRow[matchedKey]) || 0;
         }
       });
+
+      // Unit & fallback handling for Water Tax
+      if (titleKey === "water tax") {
+        const lc = col.toLowerCase();
+        if (lc === "total demand") {
+          if (watTotalDemandCr !== null && watTotalDemandCr > 0) {
+            totalVal = watTotalDemandCr * 10000000;
+          } else if (matchingHomeMetric) {
+            const num = parseFloat(String(matchingHomeMetric.value).replace(/,/g, ""));
+            if (!isNaN(num)) totalVal = num * 10000000;
+          }
+        } else if (lc === "total collection") {
+          if (totalVal > 0) {
+            totalVal = totalVal * 10000000;
+          } else if (matchingHomeMetric) {
+            const num = parseFloat(String(matchingHomeMetric.value).replace(/,/g, ""));
+            if (!isNaN(num)) totalVal = num * 10000000;
+          }
+        } else if (["cash", "cheque", "online"].includes(lc)) {
+          if (totalVal > 0) {
+            totalVal = totalVal * 10000000;
+          }
+        }
+      } else {
+        // For other cards, if monthwise data is empty, fallback to Home Page metric
+        if (totalVal === 0 && matchingHomeMetric && !activeMonth) {
+          const num = parseFloat(String(matchingHomeMetric.value).replace(/,/g, ""));
+          if (!isNaN(num)) {
+            if ((matchingHomeMetric.label || "").toLowerCase().includes("(cr)")) {
+              totalVal = num * 10000000;
+            } else {
+              totalVal = num;
+            }
+          }
+        }
+      }
     }
 
-    if (titleKey === 'estate' && estateStats !== null) {
+    if (titleKey === "estate" && estateStats !== null) {
       const lc = col.toLowerCase();
-      if (lc === 'total properties') totalVal = estateStats.total_properties;
-      if (lc === 'rented properties') totalVal = estateStats.rented_properties;
-      if (lc === 'leased properties') totalVal = estateStats.lease_properties;
-      if (lc === 'vacant properties') totalVal = estateStats.vacant_properties;
-    }
-    if (titleKey === 'water tax' && col.toLowerCase() === 'total demand' && watTotalDemandCr !== null) {
-      totalVal = watTotalDemandCr * 10000000; 
+      if (lc === "total properties") totalVal = estateStats.total_properties;
+      if (lc === "rented properties") totalVal = estateStats.rented_properties;
+      if (lc === "leased properties") totalVal = estateStats.lease_properties;
+      if (lc === "vacant properties") totalVal = estateStats.vacant_properties;
     }
 
     return {
@@ -558,13 +636,12 @@ export default function CardDetailPage() {
       value: Number(totalVal.toFixed(2)) || 0,
     };
   });
-
   return (
     <div className={`cd-page cd-accent-${color}`}>
       <header className="cd-header">
         <div className="cd-header-left">
           <img
-            src="/DMC_logo.jpg"
+            src={ulbId === 1670 || (corpName && corpName.toLowerCase().includes("dhule")) ? "/DMC_logo.jpg" : "/Images/AscenTech_Logomini.png"}
             alt="DMC Logo"
             className="cd-header-logo"
             onError={e => { e.currentTarget.style.display = "none"; }}
@@ -579,6 +656,11 @@ export default function CardDetailPage() {
             </div>
             <div>
               <h1 className="cd-header-title">{title}</h1>
+              {corpName && (
+                <div style={{ fontSize: "12.5px", color: "#64748b", fontWeight: 500, marginTop: "2px" }}>
+                  {corpName}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -636,7 +718,7 @@ export default function CardDetailPage() {
             if (!isNaN(numVal)) {
               const lowerLabel = sc.label.toLowerCase();
               const isPercentage = lowerLabel.includes("percentage");
-              const isCurrency = /demand|collection|outstanding|budget|expenditure|revenue|balance|cash|cheque|online/i.test(lowerLabel);
+              const isCurrency = /demand|collection|outstanding|budget|expenditure|revenue|balance|cash|cheque|online|amount/i.test(lowerLabel);
 
               if (isPercentage) {
                 displayValue = `${numVal}%`;
@@ -673,6 +755,29 @@ export default function CardDetailPage() {
           })}
         </div>
 
+        {!loading && !error && apiData.length === 0 && (
+          <div style={{
+            margin: "12px 0 16px 0",
+            padding: "12px 18px",
+            background: "#f8fafc",
+            border: "1px solid #cbd5e1",
+            borderRadius: "8px",
+            color: "#334155",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            fontSize: "13.5px"
+          }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5c4" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+            <span>
+              Month-wise breakdown is not yet synchronized for <strong>{corpName || "this corporation"}</strong> in the database. Overall summary totals from the dashboard are displayed above.
+            </span>
+          </div>
+        )}
         {loading && <div style={{ padding: "20px", textAlign: "center", color: "#64748b" }}>Loading Monthwise Data...</div>}
         {error && <div style={{ padding: "20px", textAlign: "center", color: "#ef4444" }}>{error}</div>}
 
@@ -720,7 +825,7 @@ export default function CardDetailPage() {
                           {row.values.map((val, vi) => {
                             const colName = tableActiveCols[vi];
                             const isPercentage = colName.toLowerCase().includes("percentage");
-                            const isCurrency = /demand|collection|outstanding|budget|expenditure|revenue|balance|cash|cheque|online/i.test(colName);
+                            const isCurrency = /demand|collection|outstanding|budget|expenditure|revenue|balance|cash|cheque|online|amount/i.test(colName);
 
                             let formattedVal;
                             if (isPercentage) {
@@ -762,7 +867,7 @@ export default function CardDetailPage() {
                               total = tableRows.reduce((sum, row) => sum + (row.values[ci] || 0), 0);
                             }
 
-                            const isCurrency = /demand|collection|outstanding|budget|expenditure|revenue|balance|cash|cheque|online/i.test(colName);
+                            const isCurrency = /demand|collection|outstanding|budget|expenditure|revenue|balance|cash|cheque|online|amount/i.test(colName);
                             let displayTotal = total === 0 ? "0" : Number.isInteger(total) ? total : total.toFixed(2);
 
                             if (isPercentage) {
@@ -827,6 +932,8 @@ export default function CardDetailPage() {
     </div>
   );
 }
+
+
 
 
 

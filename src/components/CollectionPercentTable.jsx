@@ -1,9 +1,10 @@
-import { useEffect, useState, memo } from "react";
+﻿import { useEffect, useState, memo } from "react";
 import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function CollectionPercentTable({
+  ulbId = "ALL",
   maxRowsBeforeScroll = 5,
 }) {
   const [data, setData] = useState([]);
@@ -18,24 +19,21 @@ function CollectionPercentTable({
 
   useEffect(() => {
     fetchCollectionPercent();
-  }, []);
+  }, [ulbId]);
 
 const fetchCollectionPercent = async () => {
   try {
     setMessage("");
     setLoading(true);
-    const res = await axios.get(
-      `${API_BASE_URL}/property/getCollectioninPerct`
-    );
+    const url = (ulbId && ulbId !== "ALL")
+      ? `${API_BASE_URL}/property/getCollectioninPerct?ulbId=${ulbId}`
+      : `${API_BASE_URL}/property/getCollectioninPerct`;
+    const res = await axios.get(url);
 
     const rows = res.data.data || [];
-    // console.log("Rows", rows)
-    const totalRow = rows.find(
-      (r) => r.CORPORATION === "TOTAL"
-    );
 
     const corporationRows = rows
-      .filter((r) => r.CORPORATION !== "TOTAL")
+      .filter((r) => r.CORPORATION !== "TOTAL" && r.CORPORATION !== null)
       .map((r) => ({
         corporation: r.CORPORATION,
         demand: Number(r.TOTAL_DEMAND || 0),
@@ -43,16 +41,28 @@ const fetchCollectionPercent = async () => {
         outstanding: Number(r.TOTAL_OUTSTANDING || 0),
         percent: Number(r.COLLECTION_PERCENTAGE || 0),
       }));
-// console.log("corprows",corporationRows);
 
     setData(corporationRows);
 
+    // Compute totals from filtered rows (since ROLLUP row no longer comes from DB)
+    const totalRow = rows.find((r) => r.CORPORATION === "TOTAL");
     if (totalRow) {
       setTotal({
         demand: Number(totalRow.TOTAL_DEMAND || 0),
         collection: Number(totalRow.TOTAL_COLLECTION || 0),
         outstanding: Number(totalRow.TOTAL_OUTSTANDING || 0),
         percent: Number(totalRow.COLLECTION_PERCENTAGE || 0),
+      });
+    } else {
+      // Calculate total from rows directly
+      const td = corporationRows.reduce((s, r) => s + r.demand, 0);
+      const tc = corporationRows.reduce((s, r) => s + r.collection, 0);
+      const to = corporationRows.reduce((s, r) => s + r.outstanding, 0);
+      setTotal({
+        demand: td,
+        collection: tc,
+        outstanding: to,
+        percent: td > 0 ? Number(((tc / td) * 100).toFixed(2)) : 0,
       });
     }
   } catch (err) {
@@ -65,9 +75,7 @@ const fetchCollectionPercent = async () => {
     setLoading(false);
   }
 };
-// useEffect(() => {
-//   console.log("Data State:", data);
-// }, [data, ulbId]);
+
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "150px" }}>
@@ -123,7 +131,37 @@ const fetchCollectionPercent = async () => {
   ) : (
     data.map((row) => (
       <tr key={row.corporation}>
-        <td>{row.corporation}</td>
+        <td>
+          {row.corporation && (row.corporation.includes("लातूर") || row.corporation.toLowerCase().includes("latur")) ? (
+            <a
+              href="https://ptaxdashboard.mclatur.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: "#0d6efd",
+                textDecoration: "underline",
+                cursor: "pointer",
+              }}
+            >
+              {row.corporation}
+            </a>
+          ) : row.corporation === "वसई-विरार मनपा" ? (
+            <a
+              href="https://dashboard.onlinevvcmc.in/property/mode"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: "#0d6efd",
+                textDecoration: "underline",
+                cursor: "pointer",
+              }}
+            >
+              {row.corporation}
+            </a>
+          ) : (
+            row.corporation
+          )}
+        </td>
 
         <td className="dma-text-center">
           {row.demand.toFixed(2)}
@@ -157,29 +195,6 @@ const fetchCollectionPercent = async () => {
     ))
   )}
 </tbody>
- {/* {!message && (
-  <tfoot>
-    <tr>
-      <td>Total</td>
-
-      <td className="dma-text-center">
-        {total.demand.toFixed(2)}
-      </td>
-
-      <td className="dma-text-center">
-        {total.collection.toFixed(2)}
-      </td>
-
-      <td className="dma-text-center">
-        {total.outstanding.toFixed(2)}
-      </td>
-
-      <td className="dma-text-center">
-        {total.percent.toFixed(2)}%
-      </td>
-    </tr>
-  </tfoot>
-)} */}
       </table>
     </div>
   );

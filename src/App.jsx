@@ -23,6 +23,9 @@ function App() {
         <Route path="/laturdashboard" element={<Navigate to="/" replace />} />
         <Route path="/mbmcdashboard" element={<Navigate to="/" replace />} />
 
+      <Route path="/jalgaondashboard" element={<Navigate to="/" replace />} />
+      <Route path="/ahilyanagardashboard" element={<Navigate to="/" replace />} />
+
         {/* NEW RTS Dashboard */}
         <Route path="/rtsdashboard" element={<RTSDashboard_NEW />} />
 

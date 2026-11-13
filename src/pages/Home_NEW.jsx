@@ -494,6 +494,14 @@ export default function Home_NEW() {
   const LATUR_DOMAIN = import.meta.env.VITE_LATUR_DOMAIN || "dashboard.mclatur.in";
   const MBMC_DOMAIN = import.meta.env.VITE_MBMC_DOMAIN || "dashboard.mbmc.gov.in";
 
+  const JALGAON_DOMAIN =
+  import.meta.env.VITE_JALGAON_DOMAIN ||
+  "jcmcdashboard.nagarkaryavalinew.com";
+
+const AHILYANAGAR_DOMAIN =
+  import.meta.env.VITE_AHILYANAGAR_DOMAIN ||
+  "amcdashboard.nagarkaryavalinew.com";
+
   // Initialize state from URL params, domain, or sessionStorage
   const isDhuleDomain = typeof window !== "undefined" && (
     window.location.hostname === DHULE_DOMAIN ||
@@ -510,8 +518,30 @@ export default function Home_NEW() {
     window.location.hostname.includes("mbmc.gov.in")
   );
 
-  const isDedicatedDomain = isDhuleDomain || isLaturDomain || isMbmcDomain;
+  const isJalgaonDomain =
+  typeof window !== "undefined" &&
+  (
+    window.location.hostname === JALGAON_DOMAIN ||
+    window.location.hostname.includes(
+      "jcmcdashboard.nagarkaryavalinew.com"
+    )
+  );
 
+const isAhilyanagarDomain =
+  typeof window !== "undefined" &&
+  (
+    window.location.hostname === AHILYANAGAR_DOMAIN ||
+    window.location.hostname.includes(
+      "amcdashboard.nagarkaryavalinew.com"
+    )
+  );
+
+  const isDedicatedDomain =
+  isDhuleDomain ||
+  isLaturDomain ||
+  isMbmcDomain ||
+  isJalgaonDomain ||
+  isAhilyanagarDomain;
   // Initialize state from domain, URL params, or sessionStorage
   const [selectedUlbId, setSelectedUlbId] = useState(() => {
     if (typeof window !== "undefined") {
@@ -533,6 +563,24 @@ export default function Home_NEW() {
       ) {
         return 1710;
       }
+
+      if (
+  window.location.hostname === JALGAON_DOMAIN ||
+  window.location.hostname.includes(
+    "jcmcdashboard.nagarkaryavalinew.com"
+  )
+) {
+  return 1750;
+}
+
+if (
+  window.location.hostname === AHILYANAGAR_DOMAIN ||
+  window.location.hostname.includes(
+    "amcdashboard.nagarkaryavalinew.com"
+  )
+) {
+  return 2;
+}
       const params = new URLSearchParams(window.location.search);
       const paramUlb = params.get("ulbId");
       if (paramUlb) {
@@ -561,6 +609,20 @@ export default function Home_NEW() {
         if (selectedUlbId !== 1710) setSelectedUlbId(1710);
         return;
       }
+
+      if (isJalgaonDomain) {
+  if (Number(selectedUlbId) !== 1750) {
+    setSelectedUlbId(1750);
+  }
+  return;
+}
+
+if (isAhilyanagarDomain) {
+  if (Number(selectedUlbId) !== 2) {
+    setSelectedUlbId(2);
+  }
+  return;
+}
     }
     const params = new URLSearchParams(location.search);
     const paramUlb = params.get("ulbId");
@@ -610,6 +672,48 @@ export default function Home_NEW() {
         selectedUlb.MARNAME.includes("भाइंदर")
       ))
     ));
+
+    const isJalgaon =
+  isJalgaonDomain ||
+  (
+    selectedUlbId !== "ALL" &&
+    (
+      Number(selectedUlbId) === 1750 ||
+      selectedUlb?.CORPCODE === "JCMC" ||
+      (
+        selectedUlb?.ENGNAME &&
+        selectedUlb.ENGNAME.toLowerCase().includes("jalgaon")
+      ) ||
+      (
+        selectedUlb?.MARNAME &&
+        selectedUlb.MARNAME.includes("जळगाव")
+      )
+    )
+  );
+
+const isAhilyanagar =
+  isAhilyanagarDomain ||
+  (
+    selectedUlbId !== "ALL" &&
+    (
+      Number(selectedUlbId) === 2 ||
+      (
+        selectedUlb?.ENGNAME &&
+        (
+          selectedUlb.ENGNAME.toLowerCase().includes("ahilyanagar") ||
+          selectedUlb.ENGNAME.toLowerCase().includes("ahmednagar")
+        )
+      ) ||
+      (
+        selectedUlb?.MARNAME &&
+        (
+          selectedUlb.MARNAME.includes("अहिल्यानगर") ||
+          selectedUlb.MARNAME.includes("अहमदनगर")
+        )
+      )
+    )
+  );
+
   const activeUlbRef = useRef(selectedUlbId);
   useEffect(() => {
     activeUlbRef.current = selectedUlbId;
@@ -843,11 +947,37 @@ export default function Home_NEW() {
         {/* Left: back button (when Dhule) + logo + title */}
         <div className="hn-header-left">
           <img
-            src={isDhule ? "/DMC_logo.jpg" : isLatur ? "/latur_logo.jpg" : isMbmc ? "/mbmc_logo.png" : "/Images/AscenTech_Logomini.png"}
-            alt={isDhule ? "DMC Logo" : isLatur ? "LCMC Logo" : isMbmc ? "MBMC Logo" : "AscenTech"}
-            className="hn-header-logo"
-            onError={(e) => { e.currentTarget.style.display = "none"; }}
-          />
+  src={
+    isDhule
+      ? "/DMC_logo.jpg"
+      : isLatur
+      ? "/latur_logo.jpg"
+      : isMbmc
+      ? "/mbmc_logo.png"
+      : isJalgaon
+      ? "/JALGAON_LOGO.png"
+      : isAhilyanagar
+      ? "/AHILYANAGAR_LOGO.png"
+      : "/Images/AscenTech_Logomini.png"
+  }
+  alt={
+    isDhule
+      ? "DMC Logo"
+      : isLatur
+      ? "LCMC Logo"
+      : isMbmc
+      ? "MBMC Logo"
+      : isJalgaon
+      ? "Jalgaon Municipal Corporation Logo"
+      : isAhilyanagar
+      ? "Ahilyanagar Municipal Corporation Logo"
+      : "AscenTech"
+  }
+  className="hn-header-logo"
+  onError={(e) => {
+    e.currentTarget.style.display = "none";
+  }}
+/>
           <div className="hn-header-title-wrap">
             <h1 className="hn-header-title">Dashboard</h1>
           </div>
@@ -875,6 +1005,22 @@ export default function Home_NEW() {
             </h2>
           </div>
         )}
+
+        {isJalgaonDomain && (
+  <div className="hn-header-center">
+    <h2 className="hn-header-center-title">
+      Jalgaon City Municipal Corporation
+    </h2>
+  </div>
+)}
+
+{isAhilyanagarDomain && (
+  <div className="hn-header-center">
+    <h2 className="hn-header-center-title">
+      Ahilyanagar Municipal Corporation
+    </h2>
+  </div>
+)}
 
         {/* Right: Dynamic ULB Dropdown (hidden on Dhule / Latur dedicated domain) + Nagar Karyawali logo + date badge */}
         <div className="hn-header-right">

@@ -1,15 +1,14 @@
-
-
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import HomeCard_NEW from "../components/HomeCard_NEW";
 import "../styles/home-new.css";
 import { filterConfiguredServices } from "../utils/serviceConfiguration";
 import RTSOptionsModal from "../components/RTSOptionsModal";
 import "../styles/rts-services.css";
+import QuickLinkCards from "../components/QuickLinkCards";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://dmadashboardapi.nagarkaryavalinew.com/api";
 
 /* ── Card metadata list: exact color + route + solid SVG icon by index ── */
 const CARD_META_LIST = [
@@ -396,6 +395,7 @@ const TITLE_TO_INDEX_MAP = {
   "asset management": 9,
   "project management": 10,
   "septic tank": 11,
+  "septictank": 11,
   "inward outward": 12,
   "birth & death": 13,
   "smart parking": 15,
@@ -407,9 +407,16 @@ const TITLE_TO_INDEX_MAP = {
   "works": 21,
   "marriage registration": 22,
   "visitor management": 23,
+  "visitormanagement": 23,
+  "visitor": 23,
+  "visit": 23,
+  "vist": 23,
   "rts": 24,
   "opd": 25,
   "digital library": 26,
+  "digitallibrary": 26,
+  "digilibrary": 26,
+  "dlib": 26,
   "tanker": 27,
   "advertisement": 28,
   "bombay nursing act": 29
@@ -480,17 +487,133 @@ export default function Home_NEW() {
   const [error, setError] = useState(null);
   const [ulbList, setUlbList] = useState([]);
   
-  // Initialize state from sessionStorage to remember selection when navigating back
-  // sessionStorage always returns strings, so we parse the stored value back to a number
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const DHULE_DOMAIN = import.meta.env.VITE_DHULE_DOMAIN || "dashboard.dhulecorporation.in";
+  const LATUR_DOMAIN = import.meta.env.VITE_LATUR_DOMAIN || "dashboard.mclatur.in";
+  const MBMC_DOMAIN = import.meta.env.VITE_MBMC_DOMAIN || "dashboard.mbmc.gov.in";
+
+  // Initialize state from URL params, domain, or sessionStorage
+  const isDhuleDomain = typeof window !== "undefined" && (
+    window.location.hostname === DHULE_DOMAIN ||
+    window.location.hostname.includes("dhulecorporation.in")
+  );
+
+  const isLaturDomain = typeof window !== "undefined" && (
+    window.location.hostname === LATUR_DOMAIN ||
+    window.location.hostname.includes("mclatur.in")
+  );
+
+  const isMbmcDomain = typeof window !== "undefined" && (
+    window.location.hostname === MBMC_DOMAIN ||
+    window.location.hostname.includes("mbmc.gov.in")
+  );
+
+  const isDedicatedDomain = isDhuleDomain || isLaturDomain || isMbmcDomain;
+
+  // Initialize state from domain, URL params, or sessionStorage
   const [selectedUlbId, setSelectedUlbId] = useState(() => {
+    if (typeof window !== "undefined") {
+      if (
+        window.location.hostname === DHULE_DOMAIN ||
+        window.location.hostname.includes("dhulecorporation.in")
+      ) {
+        return 1670;
+      }
+      if (
+        window.location.hostname === LATUR_DOMAIN ||
+        window.location.hostname.includes("mclatur.in")
+      ) {
+        return 1610;
+      }
+      if (
+        window.location.hostname === MBMC_DOMAIN ||
+        window.location.hostname.includes("mbmc.gov.in")
+      ) {
+        return 1710;
+      }
+      const params = new URLSearchParams(window.location.search);
+      const paramUlb = params.get("ulbId");
+      if (paramUlb) {
+        const parsedParam = Number(paramUlb);
+        if (!isNaN(parsedParam)) return parsedParam;
+      }
+    }
     const stored = sessionStorage.getItem("home_selectedUlbId");
     if (!stored || stored === "ALL") return "ALL";
     const parsed = Number(stored);
     return isNaN(parsed) ? "ALL" : parsed;
   });
 
-  const navigate = useNavigate();
+  // Sync selectedUlbId when URL query or pathname changes
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (isDhuleDomain) {
+        if (selectedUlbId !== 1670) setSelectedUlbId(1670);
+        return;
+      }
+      if (isLaturDomain) {
+        if (selectedUlbId !== 1610) setSelectedUlbId(1610);
+        return;
+      }
+      if (isMbmcDomain) {
+        if (selectedUlbId !== 1710) setSelectedUlbId(1710);
+        return;
+      }
+    }
+    const params = new URLSearchParams(location.search);
+    const paramUlb = params.get("ulbId");
+    if (paramUlb) {
+      const parsed = Number(paramUlb);
+      if (!isNaN(parsed) && parsed !== selectedUlbId) {
+        setSelectedUlbId(parsed);
+      }
+    }
+  }, [location.search, location.pathname]);
+
   const { date, day } = getFormattedDate();
+
+  const selectedUlb = ulbList.find((u) => Number(u.CORPID) === Number(selectedUlbId));
+  const isDhule =
+    isDhuleDomain ||
+    (selectedUlbId !== "ALL" && (
+      Number(selectedUlbId) === 1670 ||
+      selectedUlb?.CORPCODE === "DMC" ||
+      (selectedUlb?.ENGNAME && selectedUlb.ENGNAME.toLowerCase().includes("dhule"))
+    ));
+
+  const isLatur =
+    isLaturDomain ||
+    (selectedUlbId !== "ALL" && (
+      Number(selectedUlbId) === 1610 ||
+      selectedUlb?.CORPCODE === "LCMC" ||
+      (selectedUlb?.ENGNAME && selectedUlb.ENGNAME.toLowerCase().includes("latur"))
+    ));
+
+  const isMbmc =
+    isMbmcDomain ||
+    (selectedUlbId !== "ALL" && (
+      Number(selectedUlbId) === 1710 ||
+      Number(selectedUlbId) === 890 ||
+      selectedUlb?.CORPCODE === "MBMC" ||
+      (selectedUlb?.ENGNAME && (
+        selectedUlb.ENGNAME.toLowerCase().includes("mira") ||
+        selectedUlb.ENGNAME.toLowerCase().includes("bhaindar") ||
+        selectedUlb.ENGNAME.toLowerCase().includes("bhayandar") ||
+        selectedUlb.ENGNAME.toLowerCase().includes("bhayander")
+      )) ||
+      (selectedUlb?.MARNAME && (
+        selectedUlb.MARNAME.includes("मिरा") ||
+        selectedUlb.MARNAME.includes("मीरा") ||
+        selectedUlb.MARNAME.includes("भाईंदर") ||
+        selectedUlb.MARNAME.includes("भाइंदर")
+      ))
+    ));
+  const activeUlbRef = useRef(selectedUlbId);
+  useEffect(() => {
+    activeUlbRef.current = selectedUlbId;
+  }, [selectedUlbId]);
 
   // Fetch ULB (Corporation) list from API
   const fetchULBList = useCallback(async () => {
@@ -498,6 +621,19 @@ export default function Home_NEW() {
       const res = await axios.get(`${API_BASE_URL}/dashboard/ULBList`);
       const list = res.data?.data || [];
       setUlbList(list);
+      // If stored ULB ID no longer exists in list, safely reset to ALL (only if URL has no explicit ulbId)
+      const urlHasUlb = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("ulbId");
+      if (!urlHasUlb && !isDedicatedDomain) {
+        const stored = sessionStorage.getItem("home_selectedUlbId");
+        if (stored && stored !== "ALL" && list.length > 0) {
+          const found = list.some((u) => Number(u.CORPID) === Number(stored));
+          if (!found) {
+            sessionStorage.setItem("home_selectedUlbId", "ALL");
+            setSelectedUlbId("ALL");
+                navigate("/", { replace: true });
+          }
+        }
+      }
     } catch (err) {
       console.error("ULB List Fetch Error:", err);
     }
@@ -512,6 +648,10 @@ export default function Home_NEW() {
       const res = await axios.get(`${API_BASE_URL}/dashboard/DashboardDataNew`, {
         params: { ulbId },
       });
+      // Avoid race conditions: discard result if user/URL changed while request was in-flight
+      if (activeUlbRef.current !== ulbId) {
+        return;
+      }
       const rawCards = res.data?.data || [];
       const cardsWithIndex = rawCards.map((card, index) => ({
         ...card,
@@ -526,7 +666,13 @@ export default function Home_NEW() {
       setCards(configuredCards);
     } catch (err) {
       console.error("Dashboard Error:", err);
-      setError("Failed to load dashboard data. Please try again.");
+      const urlHasUlb = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("ulbId");
+      if (ulbId !== "ALL" && !urlHasUlb && !isDedicatedDomain) {
+        sessionStorage.setItem("home_selectedUlbId", "ALL");
+        setSelectedUlbId("ALL");
+      } else {
+        setError("Failed to load dashboard data. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -553,11 +699,10 @@ export default function Home_NEW() {
 
   const handleRTSServices = () => {
     setRtsModalOpen(false);
-    navigate("/dhuledashboard/rts-services", { state: { from: "/", ulbId: 1670 } });
+    navigate("/rts-services", { state: { from: "/", ulbId: 1670 } });
   };
 
   const handleCardClick = (card, index) => {
-    const selectedUlb = ulbList.find((u) => Number(u.CORPID) === Number(selectedUlbId));
     const isLatur =
       Number(selectedUlbId) === 1610 ||
       selectedUlb?.CORPCODE === 'LCMC' ||
@@ -565,17 +710,39 @@ export default function Home_NEW() {
       (selectedUlb?.MARNAME && selectedUlb.MARNAME.includes('लातूर')) ||
       (typeof window !== 'undefined' && window.location.hostname.includes('mclatur.in'));
 
-    const isDhule =
-      Number(selectedUlbId) === 1670 ||
-      Number(selectedUlbId) === Number(import.meta.env.VITE_DHULE_ULB_ID) ||
-      selectedUlb?.CORPCODE === 'DMC' ||
-      (selectedUlb?.ENGNAME && selectedUlb.ENGNAME.toLowerCase().includes('dhule')) ||
-      (selectedUlb?.MARNAME && selectedUlb.MARNAME.includes('धुळे')) ||
-      (typeof window !== 'undefined' && window.location.hostname.includes('dhulecorporation.in'));
+    const isMiraBhayandar =
+      Number(selectedUlbId) === 1710 ||
+      Number(selectedUlbId) === 890 ||
+      selectedUlb?.CORPCODE === 'MBMC' ||
+      (selectedUlb?.ENGNAME && (
+        selectedUlb.ENGNAME.toLowerCase().includes('mira') ||
+        selectedUlb.ENGNAME.toLowerCase().includes('bhaindar') ||
+        selectedUlb.ENGNAME.toLowerCase().includes('bhayandar') ||
+        selectedUlb.ENGNAME.toLowerCase().includes('bhayander')
+      )) ||
+      (selectedUlb?.MARNAME && (
+        selectedUlb.MARNAME.includes('मिरा') ||
+        selectedUlb.MARNAME.includes('मीरा') ||
+        selectedUlb.MARNAME.includes('भाईंदर') ||
+        selectedUlb.MARNAME.includes('भाइंदर')
+      )) ||
+      (typeof window !== 'undefined' && (
+        window.location.hostname.includes('mbmc') ||
+        window.location.hostname.includes('mirabhaindar') ||
+        window.location.hostname.includes('mirabhayandar')
+      ));
+
+    const isBhiwandi =
+      Number(selectedUlbId) === 5 ||
+      selectedUlb?.CORPCODE === 'BNCMC' ||
+      (selectedUlb?.ENGNAME && selectedUlb.ENGNAME.toLowerCase().includes('bhiwandi')) ||
+      (selectedUlb?.MARNAME && selectedUlb.MARNAME.includes('भिवंडी')) ||
+      (typeof window !== 'undefined' && window.location.hostname.includes('bhiwandicorporation.in'));
 
     const isPropertyTax =
       card.code === 'PTAX' ||
       (card.title && card.title.toLowerCase().trim() === 'property tax') ||
+      (card.title && card.title.toLowerCase().includes('property tax')) ||
       (card.title && card.title.includes('मालमत्ता'));
 
     const isRts =
@@ -585,6 +752,18 @@ export default function Home_NEW() {
     // Latur Corporation Property Tax opens external dashboard
     if (isLatur && isPropertyTax) {
       window.open('https://ptaxdashboard.mclatur.in/', '_blank', 'noopener,noreferrer');
+      return;
+    }
+
+    // Mira Bhaindar Corporation Property Tax opens external dashboard
+    if (isMiraBhayandar && isPropertyTax) {
+      window.open('http://mbmcptaxdashboard.nagarkaryavalinew.com/', '_blank', 'noopener,noreferrer');
+      return;
+    }
+
+    // Bhiwandi Nizampur Corporation Property Tax opens external dashboard
+    if (isBhiwandi && isPropertyTax) {
+      window.open('http://ptaxdashboard.bhiwandicorporation.in/', '_blank', 'noopener,noreferrer');
       return;
     }
 
@@ -661,11 +840,11 @@ export default function Home_NEW() {
 
       {/* ── TOP HEADER ── */}
       <header className="hn-header">
-        {/* Left: logo + title */}
+        {/* Left: back button (when Dhule) + logo + title */}
         <div className="hn-header-left">
           <img
-            src="/Images/AscenTech_Logomini.png"
-            alt="AscenTech"
+            src={isDhule ? "/DMC_logo.jpg" : isLatur ? "/latur_logo.jpg" : isMbmc ? "/mbmc_logo.png" : "/Images/AscenTech_Logomini.png"}
+            alt={isDhule ? "DMC Logo" : isLatur ? "LCMC Logo" : isMbmc ? "MBMC Logo" : "AscenTech"}
             className="hn-header-logo"
             onError={(e) => { e.currentTarget.style.display = "none"; }}
           />
@@ -674,23 +853,48 @@ export default function Home_NEW() {
           </div>
         </div>
 
-        {/* Right: Dynamic ULB Dropdown + Nagar Karyawali logo + date badge */}
+        {/* Center: Dhule / Latur Municipal Corporation heading – shown only when on dedicated domain */}
+        {isDhuleDomain && (
+          <div className="hn-header-center">
+            <h2 className="hn-header-center-title">
+              Dhule Municipal Corporation
+            </h2>
+          </div>
+        )}
+        {isLaturDomain && (
+          <div className="hn-header-center">
+            <h2 className="hn-header-center-title">
+              Latur Municipal Corporation
+            </h2>
+          </div>
+        )}
+        {isMbmcDomain && (
+          <div className="hn-header-center">
+            <h2 className="hn-header-center-title">
+              Mira Bhaindar Municipal Corporation
+            </h2>
+          </div>
+        )}
+
+        {/* Right: Dynamic ULB Dropdown (hidden on Dhule / Latur dedicated domain) + Nagar Karyawali logo + date badge */}
         <div className="hn-header-right">
-          <select
-            className="hn-dropdown"
-            value={selectedUlbId}
-            onChange={(e) => {
-              const val = e.target.value;
-              setSelectedUlbId(val === "ALL" ? "ALL" : Number(val));
-            }}
-          >
-            <option value="ALL">All Municipal Corporations</option>
-            {ulbList.map((ulb) => (
-              <option key={ulb.CORPID} value={ulb.CORPID}>
-                {ulb.ENGNAME || ulb.MARNAME}
-              </option>
-            ))}
-          </select>
+          {!isDedicatedDomain && (
+            <select
+              className="hn-dropdown"
+              value={selectedUlbId}
+              onChange={(e) => {
+                const val = e.target.value;
+                setSelectedUlbId(val === "ALL" ? "ALL" : Number(val));
+              }}
+            >
+              <option value="ALL">All Municipal Corporations</option>
+              {ulbList.map((ulb) => (
+                <option key={ulb.CORPID} value={ulb.CORPID}>
+                  {ulb.ENGNAME || ulb.MARNAME}
+                </option>
+              ))}
+            </select>
+          )}
           <img
             src="/Images/MasterPageLogo.png"
             alt="Nagar Karyawali"
@@ -737,16 +941,13 @@ export default function Home_NEW() {
           <div className="hn-grid">
             {cards.map((card) => {
               const meta = getCardMeta(card.title, card.origIndex);
-              // Every card is clickable: dedicated-route cards go to their own page,
-              // all others open CardDetailPage.
-              const isClickable = true;
               return (
                 <HomeCard_NEW
                   key={`${card.code ?? card.title}-${card.origIndex}`}
                   title={card.title}
                   color={meta.color}
                   icon={meta.icon}
-                  clickable={isClickable}
+                  clickable
                   onClick={() => handleCardClick(card, card.origIndex)}
                   metrics={card.metrics || []}
                 />
@@ -754,6 +955,8 @@ export default function Home_NEW() {
             })}
           </div>
         )}
+
+        {isDhule && <QuickLinkCards />}
       </div>
     </div>
   );

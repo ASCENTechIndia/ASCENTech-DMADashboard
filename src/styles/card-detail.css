@@ -386,9 +386,9 @@
   text-align: left;
   font-size: 11px; /* Slightly reduced */
   font-weight: 700;
-  color: var(--hn-navy, #102a6b);
-  border-bottom: 2px solid var(--hn-border, #e2e8f0);
-  border-right: 1px solid var(--hn-border, #e2e8f0);
+  color: var(--hn-navy, #011b5a);
+  border-bottom: 1px solid #797d81;
+  border-right: 1px solid #797d81;
   white-space: normal; /* wrap long headers to reduce column width */
   vertical-align: bottom;
   text-transform: uppercase;
@@ -410,30 +410,30 @@
 }
 
 .cd-table tbody tr {
-  border-bottom: 1px solid var(--hn-border, #f1f5f9);
+  border-bottom: 1px solid #7f8286;
 }
 .cd-table tbody tr:last-child { border-bottom: none; }
 .cd-table tbody tr:hover { background: #f8fafc; }
 .cd-table tbody tr.cd-tr-active {
   background: #f0f6ff;
-  border-left: 3px solid var(--cd-accent, var(--hn-blue, #2f6fed));
+  border-left: 3px solid var(--cd-accent, var(--hn-blue, #020a1b));
 }
 
 .cd-table tbody td {
   padding: 8px 6px; /* Reduced from 8px 12px */
   color: var(--hn-text, #1e293b);
-  font-weight: 500;
-  font-size: 12.5px; /* Slightly reduced */
+  font-weight: 700;
+  font-size: 14px; /* Slightly reduced */
   vertical-align: middle;
-  border-right: 1px solid var(--hn-border, #f1f5f9);
+  border-right: 1px solid #7f8286;
 }
 .cd-table tbody td:last-child {
   border-right: none;
 }
 
 .cd-table-value {
-  font-weight: 700;
-  font-size: 14px;
+  font-weight: 500;
+  font-size: 12px;
   margin-right: 6px;
 }
 
@@ -441,7 +441,6 @@
 .cd-month-pill {
   display: inline-block;
   padding: 3px 12px;
-  border-radius: 20px;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.2px;

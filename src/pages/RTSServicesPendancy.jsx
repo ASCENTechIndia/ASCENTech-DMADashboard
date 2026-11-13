@@ -7,27 +7,21 @@ import axios from "axios";
 import "../styles/home-new.css";
 import "../styles/rts-services.css";
 
-// Base API URL and default ULB ID configuration
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL && !import.meta.env.VITE_API_BASE_URL.includes("nagarkaryavali")
-    ? import.meta.env.VITE_API_BASE_URL
-    : (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
-      ? "http://localhost:5000/api"
-      : (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api");
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://dmadashboardapi.nagarkaryavalinew.com/api";
 
 const DHULE_ULB_ID = import.meta.env.VITE_DHULE_ULB_ID || 1670;
 
 export default function RTSServicesPendancy() {
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from || "/dhuledashboard";
+  const from = location.state?.from || "/";
 
-  // Dropdown options from backend
+  // Dropdown options from backend 
   const [departments, setDepartments] = useState([]);
   const [services, setServices] = useState([]);
 
   // Selected filter states
-  const [selectedVibhag, setSelectedVibhag] = useState("all");
+  const [selectedVibhag, setSelectedVibhag] = useState("all"); 
   const [selectedServiceType, setSelectedServiceType] = useState("all");
 
   // Table & summary data from backend

@@ -16,7 +16,7 @@
   --hn-navy: #102a6b;
   --hn-text: #1e293b;
   --hn-muted:         #64748b;
-  --hn-divider:       #f1f5f9;
+  --hn-divider:       #e7e8ea;
 
   /* accent palette */
   --hn-blue:          #2f6fed;
@@ -297,9 +297,9 @@
 .hn-card-arrow {
   flex-shrink: 0;
   opacity: 0.6;
-  font-size: 14.5px; /* Reduced from 16px */
+  font-size: 22px; /* Reduced from 16px */
   font-weight: 600;
-  line-height: 1;
+  line-height: 1.5;
 }
 
 /* ── Card Body ───────────────────────────────────────────────────────── */

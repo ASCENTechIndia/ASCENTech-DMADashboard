@@ -9,7 +9,7 @@ import "../styles/home-new.css";
 import QuickLinkCards from "../components/QuickLinkCards";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const DHULE_ULB_ID = import.meta.env.VITE_DHULE_ULB_ID || 5;
+const DHULE_ULB_ID = import.meta.env.VITE_DHULE_ULB_ID || 1670;
 
 /* ── Card metadata list: exact color + route + solid SVG icon by index ── */
 const CARD_META_LIST = [
@@ -392,6 +392,7 @@ const TITLE_TO_INDEX_MAP = {
     "asset management": 9,
     "project management": 10,
     "septic tank": 11,
+    "septictank": 11,
     "inward outward": 12,
     "birth & death": 13,
     "smart parking": 15,
@@ -403,9 +404,16 @@ const TITLE_TO_INDEX_MAP = {
     "works": 21,
     "marriage registration": 22,
     "visitor management": 23,
+  "visitormanagement": 23,
+  "visitor": 23,
+  "visit": 23,
+  "vist": 23,
     "rts": 24,
     "opd": 25,
     "digital library": 26,
+  "digitallibrary": 26,
+  "digilibrary": 26,
+  "dlib": 26,
     "tanker": 27,
     "advertisement": 28,
     "bombay nursing act": 29,

@@ -9,11 +9,12 @@ import "../styles/rts-services.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://dmadashboardapi.nagarkaryavalinew.com/api";
 
-const DHULE_ULB_ID = import.meta.env.VITE_DHULE_ULB_ID || 1670;
-
 export default function RTSServicesPendancy() {
   const navigate = useNavigate();
   const location = useLocation();
+  const DHULE_ULB_ID = Number(
+  location.state?.ulbId ?? import.meta.env.VITE_DHULE_ULB_ID ?? 1670
+);
   const from = location.state?.from || "/";
 
   // Dropdown options from backend 

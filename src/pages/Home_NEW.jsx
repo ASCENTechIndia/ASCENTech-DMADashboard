@@ -796,15 +796,40 @@ const isAhilyanagar =
   }, [selectedUlbId, fetchDashboard]);
 
   /* RTS Modal handlers for Dhule */
-  const handleRTSDashboard = () => {
-    setRtsModalOpen(false);
-    window.open("https://rtsdashboard.dhulecorporation.in/", "_blank", "noopener,noreferrer");
-  };
+ const handleRTSDashboard = () => {
+  setRtsModalOpen(false);
+
+  let rtsUrl = "";
+
+  if (isDhule) {
+    rtsUrl = "https://rtsdashboard.dhulecorporation.in/";
+  } else if (isJalgaon) {
+    rtsUrl = "https://rtsjcmcdashboard.nagarkaryavalinew.com/";
+  } else if (isAhilyanagar) {
+    rtsUrl = "https://rtsamcdashboard.nagarkaryavalinew.com/";
+  }
+
+  if (rtsUrl) {
+    window.open(rtsUrl, "_blank", "noopener,noreferrer");
+  }
+};
 
   const handleRTSServices = () => {
-    setRtsModalOpen(false);
-    navigate("/rts-services", { state: { from: "/", ulbId: 1670 } });
-  };
+  setRtsModalOpen(false);
+
+  const ulbId = isJalgaon
+    ? 1750
+    : isAhilyanagar
+      ? 2
+      : 1670; // Dhule default
+
+  navigate("/rts-services", {
+    state: {
+      from: "/",
+      ulbId: ulbId,
+    },
+  });
+};
 
   const handleCardClick = (card, index) => {
     const isLatur =
@@ -872,20 +897,32 @@ const isAhilyanagar =
     }
 
     // Dhule Corporation: RTS opens modal, Property Tax opens collection dashboard
-    if (isDhule) {
-      if (isRts) {
-        setRtsModalOpen(true);
-        return;
-      }
-      if (isPropertyTax) {
-        window.open('https://collectiondashboard.dhulecorporation.in/?ulbId=1670', '_blank', 'noopener,noreferrer');
-        return;
-      }
-      if (card.title?.toLowerCase().includes("mandap")) {
-        window.open('https://mandap.dhulecorporation.in/frmmandapDashboard.aspx?@=B35F2E444FF693DAB0F320CBFA32427E', '_blank', 'noopener,noreferrer');
-        return;
-      }
-    }
+    // Dhule, Jalgaon and Ahilyanagar: RTS opens the options modal
+if (isRts && (isDhule || isJalgaon || isAhilyanagar)) {
+  setRtsModalOpen(true);
+  return;
+}
+
+// Dhule-specific dashboard navigation
+if (isDhule) {
+  if (isPropertyTax) {
+    window.open(
+      "https://collectiondashboard.dhulecorporation.in/?ulbId=1670",
+      "_blank",
+      "noopener,noreferrer"
+    );
+    return;
+  }
+
+  if (card.title?.toLowerCase().includes("mandap")) {
+    window.open(
+      "https://mandap.dhulecorporation.in/frmmandapDashboard.aspx?@=B35F2E444FF693DAB0F320CBFA32427E",
+      "_blank",
+      "noopener,noreferrer"
+    );
+    return;
+  }
+}
 
     const meta = getCardMeta(card.title, index);
     const dedicatedRoute = card.link || meta.route;
